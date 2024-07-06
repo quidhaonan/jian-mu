@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty name="APP_NAME" scope="context" source="spring.application.name"/>
+    <conversionRule conversionWord="ip" converterClass="com.lmyxlf.jian_mu.log.IPLogConverter"/>
+    <conversionRule conversionWord="pod_name" converterClass="com.lmyxlf.jian_mu.log.PodLogConverter"/>
+    <conversionRule conversionWord="json_msg" converterClass="com.lmyxlf.jian_mu.log.JsonLogConverter"/>
+    <!--    <conversionRule conversionWord="remoteIp" converterClass="com.txzing.log.RemoteIpLogConverter"/>-->
+
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook">
+        <delay>${LOG_DELAY_CLOSE_TIME:-10}</delay>
+    </shutdownHook>
+
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <!--  处理调回车符  -->
+    <conversionRule conversionWord="throwableProxy"
+                    converterClass="com.lmyxlf.jian_mu.log.LineBreakThrowableProxyConverter" />
+
+    <property name="CONSOLE_LOG_PATTERN" value='{%json_msg,"stack_trace":"%throwableProxy"} %n'/>
+    <property name="CONSOLE_LOG_PATTERN_LOCAL"
+              value="[${APP_NAME}][%pod_name][%clr(%level){blue}] [%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint}] [%ip] [%logger{36}] [%clr(%X{traceId:-}){yellow}] [%m]%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <!-- 控制台日志 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--        <withJansi>true</withJansi>-->
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 本地控制台日志 -->
+    <appender name="LOCAL" class="ch.qos.logback.core.ConsoleAppender">
+        <!--        <withJansi>true</withJansi>-->
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN_LOCAL}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+
+    <!--日志输出级别-->
+    <root level="INFO">
+        <appender-ref ref="${LOG_APPENDER_DE:-LOCAL}"/>
+        <!--        <appender-ref ref="LOCAL"/>-->
+    </root>
+</configuration>

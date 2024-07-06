@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: jian_mu
+
+logging:
+  config: src/main/resources/log/logback-spring.xml
