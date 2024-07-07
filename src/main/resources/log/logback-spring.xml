@@ -5,7 +5,7 @@
     <conversionRule conversionWord="ip" converterClass="com.lmyxlf.jian_mu.log.IPLogConverter"/>
     <conversionRule conversionWord="pod_name" converterClass="com.lmyxlf.jian_mu.log.PodLogConverter"/>
     <conversionRule conversionWord="json_msg" converterClass="com.lmyxlf.jian_mu.log.JsonLogConverter"/>
-    <!--    <conversionRule conversionWord="remoteIp" converterClass="com.txzing.log.RemoteIpLogConverter"/>-->
+    <!--    <conversionRule conversionWord="remoteIp" converterClass="com.lmyxlf.jian_mu.log.RemoteIpLogConverter"/>-->
 
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook">
         <delay>${LOG_DELAY_CLOSE_TIME:-10}</delay>

@@ -1,6 +1,34 @@
 spring:
   application:
     name: jian_mu
+    
+  # 数据源
+  datasource:
+    dynamic:
+      primary: lmyxlf
+      strict: false
+      datasource:
+        lmyxlf:
+          # mysql 版本 5.7 以上
+#          url: jdbc:mysql://${MYSQL_HOST:127.0.0.1:3306}/lmyxlf?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+          # mysql 版本 5.7 以下
+          url: jdbc:mysql://${MYSQL_HOST:127.0.0.1:3306}/lmyxlf?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+          username: root
+          password: lmyxlf
+          # mysql 版本 5.7 以上
+#          driver-class-name: com.mysql.cj.jdbc.Driver
+          # mysql 版本 5.7 以下
+          driver-class-name: com.mysql.jdbc.Driver
+    
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+#  type-enums-package:
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
 
 logging:
   config: src/main/resources/log/logback-spring.xml
