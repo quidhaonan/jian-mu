@@ -52,8 +52,8 @@ public class JsonLogConverter extends ClassicConverter {
         map.put("socket_id", MDC.get("socketId"));
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (Objects.nonNull(sra)) {
-//            HttpServletRequest request = sra.getRequest();
-            HttpServletRequest request = (HttpServletRequest) sra.getRequest();
+           HttpServletRequest request = sra.getRequest();
+            // HttpServletRequest request = (HttpServletRequest) sra.getRequest();
             map.put("req_id", request.getHeader("X-Request-ID"));
         }
         // 截取前后符号

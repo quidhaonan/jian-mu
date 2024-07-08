@@ -45,6 +45,8 @@
         <spring.tx.version>6.1.10</spring.tx.version>
         <spring.cloud.starter.openfeign.version>4.1.2</spring.cloud.starter.openfeign.version>
         <springfox.swagger2.version>3.0.0</springfox.swagger2.version>
+        <springfox.swagger.ui.version>2.9.2</springfox.swagger.ui.version>
+        <swagger.bootstrap.ui.version>1.9.1</swagger.bootstrap.ui.version>
         <httpclient.version>4.5.14</httpclient.version>
         <fastjson.version>2.0.51</fastjson.version>
         <fastjson2.version>2.0.51</fastjson2.version>
@@ -55,7 +57,12 @@
         <mysql.connector.java.version>5.1.47</mysql.connector.java.version>
         <druid.spring.boot.starter.version>1.2.23</druid.spring.boot.starter.version>
         <mybatis.plus.boot.starter.version>3.4.2</mybatis.plus.boot.starter.version>
+        <pagehelper.version>5.1.11</pagehelper.version>
         <dynamic.datasource.spring.boot.starter.version>4.3.1</dynamic.datasource.spring.boot.starter.version>
+        <redisson.spring.boot.starter.version>3.16.1</redisson.spring.boot.starter.version>
+        <jackson.core.version>2.11.4</jackson.core.version>
+        <jackson.databind.version>2.11.4</jackson.databind.version>
+        <caffeine.version>2.8.4</caffeine.version>
     </properties>
 
     <dependencies>
@@ -165,12 +172,27 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
             <version>${spring.cloud.starter.openfeign.version}</version>
         </dependency>
+
+        <!-- swagger -->
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${springfox.swagger2.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.swagger.ui.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/swagger-bootstrap-ui -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>${swagger.bootstrap.ui.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -215,6 +237,12 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis.plus.boot.starter.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>${pagehelper.version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.baomidou/dynamic-datasource-spring-boot-starter -->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -222,6 +250,21 @@
             <version>${dynamic.datasource.spring.boot.starter.version}</version>
         </dependency>
 
+        <!-- redis -->
+        <!-- https://mvnrepository.com/artifact/org.redisson/redisson-spring-boot-starter -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>${redisson.spring.boot.starter.version}</version>
+        </dependency>
+
+        <!-- 高性能缓存 -->
+        <!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

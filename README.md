@@ -9,3 +9,10 @@ A spring boot project with all the ideas
         
     pom.xml
     ```
+
+2. 修改 redis 连接密码
+
+    ```
+    src/main/resources/application.yml
+    ```
+
