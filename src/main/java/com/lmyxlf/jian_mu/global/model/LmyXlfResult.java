@@ -25,20 +25,20 @@ public class LmyXlfResult<T> {
     /**
      * 错误码
      */
-    @ApiModelProperty(name = "errCode", value = "错误码",  required = true, position = 1)
-    private String errCode;
+    @ApiModelProperty(name = "code", value = "错误码", required = true, position = 1)
+    private String code;
 
     /**
      * 错误信息
      */
-    @ApiModelProperty(name = "errMsg", value = "错误信息",  required = true, position = 2)
-    private String errMsg;
+    @ApiModelProperty(name = "msg", value = "错误信息", required = true, position = 2)
+    private String msg;
 
     /**
      * 链路调用 id
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @ApiModelProperty(name = "traceId", value = "链路调用 id",  required = true, position = 3)
+    @ApiModelProperty(name = "traceId", value = "链路调用 id", required = true, position = 3)
     private String traceId;
 
     /**
@@ -58,58 +58,59 @@ public class LmyXlfResult<T> {
     public LmyXlfResult() {
     }
 
-    private LmyXlfResult(String errCode, String errMsg, T data) {
-        this.errCode = errCode;
-        this.errMsg = errMsg;
-        this.traceId = MDC.get(TraceConstant.LOG_B3_TRACEID);;
+    private LmyXlfResult(String code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.traceId = MDC.get(TraceConstant.LOG_B3_TRACEID);
+        ;
         this.data = data;
     }
 
-    public static<T> LmyXlfResult<T> ok(String code, String msg, T date) {
+    public static <T> LmyXlfResult<T> ok(String code, String msg, T date) {
         return new LmyXlfResult<>(code, msg, date);
     }
 
-    public static<T> LmyXlfResult<T> ok(String code, String msg) {
+    public static <T> LmyXlfResult<T> ok(String code, String msg) {
         return ok(code, msg, null);
     }
 
-    public static<T> LmyXlfResult<T> ok() {
+    public static <T> LmyXlfResult<T> ok() {
         return ok(CODE_MSG.SUCCESS.getCode(), CODE_MSG.SUCCESS.getMsg());
     }
 
-    public static<T> LmyXlfResult<T> ok(T data) {
+    public static <T> LmyXlfResult<T> ok(T data) {
         return ok(CODE_MSG.SUCCESS.getCode(), CODE_MSG.SUCCESS.getMsg(), data);
     }
 
-    public static<T> LmyXlfResult<PageData<T>> ok(IPage<T> iPage) {
+    public static <T> LmyXlfResult<PageData<T>> ok(IPage<T> iPage) {
         return ok(CODE_MSG.SUCCESS.getCode(), CODE_MSG.SUCCESS.getMsg(), new PageData<>(iPage));
     }
 
-    public static<T> LmyXlfResult<T> error(String code, String msg) {
+    public static <T> LmyXlfResult<T> error(String code, String msg) {
         return ok(code, msg);
     }
 
-    public static<T> LmyXlfResult<T> error() {
+    public static <T> LmyXlfResult<T> error() {
         return ok(CODE_MSG.ERROR.getCode(), CODE_MSG.ERROR.getMsg());
     }
 
-    public static<T> LmyXlfResult<T> error(String errMsg) {
-        return error(CODE_MSG.ERROR.getCode(), errMsg);
+    public static <T> LmyXlfResult<T> error(String msg) {
+        return error(CODE_MSG.ERROR.getCode(), msg);
     }
 
-    public static<T> LmyXlfResult<T> error(T object) {
+    public static <T> LmyXlfResult<T> error(T object) {
         return error(CODE_MSG.ERROR, object);
     }
 
-    public static<T> LmyXlfResult<T> error(CodeMsg codeMsg) {
+    public static <T> LmyXlfResult<T> error(CodeMsg codeMsg) {
         return ok(String.valueOf(codeMsg.getCode()), codeMsg.getMsg());
     }
 
-    public static<T> LmyXlfResult<T> error(CodeMsg codeMsg, T data) {
+    public static <T> LmyXlfResult<T> error(CodeMsg codeMsg, T data) {
         return ok(String.valueOf(codeMsg.getCode()), codeMsg.getMsg() + (data == null ? "" : (": " + data.toString())), null);
     }
 
-    public static<T> LmyXlfResult<T> auto(boolean b, T data) {
+    public static <T> LmyXlfResult<T> auto(boolean b, T data) {
         if (b) {
             return ok(data);
         } else {
@@ -117,11 +118,11 @@ public class LmyXlfResult<T> {
         }
     }
 
-    public static LmyXlfResult<Boolean> auto(boolean b, String errMsg) {
+    public static LmyXlfResult<Boolean> auto(boolean b, String msg) {
         if (b) {
             return ok(true);
         } else {
-            return ok(CODE_MSG.ERROR.getCode(), errMsg, false);
+            return ok(CODE_MSG.ERROR.getCode(), msg, false);
         }
     }
 }

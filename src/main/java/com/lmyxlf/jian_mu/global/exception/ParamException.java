@@ -9,7 +9,7 @@ package com.lmyxlf.jian_mu.global.exception;
  */
 public class ParamException extends RuntimeException {
 
-    private String errMsg;
+    private String msg;
 
     public ParamException() {
         super();
@@ -18,16 +18,14 @@ public class ParamException extends RuntimeException {
     /**
      * 构造方法
      *
-     * @param errMsg 异常信息
+     * @param msg 异常信息
      */
-    public ParamException(String errMsg) {
-        this.errMsg = errMsg;
+    public ParamException(String msg) {
+        this.msg = msg;
     }
 
 
-    public String getErrMsg() {
-        return errMsg;
+    public String getMsg() {
+        return msg;
     }
-
-
 }
