@@ -1,0 +1,13 @@
+#mysql:
+#  # mysql ip+端口
+#  MYSQL_HOST: 127.0.0.1:3306
+#  # mysql 密码
+#  MYSQL_PASSWORD: lmyxlf
+#  # mysql 待连接数据库名
+#  MYSQL_DATABASE: lmyxlf
+#
+#redis:
+#  # redis ip+端口
+#  REDIS_HOST: 127.0.0.1:6379
+#  # redis 密码
+#  REDIS_PASSWORD: lmyxlf

@@ -1,0 +1,63 @@
+services:
+  jianmu:
+    build:
+      context: ./java
+      dockerfile: Dockerfile
+    image: jian_mu
+    container_name: jian_mu
+    restart: always
+    ports:
+      - "9999:9999"
+    networks:
+      - jianmu-net
+    depends_on:
+      - mysql
+      - redis
+  
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: lmyxlf
+    volumes:
+      - "./mysql/conf:/etc/mysql/conf.d"
+      - "./mysql/data:/var/lib/mysql"
+      - "./mysql/init:/docker-entrypoint-initdb.d"
+    networks:
+      - jianmu-net
+      
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    # 密码
+    command: redis-server --requirepass lmyxlf
+    volumes:
+      - ./redis/data:/data
+      - ./redis/logs:/logs
+    networks:
+      - jianmu-net
+  
+  nginx:
+    image: nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "./nginx/html:/usr/share/nginx/html"
+    depends_on:
+      - jianmu
+    networks:
+      - jianmu-net
+      
+networks:
+  jianmu-net:
+    name: jianmu-net

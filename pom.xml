@@ -52,9 +52,9 @@
         <fastjson2.version>2.0.51</fastjson2.version>
         <httpmime.version>4.5.14</httpmime.version>
         <!-- mysql 版本 5.7 以上 -->
-        <!-- <mysql.connector.java.version>8.0.18</mysql.connector.java.version> -->
+        <mysql.connector.java.version>8.0.18</mysql.connector.java.version>
         <!-- mysql 版本 5.7 以下 -->
-        <mysql.connector.java.version>5.1.47</mysql.connector.java.version>
+        <!-- <mysql.connector.java.version>5.1.47</mysql.connector.java.version> -->
         <druid.spring.boot.starter.version>1.2.23</druid.spring.boot.starter.version>
         <mybatis.plus.boot.starter.version>3.4.2</mybatis.plus.boot.starter.version>
         <pagehelper.version>5.1.11</pagehelper.version>
@@ -268,6 +268,7 @@
     </dependencies>
 
     <build>
+        <finalName>jian_mu</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

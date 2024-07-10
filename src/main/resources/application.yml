@@ -1,7 +1,12 @@
+server:
+  port: 9999
+  
 spring:
   application:
     name: jian_mu
-    
+  config:
+    import: classpath:application-local.yml
+  
   # 数据源
   datasource:
     dynamic:
@@ -10,15 +15,15 @@ spring:
       datasource:
         lmyxlf:
           # mysql 版本 5.7 以上
-#          url: jdbc:mysql://${MYSQL_HOST:127.0.0.1:3306}/lmyxlf?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+          url: jdbc:mysql://${mysql.MYSQL_HOST:mysql:3306}/${mysql.MYSQL_DATABASE:lmyxlf}?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
           # mysql 版本 5.7 以下
-          url: jdbc:mysql://${MYSQL_HOST:127.0.0.1:3306}/lmyxlf?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+#          url: jdbc:mysql://${mysql.MYSQL_HOST:mysql:3306}/${mysql.MYSQL_DATABASE:lmyxlf}?useUnicode=true&characterEncoding=UTF-8&useSSL=false
           username: root
-          password: lmyxlf
+          password: ${mysql.MYSQL_PASSWORD:lmyxlf}
           # mysql 版本 5.7 以上
-#          driver-class-name: com.mysql.cj.jdbc.Driver
+          driver-class-name: com.mysql.cj.jdbc.Driver
           # mysql 版本 5.7 以下
-          driver-class-name: com.mysql.jdbc.Driver
+#          driver-class-name: com.mysql.jdbc.Driver
           
   redis:
     redisson:
@@ -29,10 +34,10 @@ spring:
           timeout: 3000
           retryAttempts: 3
           retryInterval: 1500
-          password: ${REDIS_PASSWORD:lmyxlf}
+          password: ${redis.REDIS_PASSWORD:lmyxlf}
           subscriptionsPerConnection: 5
           clientName: lmyxlf
-          address: redis://${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}
+          address: redis://${redis.REDIS_HOST:redis:6379}
           subscriptionConnectionMinimumIdleSize: 1
           subscriptionConnectionPoolSize: 8
           connectionMinimumIdleSize: 8
