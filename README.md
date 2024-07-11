@@ -64,7 +64,10 @@ A spring boot project with all the ideas
 
 1. 数据库默认密码：`lmyxlf`，默认连接数据库名 `lmyxlf`
 2. redis 默认密码：`lmyxlf`
-3. 假设 ip 地址为：`127.0.0.1`
-
-	+ 项目默认前缀：`127.0.0.1/api/jianmu`
-    + swagger 地址：`127.0.0.1/api/jianmu/doc.html` 或 `127.0.0.1/api/jianmu/swagger-ui.html`
+3. 假设 ip 地址为：`127.0.0.1` 
+    + 如服务器上运行，使用了 nginx，则地址默认加上 `/api/jianmu`
+      + 项目默认前缀：`127.0.0.1/api/jianmu`
+      + swagger 地址：`127.0.0.1/api/jianmu/doc.html` 或 `127.0.0.1/api/jianmu/swagger-ui.html`
+    + 如普通本地运行，则无默认前缀
+      + 项目默认前缀：`127.0.0.1:9999`
+      + swagger 地址：`127.0.0.1:9999/doc.html` 或 `127.0.0.1:9999/swagger-ui.html`

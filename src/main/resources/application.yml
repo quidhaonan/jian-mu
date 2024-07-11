@@ -62,7 +62,7 @@ mybatis-plus:
     map-underscore-to-camel-case: true
 
 logging:
-  config: src/main/resources/log/logback-spring.xml
+  config: classpath:log/logback-spring.xml
   
 # 是否开启swagger文档
 swagger:
