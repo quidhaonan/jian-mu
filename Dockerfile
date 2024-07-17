@@ -4,6 +4,6 @@ FROM openjdk:17
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # 拷贝 jar 包
-COPY jian_mu.jar /jian_mu.jar
+COPY jian_mu.jar /jian_mu/jian_mu.jar
 # 入口
-ENTRYPOINT ["java", "-jar", "/jian_mu.jar"]
+ENTRYPOINT ["java", "-jar", "/jian_mu/jian_mu.jar"]

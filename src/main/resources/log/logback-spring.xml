@@ -25,6 +25,8 @@
     <property name="CONSOLE_LOG_PATTERN" value='{%json_msg,"stack_trace":"%throwableProxy"} %n'/>
     <property name="CONSOLE_LOG_PATTERN_LOCAL"
               value="[${APP_NAME}][%pod_name][%clr(%level){blue}] [%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint}] [%ip] [%logger{36}] [%clr(%X{traceId:-}){yellow}] [%m]%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <property name="LOGS_LOCATION" value="./jian_mu/logs" />
+
     <!-- 控制台日志 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!--        <withJansi>true</withJansi>-->
@@ -42,10 +44,27 @@
         </encoder>
     </appender>
 
+    <appender name="FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_LOCATION}/jian_mu.log</file>
+        <!-- 循环政策：基于时间、大小创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${LOGS_LOCATION}/jian_mu_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <!-- 日志最大的历史 9 天 -->
+            <maxHistory>9</maxHistory>
+            <!--日志文件最大的大小-->
+            <maxFileSize>9MB</maxFileSize>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 格式化输出 -->
+            <pattern>${CONSOLE_LOG_PATTERN_LOCAL}</pattern>
+        </encoder>
+    </appender>
 
     <!--日志输出级别-->
     <root level="INFO">
         <appender-ref ref="${LOG_APPENDER_DE:-LOCAL}"/>
+        <appender-ref ref="${LOG_APPENDER_DE:-FILE}"/>
         <!--        <appender-ref ref="LOCAL"/>-->
     </root>
 </configuration>

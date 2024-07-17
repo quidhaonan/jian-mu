@@ -8,6 +8,8 @@ services:
     restart: always
     ports:
       - "9999:9999"
+    volumes:
+      - "./java/logs:/jian_mu/logs"
     networks:
       - jianmu-net
     depends_on:
