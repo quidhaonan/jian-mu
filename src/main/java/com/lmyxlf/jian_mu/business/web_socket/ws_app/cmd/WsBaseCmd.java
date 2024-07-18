@@ -1,0 +1,41 @@
+package com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd;
+
+import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+/**
+ * @author lmy
+ * @email 2130546401@qq.com
+ * @date 2024/7/18 17:59
+ * @description ws 基础类型
+ * @since 17
+ */
+@Data
+@Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class WsBaseCmd {
+
+    private String msgId;
+
+    private String type;
+
+    private Object data;
+
+    private String err;
+
+    private String code;
+
+    public WsBaseCmd setType(String type) {
+        this.type = StrUtil.trimToNull(type);
+        return this;
+    }
+
+    public WsBaseCmd setMsgId(String msgId) {
+        this.msgId = StrUtil.trimToNull(msgId);
+        return this;
+    }
+}
