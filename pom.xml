@@ -63,6 +63,12 @@
         <jackson.core.version>2.11.4</jackson.core.version>
         <jackson.databind.version>2.11.4</jackson.databind.version>
         <caffeine.version>2.8.4</caffeine.version>
+
+        <!-- feat/lmyxlf/web_socket 分支依赖 -->
+        <spring.boot.starter.websocket.version>3.2.4</spring.boot.starter.websocket.version>
+        <annotations.version>24.1.0</annotations.version>
+        <!-- feat/lmyxlf/web_socket 分支依赖 -->
+
     </properties>
 
     <dependencies>
@@ -265,6 +271,22 @@
             <artifactId>caffeine</artifactId>
             <version>${caffeine.version}</version>
         </dependency>
+
+        <!-- feat/lmyxlf/web_socket 分支依赖 -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+            <version>${spring.boot.starter.websocket.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${annotations.version}</version>
+        </dependency>
+        <!-- feat/lmyxlf/web_socket 分支依赖 -->
+
     </dependencies>
 
     <build>
