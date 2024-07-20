@@ -8,6 +8,8 @@ import com.lmyxlf.jian_mu.business.web_socket.ws_app.handler.WsHandler;
 import com.lmyxlf.jian_mu.global.constant.CODE_MSG;
 import com.lmyxlf.jian_mu.global.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -23,8 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 17
  */
 @Slf4j
-@ServerEndpoint("/ws")
 @Component
+@Scope("prototype")
+@ServerEndpoint("/ws/connect")
 public class WsServerEndpoint {
 
 
@@ -61,6 +64,7 @@ public class WsServerEndpoint {
      * 接收到消息
      */
     @OnMessage()
+    @Async("async_executor_ws")
     public void onMsg(Session session, String text) {
 
         // Pool.webExecutor.submit(() -> {

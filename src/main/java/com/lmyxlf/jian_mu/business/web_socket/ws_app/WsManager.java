@@ -224,7 +224,7 @@ public class WsManager {
         WsStore store = webStores.getIfPresent(clientId);
         if (store == null) {
             log.error("[发送设备指令]，设备不在线，clientId：[{}]，cmd：[{}]", clientId, wsWebBaseCmd);
-            throw new ServiceException(WSExceptionEnum.DEVICE_NOT_ONLINE);
+            throw new ServiceException(WSExceptionEnum.DEVICE_NOT_ONLINE.getMsg());
         }
 
         sendText(store.getSession(), wsWebBaseCmd);

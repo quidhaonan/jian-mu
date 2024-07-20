@@ -1,7 +1,6 @@
 package com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.lmyxlf.jian_mu.business.web_socket.constant.WSParamEnum;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsCmd;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -9,18 +8,32 @@ import lombok.experimental.Accessors;
 /**
  * @author lmy
  * @email 2130546401@qq.com
- * @date 2024/7/18 19:06
- * @description ws 心跳请求体
+ * @date 2024/7/20 2:53
+ * @description 浏览器加密
  * @since 17
  */
 @Data
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HeartbeatCmd implements WsCmd {
+public class BrowserEncryptCmd implements WsCmd {
 
     /**
-     * 客户端ping，服务端pong
+     * clientId
      */
-    private String param = WSParamEnum.HEARTBEAT_PARM_STRING.getMsg();
+    private String clientId;
 
+    /**
+     * 明文
+     */
+    private String plaintext;
+
+    /**
+     * 密文
+     */
+    private String ciphertext;
+
+    /**
+     * 随机字符串，作为 countDownLatch key，存储 redis 值时加上前缀
+     */
+    private String randomStr;
 }

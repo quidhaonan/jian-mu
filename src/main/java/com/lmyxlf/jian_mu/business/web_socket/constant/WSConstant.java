@@ -1,26 +1,23 @@
 package com.lmyxlf.jian_mu.business.web_socket.constant;
 
-import lombok.Getter;
-
 /**
  * @author lmy
  * @email 2130546401@qq.com
  * @date 2024/7/18 19:18
- * @description ws 枚举类
+ * @description ws 常量
  * @since 17
  */
-@Getter
-public enum WSConstant {
-    HEARTBEAT_PARM_STRING(1,"heartbeat_parm_string"),
-    HEARTBEAT_WORD(2,"heartbeat_word")
-    ;
+public class WSConstant {
 
+    public final static String REDIS_BROWSER_ENCRYPT_PREFIX = "browser_encrypt:";
 
-    private final Integer code;
-    private final String msg;
+    /**
+     * redis 过期时间，单位：秒
+     */
+    public final static Long REDIS_EXPIRE_TIME = 10 * 60L;
 
-    WSConstant(Integer code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
+    /**
+     * redis countDownLatch 超时时间，单位：秒
+     */
+    public final static Long COUNTDOWNLATCH_AWAIT_TIME = 5L;
 }

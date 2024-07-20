@@ -1,5 +1,6 @@
 package com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd;
 
+import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.impl.BrowserEncryptCmd;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.impl.HeartbeatCmd;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.impl.InitCmd;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ public enum WsCmdType {
 
     PING("heartbeat", HeartbeatCmd.class, true),
     INIT("init", InitCmd.class, true),
-    ;
+    BROWSER_ENCRYPT("browser_encrypt", BrowserEncryptCmd.class, true);
 
     private final String type;
 

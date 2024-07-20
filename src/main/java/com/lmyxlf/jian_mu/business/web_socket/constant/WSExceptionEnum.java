@@ -11,7 +11,9 @@ import lombok.Getter;
  */
 @Getter
 public enum WSExceptionEnum {
-    DEVICE_NOT_ONLINE("1001", "设备不在线");
+    DEVICE_NOT_ONLINE("1001", "设备不在线"),
+    BROWSER_OFFLINE("1002", "浏览器已下线"),
+    BROWSER_TIMEOUT("1003", "浏览器超时");
 
     private final String code;
     private final String msg;
