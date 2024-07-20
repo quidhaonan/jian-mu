@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api(tags = "ws_浏览器加密")
 @AllArgsConstructor(onConstructor_ = @Autowired)
-@RequestMapping("${jian_mu.web_socket.urlPrefix}")
+@RequestMapping("${jian_mu.web_socket.urlPrefix}/browser")
 public class BrowserEncryptController {
 
     private final BrowserEncryptService browserEncryptService;

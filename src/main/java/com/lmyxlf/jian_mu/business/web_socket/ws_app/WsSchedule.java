@@ -26,7 +26,7 @@ public class WsSchedule {
         WsManager.buildActiveCache();
         int size = WsManager.getAllActiveWebs().size();
         if (size > 0) {
-            log.info("活跃web：{}", String.join(",", WsManager.getAllActiveWebs()));
+            log.info("活跃 web：{}", String.join(",", WsManager.getAllActiveWebs()));
         }
 
     }

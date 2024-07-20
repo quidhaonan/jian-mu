@@ -9,6 +9,9 @@ package com.lmyxlf.jian_mu.business.web_socket.constant;
  */
 public class WSConstant {
 
+    /**
+     * 浏览器加密，存储 redis key 前缀
+     */
     public final static String REDIS_BROWSER_ENCRYPT_PREFIX = "browser_encrypt:";
 
     /**

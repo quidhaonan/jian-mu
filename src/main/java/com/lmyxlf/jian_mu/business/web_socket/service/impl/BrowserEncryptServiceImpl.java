@@ -9,6 +9,7 @@ import com.lmyxlf.jian_mu.business.web_socket.service.BrowserEncryptService;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.WsManager;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.WsStore;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsBaseCmd;
+import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsCmdType;
 import com.lmyxlf.jian_mu.global.constant.CODE_MSG;
 import com.lmyxlf.jian_mu.global.exception.ServiceException;
 import com.lmyxlf.jian_mu.global.util.RandomUtil;
@@ -69,7 +70,7 @@ public class BrowserEncryptServiceImpl implements BrowserEncryptService {
         countDownLatch.trySetCount(1);
 
         // 发送明文至浏览器加密
-        WsManager.sendOK(wsStore.getSession(), new WsBaseCmd(), respBrowserEncrypt);
+        WsManager.sendOK(wsStore.getSession(), new WsBaseCmd().setType(WsCmdType.BROWSER_ENCRYPT.getType()), respBrowserEncrypt);
         try {
             boolean completed = countDownLatch.await(WSConstant.COUNTDOWNLATCH_AWAIT_TIME, TimeUnit.SECONDS);
             if (!completed) {
