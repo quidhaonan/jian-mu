@@ -5,7 +5,8 @@ spring:
   application:
     name: jian_mu
   config:
-    import: classpath:application-local.yml
+    import: classpath:application-local.yml,
+                      business/web_socket/web-socket.yml
   
   # 数据源
   datasource:

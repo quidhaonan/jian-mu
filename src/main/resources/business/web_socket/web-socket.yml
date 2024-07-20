@@ -1,0 +1,3 @@
+jian_mu:
+  web_socket:
+    urlPrefix: /ws
