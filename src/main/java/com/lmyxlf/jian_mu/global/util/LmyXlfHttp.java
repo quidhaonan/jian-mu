@@ -4,6 +4,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.lmyxlf.jian_mu.global.constant.LmyXlfReqParamConstant;
 import com.lmyxlf.jian_mu.global.exception.LmyXlfException;
 import com.lmyxlf.jian_mu.global.exception.LmyXlfIOException;
 import com.lmyxlf.jian_mu.global.model.HttpResult;
@@ -51,13 +52,13 @@ public class LmyXlfHttp {
         this.request = request;
     }
 
-    public static void printManagerStatus(){
+    public static void printManagerStatus() {
         PoolingHttpClientConnectionManager connectManager = HttpClientUtils.getConnectManager();
         // 获取每个路由的状态
         Set<HttpRoute> routes = connectManager.getRoutes();
         routes.forEach(e -> {
             PoolStats stats = connectManager.getStats(e);
-            log.info("Per route: {} {}",e,stats);
+            log.info("Per route: {} {}", e, stats);
         });
         // 获取所有路由的连接池状态
 //        PoolStats totalStats = connectManager.getTotalStats();
@@ -86,7 +87,7 @@ public class LmyXlfHttp {
             //         .tag("path", uri.getRawPath())
             //         .log("请求url：{}失败! {}, 异常出现间隔:{}", uri, ExceptionUtils.getStackTrace(e), System.currentTimeMillis()-t1)
             //         .inc();
-            log.error("请求 url：{}失败! {}, 异常出现间隔:{}", uri, ExceptionUtils.getStackTrace(e), System.currentTimeMillis()-t1);
+            log.error("请求 url：{}失败! {}, 异常出现间隔:{}", uri, ExceptionUtils.getStackTrace(e), System.currentTimeMillis() - t1);
             throw new LmyXlfException("http 请求异常: " + uri);
         }
     }
@@ -99,6 +100,7 @@ public class LmyXlfHttp {
      * 返回以响应头 byte[] 格式填充 HttpResult 类
      * 数据位于 bytes 字段
      * 只适用于小数据响应头返回，如果有下载文件等需要，请使用 execute() 方法
+     *
      * @return
      */
     public HttpResult bodyBytes() {
@@ -375,6 +377,19 @@ public class LmyXlfHttp {
                 this.header = new HashMap<>();
             }
             this.header.put(key, value);
+            return this;
+        }
+
+        /**
+         * 伪装 ip
+         *
+         * @return
+         */
+        public LmyXlfHttpBuilder proxy() {
+            if (null == this.header) {
+                this.header = new HashMap<>();
+            }
+            this.header.put(LmyXlfReqParamConstant.KEY_X_FORWARDED_FOR, RandomUtil.generateRandomIp());
             return this;
         }
 

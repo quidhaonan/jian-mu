@@ -147,7 +147,9 @@ public class CommonExceptionHandler {
         }
         // Monitor.warn("param_binding_error").log(sb.toString()).inc();
         log.warn(sb.toString());
-        return LmyXlfResult.error(CODE_MSG.ARGUMENT_NOT_VALID);
+        // return LmyXlfResult.error(CODE_MSG.ARGUMENT_NOT_VALID);
+
+        return LmyXlfResult.error(sb.toString());
     }
 
     /**

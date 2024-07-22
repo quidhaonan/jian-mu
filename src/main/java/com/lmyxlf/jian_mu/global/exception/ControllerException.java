@@ -7,6 +7,7 @@ package com.lmyxlf.jian_mu.global.exception;
  * @description 控制层异常
  * @since 17
  */
+@Deprecated
 public class ControllerException extends MyException {
     public ControllerException() {
     }

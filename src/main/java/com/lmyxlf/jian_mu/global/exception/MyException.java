@@ -10,9 +10,9 @@ import lombok.EqualsAndHashCode;
  * @description 自定义异常类
  * @since 17
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Deprecated
+@EqualsAndHashCode(callSuper = true)
 public class MyException extends RuntimeException{
 
     public MyException() {

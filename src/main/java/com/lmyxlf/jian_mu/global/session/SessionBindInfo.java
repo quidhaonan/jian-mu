@@ -21,7 +21,7 @@ public class SessionBindInfo {
     private String phone;
 
     /**
-     * 从HttpServletRequest 构造绑定信息并在 HttpServletRequest 记录下来
+     * 从 HttpServletRequest 构造绑定信息并在 HttpServletRequest 记录下来
      *
      * @param httpRequest 本次 HttpServletRequest 请求对象
      */
