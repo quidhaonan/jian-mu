@@ -3,10 +3,13 @@ package com.lmyxlf.jian_mu.global.util;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.lmyxlf.jian_mu.global.constant.LmyXlfReqParamConstant;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Optional;
 
 /**
  * @author lmy
@@ -22,6 +25,7 @@ public class IPUtils {
     public final static String UNKNOWN = "unknown";
     public final static String DEFAULT_IP_4_ADDRESS = "127.0.0.1";
     public final static String DEFAULT_IP_6_ADDRESS = "0:0:0:0:0:0:0:1";
+    public final static Integer IP_LEN = 15;
 
     /**
      * 获取 IP 地址
@@ -39,8 +43,8 @@ public class IPUtils {
         String ipAddress = request.getHeader(LmyXlfReqParamConstant.KEY_X_REAL_IP);
 
         // 各服务代理 ip
-        if (ipAddress ==null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)){
-            ipAddress=request.getHeader(LmyXlfReqParamConstant.KEY_PROXY_CLIENT_IP);
+        if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader(LmyXlfReqParamConstant.KEY_PROXY_CLIENT_IP);
         }
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader(LmyXlfReqParamConstant.KEY_WL_PROXY_CLIENT_IP);
@@ -59,7 +63,7 @@ public class IPUtils {
                     ipAddress = inet.getHostAddress();
                 } catch (UnknownHostException e) {
                     // Monitor.error("get_local_host_error").log("获取本地host异常：{}", ExceptionUtil.getMessage(e)).inc();
-                    log.error("获取本地host异常：{}", ExceptionUtil.getMessage(e));
+                    log.error("获取本地 host 异常：{}", ExceptionUtil.getMessage(e));
                 }
             }
         }
@@ -70,11 +74,58 @@ public class IPUtils {
         }
 
         // 对于通过多个代理的情况，第一个 IP 为客户端真实 IP,多个 IP 按照 ',' 分割 //"***.***.***.***".length() = 15
-        if (ipAddress != null && ipAddress.length() > 15) {
+        if (ipAddress != null && ipAddress.length() > IP_LEN) {
             if (ipAddress.indexOf(",") > 0) {
                 ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
             }
         }
+        return ipAddress;
+    }
+
+    public static String getIpAddr(ServerHttpRequest request) {
+        HttpHeaders headers = request.getHeaders();
+        String ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_X_REAL_IP);
+
+        // 各服务代理 ip
+        if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+            ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_PROXY_CLIENT_IP);
+        }
+        if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+            ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_WL_PROXY_CLIENT_IP);
+        }
+        if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+            ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_HTTP_CLIENT_IP);
+        }
+
+        if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+            ipAddress = Optional.ofNullable(request.getRemoteAddress())
+                    .map(address -> address.getAddress().getHostAddress())
+                    .orElse("");
+            if (DEFAULT_IP_4_ADDRESS.equals(ipAddress) || DEFAULT_IP_6_ADDRESS.equals(ipAddress)) {
+                // 根据网卡取本机配置的IP
+                try {
+                    InetAddress inet = InetAddress.getLocalHost();
+                    ipAddress = inet.getHostAddress();
+                } catch (UnknownHostException e) {
+                    // ignore
+                    log.error("获取本地 host 异常：{}", ExceptionUtil.getMessage(e));
+                }
+            }
+        }
+
+        // X-Forwarded-For ip，可能会存在伪装 ip
+        if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+            ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_X_FORWARDED_FOR);
+        }
+
+        // 对于通过多个代理的情况，第一个 IP 为客户端真实 IP,多个 IP 按照 ',' 分割 //"***.***.***.***".length() = 15
+        if (ipAddress != null && ipAddress.length() > IP_LEN) {
+            int index = ipAddress.indexOf(",");
+            if (index > 0) {
+                ipAddress = ipAddress.substring(0, index);
+            }
+        }
+
         return ipAddress;
     }
 }

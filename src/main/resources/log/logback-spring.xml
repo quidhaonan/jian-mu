@@ -24,7 +24,7 @@
 
     <property name="CONSOLE_LOG_PATTERN" value='{%json_msg,"stack_trace":"%throwableProxy"} %n'/>
     <property name="CONSOLE_LOG_PATTERN_LOCAL"
-              value="[${APP_NAME}][%pod_name][%clr(%level){blue}] [%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint}] [%ip] [%logger{36}] [%clr(%X{traceId:-}){yellow}] [%m]%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+              value="[${APP_NAME}][%pod_name][%clr(%level){blue}] [%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint}] [%ip] [%clr(%X{remoteIp:-}){red}] [%logger{36}] [%clr(%X{traceId:-}){yellow}] [%m]%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
     <property name="LOGS_LOCATION" value="./jian_mu/logs" />
 
     <!-- 控制台日志 -->

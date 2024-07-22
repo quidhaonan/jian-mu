@@ -1,5 +1,6 @@
 package com.lmyxlf.jian_mu.log;
 
+import com.lmyxlf.jian_mu.global.util.IPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -26,7 +27,7 @@ public class WebFluxIpFilter implements WebFilter {
     public static final String REMOTE_IP = "remoteIp";
 
     public WebFluxIpFilter() {
-        if (log.isDebugEnabled()){
+        if (log.isDebugEnabled()) {
             log.debug("IP日志被创建");
         }
     }
@@ -34,7 +35,7 @@ public class WebFluxIpFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        MDC.put(REMOTE_IP,IpUtils.getIpAddr(request));
+        MDC.put(REMOTE_IP, IPUtils.getIpAddr(request));
         return chain.filter(exchange);
     }
 }
