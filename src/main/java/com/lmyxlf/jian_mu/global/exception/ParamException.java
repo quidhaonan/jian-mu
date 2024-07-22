@@ -7,6 +7,7 @@ package com.lmyxlf.jian_mu.global.exception;
  * @description 参数错误异常
  * @since 17
  */
+@Deprecated
 public class ParamException extends RuntimeException {
 
     private String msg;

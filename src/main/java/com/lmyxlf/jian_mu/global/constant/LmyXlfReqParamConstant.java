@@ -17,14 +17,32 @@ public class LmyXlfReqParamConstant {
      * 客户端远程 IP 的 Http 头
      */
     public final static String KEY_REMOTE_ADDR = "REMOTE_ADDR";
+
     /**
-     * 客户端真实 IP 的 Http 头
+     * 客户端真实 IP 的 Http 头，nginx 代理
      */
     public final static String KEY_X_REAL_IP = "X-Real-IP";
+
     /**
      * 客户端路由 IP 序列的 Http 头
      */
     public final static String KEY_X_FORWARDED_FOR = "X-Forwarded-For";
+
+    /**
+     * apache 服务代理
+     */
+    public final static String KEY_PROXY_CLIENT_IP = "Proxy-Client-IP";
+
+    /**
+     * weblogic 服务代理
+     */
+    public final static String KEY_WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
+
+    /**
+     * 其他服务代理
+     */
+    public final static String KEY_HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
+
     /**
      * 请求时间戳
      */

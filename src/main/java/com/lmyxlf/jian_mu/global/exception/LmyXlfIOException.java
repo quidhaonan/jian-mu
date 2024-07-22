@@ -7,6 +7,7 @@ package com.lmyxlf.jian_mu.global.exception;
  * @description
  * @since 17
  */
+@Deprecated
 public class LmyXlfIOException extends LmyXlfException{
     public LmyXlfIOException() {
     }

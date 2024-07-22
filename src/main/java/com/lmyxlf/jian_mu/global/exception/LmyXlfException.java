@@ -7,12 +7,11 @@ import lombok.EqualsAndHashCode;
  * @author lmy
  * @email 2130546401@qq.com
  * @date 2024/7/6 17:32
- * @description 业务层异常
+ * @description 主要异常
  * @since 17
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-@Deprecated
+@EqualsAndHashCode(callSuper = true)
 public class LmyXlfException extends RuntimeException {
     private Object error;
 

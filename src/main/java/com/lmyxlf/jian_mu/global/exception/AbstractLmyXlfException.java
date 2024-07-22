@@ -26,8 +26,9 @@ import lombok.EqualsAndHashCode;
  *              }
  * @since 17
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
+@Deprecated
+@EqualsAndHashCode(callSuper = true)
 public abstract class AbstractLmyXlfException extends RuntimeException{
     private Object error;
 
