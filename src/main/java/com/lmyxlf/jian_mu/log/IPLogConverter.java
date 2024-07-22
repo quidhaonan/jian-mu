@@ -29,5 +29,4 @@ public class IPLogConverter extends ClassicConverter {
             return "127.0.0.1";
         }
     }
-
 }

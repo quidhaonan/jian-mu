@@ -1,5 +1,7 @@
 package com.lmyxlf.jian_mu.log;
 
+import com.lmyxlf.jian_mu.global.constant.TraceConstant;
+import com.lmyxlf.jian_mu.global.util.IPUtils;
 import org.slf4j.MDC;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -23,16 +25,13 @@ public class RemoteIpLogInterceptor implements HandlerInterceptor {
 
     public static final String REMOTE_IP = "remoteIp";
 
-    public static final String TRACE_ID = "traceId";
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String ipAddr = IpUtils.getIpAddr(request);
+        String ipAddr = IPUtils.getIpAddr(request);
         // 强转报错，修改 getIpAddr 接收参数
 //        String ipAddr = IpUtils.getIpAddr((javax.servlet.http.HttpServletRequest) request);
         MDC.put(REMOTE_IP, ipAddr);
-        MDC.put(TRACE_ID, TraceIdGenerator.generateTraceId(ipAddr));
+        MDC.put(TraceConstant.LOG_B3_TRACEID, TraceIdGenerator.generateTraceId(ipAddr));
         return true;
     }
-
 }
