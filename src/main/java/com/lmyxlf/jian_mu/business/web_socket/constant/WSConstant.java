@@ -12,7 +12,12 @@ public class WSConstant {
     /**
      * 浏览器加密，存储 redis key 前缀
      */
-    public final static String REDIS_BROWSER_ENCRYPT_PREFIX = "browser_encrypt:";
+    public final static String REDIS_BROWSER_ENCRYPT_PREFIX = "browserEncrypt:";
+
+    /**
+     * redis countDownLatch 前缀
+     */
+    public final static String REDIS_COUNTDOWNLATCH_PREFIX = "countDownLatch:";
 
     /**
      * redis 过期时间，单位：秒

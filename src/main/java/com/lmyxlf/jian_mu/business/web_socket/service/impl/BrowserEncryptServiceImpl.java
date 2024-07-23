@@ -11,7 +11,7 @@ import com.lmyxlf.jian_mu.business.web_socket.ws_app.WsStore;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsBaseCmd;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsCmdType;
 import com.lmyxlf.jian_mu.global.constant.CODE_MSG;
-import com.lmyxlf.jian_mu.global.exception.ServiceException;
+import com.lmyxlf.jian_mu.global.exception.LmyXlfException;
 import com.lmyxlf.jian_mu.global.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class BrowserEncryptServiceImpl implements BrowserEncryptService {
         WsStore wsStore = WsManager.getStore(clientId);
         if (ObjUtil.isNull(wsStore)) {
             log.error("浏览器已下线，reqBrowserEncrypt：{}", reqBrowserEncrypt);
-            throw new ServiceException(WSExceptionEnum.BROWSER_OFFLINE.getMsg());
+            throw new LmyXlfException(WSExceptionEnum.BROWSER_OFFLINE.getMsg());
         }
 
         // 存储 redis
@@ -66,7 +66,7 @@ public class BrowserEncryptServiceImpl implements BrowserEncryptService {
         rBucket.set(respBrowserEncrypt, WSConstant.REDIS_EXPIRE_TIME, TimeUnit.SECONDS);
 
         // 等待浏览器返回密文
-        RCountDownLatch countDownLatch = redissonClient.getCountDownLatch(randomStr);
+        RCountDownLatch countDownLatch = redissonClient.getCountDownLatch(WSConstant.REDIS_COUNTDOWNLATCH_PREFIX + randomStr);
         countDownLatch.trySetCount(1);
 
         // 发送明文至浏览器加密
@@ -75,11 +75,11 @@ public class BrowserEncryptServiceImpl implements BrowserEncryptService {
             boolean completed = countDownLatch.await(WSConstant.COUNTDOWNLATCH_AWAIT_TIME, TimeUnit.SECONDS);
             if (!completed) {
                 log.error("countDownLatch 等待超时，respBrowserEncrypt：{}", respBrowserEncrypt);
-                throw new ServiceException(WSExceptionEnum.BROWSER_TIMEOUT.getMsg());
+                throw new LmyXlfException(WSExceptionEnum.BROWSER_TIMEOUT.getMsg());
             }
         } catch (InterruptedException e) {
             log.error("countDownLatch 出现错误，respBrowserEncrypt：{}", respBrowserEncrypt);
-            throw new ServiceException(CODE_MSG.ERROR);
+            throw new LmyXlfException(CODE_MSG.ERROR);
         }
 
         // 获得最新 redis 值

@@ -6,7 +6,7 @@ import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsCmd;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsCmdType;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.handler.WsHandler;
 import com.lmyxlf.jian_mu.global.constant.CODE_MSG;
-import com.lmyxlf.jian_mu.global.exception.ServiceException;
+import com.lmyxlf.jian_mu.global.exception.LmyXlfException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
@@ -75,14 +75,14 @@ public class WsServerEndpoint {
             String reqType = wsBaseRes.getType();
 
             if (reqType == null) {
-                WsManager.sendError(wsBaseRes, session, new ServiceException(CODE_MSG.ERROR));
+                WsManager.sendError(wsBaseRes, session, new LmyXlfException(CODE_MSG.ERROR));
                 log.error("[ws web 接收数据异常], 类型不存在, sessionId：[{}]，text：[{}]", session.getId(), text);
                 return;
             }
 
             WsCmdType type = WsCmdType.of(reqType);
             if (type == null) {
-                WsManager.sendError(wsBaseRes, session, new ServiceException(CODE_MSG.ERROR));
+                WsManager.sendError(wsBaseRes, session, new LmyXlfException(CODE_MSG.ERROR));
                 log.error("[ws web 接收数据异常],未知指令, sessionId：[{}]，type：[{}]，text：[{}]", session.getId(), reqType, text);
                 return;
             }

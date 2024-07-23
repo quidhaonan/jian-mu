@@ -8,7 +8,7 @@ import com.lmyxlf.jian_mu.business.web_socket.constant.WSExceptionEnum;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsBaseCmd;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsCmdType;
 import com.lmyxlf.jian_mu.global.constant.CODE_MSG;
-import com.lmyxlf.jian_mu.global.exception.ServiceException;
+import com.lmyxlf.jian_mu.global.exception.LmyXlfException;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -224,7 +224,7 @@ public class WsManager {
         WsStore store = webStores.getIfPresent(clientId);
         if (store == null) {
             log.error("[发送设备指令]，设备不在线，clientId：[{}]，cmd：[{}]", clientId, wsWebBaseCmd);
-            throw new ServiceException(WSExceptionEnum.DEVICE_NOT_ONLINE.getMsg());
+            throw new LmyXlfException(WSExceptionEnum.DEVICE_NOT_ONLINE.getMsg());
         }
 
         sendText(store.getSession(), wsWebBaseCmd);

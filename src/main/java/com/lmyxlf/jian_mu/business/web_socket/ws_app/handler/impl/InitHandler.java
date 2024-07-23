@@ -9,7 +9,7 @@ import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.WsCmdType;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.cmd.impl.InitCmd;
 import com.lmyxlf.jian_mu.business.web_socket.ws_app.handler.WsHandler;
 import com.lmyxlf.jian_mu.global.constant.CODE_MSG;
-import com.lmyxlf.jian_mu.global.exception.ServiceException;
+import com.lmyxlf.jian_mu.global.exception.LmyXlfException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +41,7 @@ public class InitHandler implements WsHandler<InitCmd> {
         String clientId = cmd.getClientId();
         if (clientId == null) {
             log.error("[初始化 web 连接]，clientId 为空，sessionId：[{}]", session.getId());
-            throw new ServiceException(CODE_MSG.ERROR);
+            throw new LmyXlfException(CODE_MSG.ERROR);
         }
 
         // 2. 踢掉旧的连接
@@ -64,7 +64,7 @@ public class InitHandler implements WsHandler<InitCmd> {
         // 获取设备消息
         WsStore store = WsManager.getStoreBySessionId(session.getId());
         if (store == null) {
-            WsManager.sendError(wsBaseCmd, session, new ServiceException(WSExceptionEnum.DEVICE_NOT_ONLINE.getMsg()));
+            WsManager.sendError(wsBaseCmd, session, new LmyXlfException(WSExceptionEnum.DEVICE_NOT_ONLINE.getMsg()));
             WsManager.closeSession(session);
             return false;
         }
