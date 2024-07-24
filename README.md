@@ -1,7 +1,13 @@
 # jianMu
 A spring boot project with all the ideas
 
-## 1. 开始
+## 1. 分支
+1. 检出分支：`main`
+2. 合并分支：
+   + `feat/lmyxlf/web_socket`
+   + `feat/lmyxlf/养号`
+
+## 2. 开始
 
 ### ① 服务器
 
@@ -56,7 +62,7 @@ A spring boot project with all the ideas
 
 2. 在 `src/main/resources/application-local.yml` 配置文件中加上本地 redis 的 ip 地址与密码
 
-## 2. 基本信息
+## 3. 基本信息
 
 1. 数据库默认密码：`lmyxlf`，默认连接数据库名 `lmyxlf`
 2. redis 默认密码：`lmyxlf`
