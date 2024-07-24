@@ -5,8 +5,7 @@ import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNCornConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.entity.RaisingNumbers;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.enums.RaisingNumbersTypeEnums;
-import com.lmyxlf.jian_mu.business.raising_numbers.model.req.ReqLibaoLand;
-import com.lmyxlf.jian_mu.business.raising_numbers.model.resp.RespLibaoLand;
+import com.lmyxlf.jian_mu.business.raising_numbers.model.resp.RespJingyiForum;
 import com.lmyxlf.jian_mu.business.raising_numbers.service.RaisingNumbersService;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
 import com.lmyxlf.jian_mu.global.util.LmyXlfHttp;
@@ -27,63 +26,52 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author lmy
  * @email 2130546401@qq.com
- * @date 2024/7/24 0:08
- * @description 丽宝乐园
+ * @date 2024/7/24 22:29
+ * @description 精易论坛
  * @since 17
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class LibaoLandScheduled {
+public class JingyiForumScheduled {
 
     private final RaisingNumbersService raisingNumbersService;
 
     /**
      * 签到 url
      */
-    private final static String SIGN_IN_URL = "https://m.mallcoo.cn/api/user/User/CheckinV2";
+    private final static String SIGN_IN_URL = "https://bbs.125.la/plugin.php?" +
+            "id=dsu_paulsign:sign&operation=qiandao&infloat=1&formhash=ad509b0f&submit=1&targerurl=&todaysay=&qdxq=kx";
 
     /**
      * 签到成功码
      */
-    private final static String CODE_SUCCESS = "1";
+    private final static String CODE_SUCCESS = "0";
 
-    /**
-     * 今日已签到成功码
-     */
-    private final static String CODE_REPEAT = "2054";
-
-    /**
-     * 签到
-     */
     @Async("async_executor_rn")
-    @Scheduled(cron = RNCornConstant.EVERY_DAY_0_CLOCK_1_MINUTE_AM)
+    @Scheduled(cron = RNCornConstant.EVERY_DAY_12_CLOCK_0_MINUTE_PM)
     public void signIn() {
-        log.info("开始[{}]养号", RaisingNumbersTypeEnums.LIBAO_LAND.getName());
+        log.info("开始[{}]养号", RaisingNumbersTypeEnums.JINGYI_FORUM.getName());
         // 养号失败列表
-        List<RespLibaoLand> failList = new ArrayList<>();
+        List<RespJingyiForum> failList = new ArrayList<>();
 
-        // 请求头
-        Map<String, String> headers = getHeaders();
-
-        // 请求 token
+        // 请求 cookie
         List<RaisingNumbers> raisingNumbersList = raisingNumbersService.lambdaQuery()
-                .eq(RaisingNumbers::getType, RaisingNumbersTypeEnums.LIBAO_LAND.getType())
+                .eq(RaisingNumbers::getType, RaisingNumbersTypeEnums.JINGYI_FORUM.getType())
                 .list();
+
         // 养号
         raisingNumbersList.forEach(item -> {
-            // 请求参数
-            ReqLibaoLand params = new ReqLibaoLand(item.getToken());
-            RespLibaoLand result = LmyXlfHttp
-                    .post(SIGN_IN_URL)
+            // 请求头
+            Map<String, String> headers = getHeaders(item.getToken());
+            RespJingyiForum result = LmyXlfHttp.post(SIGN_IN_URL)
                     .header(headers)
-                    .json(params)
-                    .proxy()
-                    .build().json(RespLibaoLand.class);
-            log.info("[{}]养号，item：{}，result：{}", RaisingNumbersTypeEnums.LIBAO_LAND.getName(), item, result);
+                    .build()
+                    .json(RespJingyiForum.class);
+            log.info("[{}]养号，item：{}，result：{}", RaisingNumbersTypeEnums.JINGYI_FORUM.getName(), item, result);
 
-            String m = result.getM();
-            if (!CODE_SUCCESS.equals(m) && !CODE_REPEAT.equals(m)) {
+            String status = result.getStatus();
+            if (!CODE_SUCCESS.equals(status)) {
                 result.setRaisingNumbers(item);
                 failList.add(result);
             }
@@ -98,8 +86,8 @@ public class LibaoLandScheduled {
         });
 
         if (!failList.isEmpty()) {
-            log.error("[{}]养号失败，failList：{}", RaisingNumbersTypeEnums.LIBAO_LAND.getName(), failList);
-            XiZhiNoticeUtil.xiZhiMsgNotice(RaisingNumbersTypeEnums.LIBAO_LAND.getName(), JSONUtil.toJsonStr(LmyXlfResult.ok(failList)));
+            log.error("[{}]养号失败，failList：{}", RaisingNumbersTypeEnums.JINGYI_FORUM.getName(), failList);
+            XiZhiNoticeUtil.xiZhiMsgNotice(RaisingNumbersTypeEnums.JINGYI_FORUM.getName(), JSONUtil.toJsonStr(LmyXlfResult.ok(failList)));
         }
     }
 
@@ -108,20 +96,25 @@ public class LibaoLandScheduled {
      *
      * @return
      */
-    private Map<String, String> getHeaders() {
+    private Map<String, String> getHeaders(String cookie) {
         return new HashMap<>() {{
-            put("Host", "m.mallcoo.cn");
+            put("Host", "bbs.125.la");
             put("Connection", "keep-alive");
-            put("xweb_xhr", "1");
-            put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090819)XWEB/11097");
-            put("Content-Type", "application/json");
+            put("sec-ch-ua", "\";Not A Brand\";v=\"99\", \"Chromium\";v=\"94\"");
             put("Accept", "*/*");
-            put("Sec-Fetch-Site", "cross-site");
+            put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            put("X-Requested-With", "XMLHttpRequest");
+            put("sec-ch-ua-mobile", "?0");
+            put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36 Core/1.94.263.400 QQBrowser/12.7.5748.400");
+            put("sec-ch-ua-platform", "\"Windows\"");
+            put("Origin", "https://bbs.125.la");
+            put("Sec-Fetch-Site", "same-origin");
             put("Sec-Fetch-Mode", "cors");
             put("Sec-Fetch-Dest", "empty");
-            put("Referer", "https://servicewechat.com/wx73572d1e4a9dfbf6/23/page-frame.html");
+            put("Referer", "https://bbs.125.la/dsu_paulsign-sign.html");
             put("Accept-Encoding", "gzip, deflate, br");
             put("Accept-Language", "zh-CN,zh;q=0.9");
+            put("Cookie", cookie);
         }};
     }
 }
