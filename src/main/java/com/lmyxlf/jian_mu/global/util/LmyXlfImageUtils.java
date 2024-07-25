@@ -3,8 +3,7 @@ package com.lmyxlf.jian_mu.global.util;
 import cn.hutool.core.codec.Base64Decoder;
 import cn.hutool.core.codec.Base64Encoder;
 import cn.hutool.core.img.ImgUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,9 +15,8 @@ import java.io.ByteArrayOutputStream;
  * @description springMcv 自定义的一些配置
  * @since 17
  */
+@Slf4j
 public class LmyXlfImageUtils {
-
-    private static final Logger log = LoggerFactory.getLogger(LmyXlfImageUtils.class);
 
     public static String compressBase64Str(String base64Str, float scale) {
         byte[] decode = Base64Decoder.decode(base64Str);

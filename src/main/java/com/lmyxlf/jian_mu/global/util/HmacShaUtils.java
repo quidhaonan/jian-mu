@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -21,9 +20,9 @@ import java.security.NoSuchAlgorithmException;
 @Slf4j
 public class HmacShaUtils {
 
-    private final static String HMAC_SHA1 = "HmacSHA1";
-    private final static String HMAC_SHA256 = "HmacSHA256";
-    private final static String HMAC_MD5 = "HmacMD5";
+    private static final String HMAC_SHA1 = "HmacSHA1";
+    private static final String HMAC_SHA256 = "HmacSHA256";
+    private static final String HMAC_MD5 = "HmacMD5";
 
 
     /**

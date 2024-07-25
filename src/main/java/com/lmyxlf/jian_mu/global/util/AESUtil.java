@@ -18,8 +18,9 @@ import java.util.Base64;
  */
 @Slf4j
 public class AESUtil {
-    private static final int MIN_KEY_LENGTH = 16;
-    private static final int NUL_CHARACTERS_ASCII = 0;
+
+    private static final Integer MIN_KEY_LENGTH = 16;
+    private static final Integer NUL_CHARACTERS_ASCII = 0;
 
     /**
      * 加密

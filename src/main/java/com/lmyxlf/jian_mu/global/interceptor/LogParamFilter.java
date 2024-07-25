@@ -1,6 +1,7 @@
 package com.lmyxlf.jian_mu.global.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.Ordered;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -25,17 +26,17 @@ import java.util.Enumeration;
 @Slf4j
 public class LogParamFilter extends OncePerRequestFilter implements Ordered {
 
-    private int order = Ordered.LOWEST_PRECEDENCE - 8;
+    private static final Integer ORDER = Ordered.LOWEST_PRECEDENCE - 8;
     public static final String SPLIT_STRING_M = "=";
     public static final String SPLIT_STRING_DOT = ", ";
 
     @Override
     public int getOrder() {
-        return order;
+        return ORDER;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         ContentCachingRequestWrapper wrapperRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrapperResponse = new ContentCachingResponseWrapper(response);
@@ -103,7 +104,7 @@ public class LogParamFilter extends OncePerRequestFilter implements Ordered {
         // 获取请求参数
         while (enu.hasMoreElements()) {
             String name = enu.nextElement();
-            sb.append(name + SPLIT_STRING_M).append(request.getParameter(name));
+            sb.append(name).append(SPLIT_STRING_M).append(request.getParameter(name));
             if (enu.hasMoreElements()) {
                 sb.append(SPLIT_STRING_DOT);
             }

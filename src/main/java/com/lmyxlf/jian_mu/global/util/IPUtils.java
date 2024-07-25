@@ -22,10 +22,10 @@ import java.util.Optional;
 @Slf4j
 public class IPUtils {
 
-    public final static String UNKNOWN = "unknown";
-    public final static String DEFAULT_IP_4_ADDRESS = "127.0.0.1";
-    public final static String DEFAULT_IP_6_ADDRESS = "0:0:0:0:0:0:0:1";
-    public final static Integer IP_LEN = 15;
+    public static final String UNKNOWN = "unknown";
+    public static final String DEFAULT_IP_4_ADDRESS = "127.0.0.1";
+    public static final String DEFAULT_IP_6_ADDRESS = "0:0:0:0:0:0:0:1";
+    public static final Integer IP_LEN = 15;
 
     /**
      * 获取 IP 地址

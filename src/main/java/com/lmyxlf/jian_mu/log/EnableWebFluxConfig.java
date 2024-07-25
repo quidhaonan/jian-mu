@@ -1,7 +1,6 @@
 package com.lmyxlf.jian_mu.log;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,11 +12,10 @@ import org.springframework.context.annotation.Configuration;
  * @description
  * @since 17
  */
+@Slf4j
 @Configuration
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 public class EnableWebFluxConfig {
-
-    private static final Logger log = LoggerFactory.getLogger(EnableWebFluxConfig.class);
 
     public EnableWebFluxConfig() {
         if (log.isDebugEnabled()) {

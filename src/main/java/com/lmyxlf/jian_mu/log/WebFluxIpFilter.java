@@ -1,8 +1,9 @@
 package com.lmyxlf.jian_mu.log;
 
+import com.lmyxlf.jian_mu.global.constant.LmyXlfReqParamConstant;
 import com.lmyxlf.jian_mu.global.util.IPUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -18,13 +19,9 @@ import reactor.core.publisher.Mono;
  * @description
  * @since 17
  */
+@Slf4j
 @Configuration
 public class WebFluxIpFilter implements WebFilter {
-
-    private static final Logger log = LoggerFactory.getLogger(WebFluxIpFilter.class);
-
-
-    public static final String REMOTE_IP = "remoteIp";
 
     public WebFluxIpFilter() {
         if (log.isDebugEnabled()) {
@@ -33,9 +30,9 @@ public class WebFluxIpFilter implements WebFilter {
     }
 
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+    public @NotNull Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        MDC.put(REMOTE_IP, IPUtils.getIpAddr(request));
+        MDC.put(LmyXlfReqParamConstant.REMOTE_IP, IPUtils.getIpAddr(request));
         return chain.filter(exchange);
     }
 }
