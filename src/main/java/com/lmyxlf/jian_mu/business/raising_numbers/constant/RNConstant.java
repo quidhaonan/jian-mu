@@ -12,5 +12,15 @@ public class RNConstant {
     /**
      * 随机休眠时长
      */
-    public static final Integer SLEEP_DURATION = 9999;
+    public static final Long SLEEP_DURATION = 9999L;
+
+    /**
+     * 养号成功
+     */
+    public static final String RN_SUCCEED = "-养号成功";
+
+    /**
+     * 养号失败
+     */
+    public static final String RN_FAILED = "-养号失败";
 }

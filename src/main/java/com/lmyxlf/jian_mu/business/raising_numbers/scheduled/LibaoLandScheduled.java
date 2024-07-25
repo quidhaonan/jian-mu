@@ -8,6 +8,7 @@ import com.lmyxlf.jian_mu.business.raising_numbers.model.enums.RaisingNumbersTyp
 import com.lmyxlf.jian_mu.business.raising_numbers.model.req.ReqLibaoLand;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.resp.RespLibaoLand;
 import com.lmyxlf.jian_mu.business.raising_numbers.service.RaisingNumbersService;
+import com.lmyxlf.jian_mu.business.raising_numbers.util.RandomHibernationUtil;
 import com.lmyxlf.jian_mu.business.raising_numbers.util.UserAgentUtil;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
 import com.lmyxlf.jian_mu.global.util.LmyXlfHttp;
@@ -50,7 +51,7 @@ public class LibaoLandScheduled {
     private static final String CODE_SUCCESS = "1";
 
     /**
-     * 今日已签到成功码
+     * 已签到成功码
      */
     private static final String CODE_REPEAT = "2054";
 
@@ -60,9 +61,10 @@ public class LibaoLandScheduled {
     @Async("async_executor_rn")
     @Scheduled(cron = RNCornConstant.EVERY_DAY_0_CLOCK_1_MINUTE_AM)
     public void dailyCheckIn() {
-        log.info("开始[{}]养号", RaisingNumbersTypeEnums.LIBAO_LAND.getName());
+        String projectName = RaisingNumbersTypeEnums.LIBAO_LAND.getName();
+        log.info("开始[{}]养号", projectName);
         // 养号失败列表
-        List<RespLibaoLand> failList = new ArrayList<>();
+        List<RespLibaoLand> failedList = new ArrayList<>();
 
         // 请求头
         Map<String, String> headers = getHeaders();
@@ -82,27 +84,20 @@ public class LibaoLandScheduled {
                     .proxy()
                     .build()
                     .json(RespLibaoLand.class);
-            log.info("[{}]养号，item：{}，result：{}", RaisingNumbersTypeEnums.LIBAO_LAND.getName(), item, result);
+            log.info("[{}]养号，item：{}，result：{}", projectName, item, result);
 
             String m = result.getM();
             if (!CODE_SUCCESS.equals(m) && !CODE_REPEAT.equals(m)) {
                 result.setRaisingNumbers(item);
-                failList.add(result);
+                failedList.add(result);
             }
 
             // 随机休眠
-            int nextInt = ThreadLocalRandom.current().nextInt(RNConstant.SLEEP_DURATION);
-            try {
-                Thread.sleep(nextInt);
-            } catch (InterruptedException e) {
-                log.error("休眠失败，nextInt：{}", nextInt);
-            }
+            RandomHibernationUtil.randomHibernation();
         });
 
-        if (!failList.isEmpty()) {
-            log.error("[{}]养号失败，failList：{}", RaisingNumbersTypeEnums.LIBAO_LAND.getName(), failList);
-            XiZhiNoticeUtil.xiZhiMsgNotice(RaisingNumbersTypeEnums.LIBAO_LAND.getName(), JSONUtil.toJsonStr(LmyXlfResult.ok(failList)));
-        }
+        String title = failedList.isEmpty() ? projectName + RNConstant.RN_SUCCEED : projectName + RNConstant.RN_FAILED;
+        XiZhiNoticeUtil.xiZhiMsgNotice(title, JSONUtil.toJsonStr(LmyXlfResult.ok(failedList)));
     }
 
     /**
