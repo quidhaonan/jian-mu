@@ -4,6 +4,7 @@ import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
 import com.ctrip.framework.apollo.spring.annotation.ApolloConfigChangeListener;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggingSystem;
 
@@ -17,9 +18,8 @@ import java.util.Set;
  * @description
  * @since 17
  */
+@Slf4j
 public class LogListenerConfig {
-
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LogListenerConfig.class);
 
     private static final String LOGGER_TAG = "logging.level.";
     private static final String JAVA_LOG_LEVEL_NAMESPACE = "DEV.Java.Log.Level";

@@ -50,6 +50,4 @@ public class SM4Util {
         }
         return null;
     }
-
-
 }

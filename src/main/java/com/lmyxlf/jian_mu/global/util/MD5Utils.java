@@ -15,7 +15,8 @@ import java.security.MessageDigest;
  */
 @Slf4j
 public class MD5Utils {
-    private final static String MD5 = "MD5" ;
+
+    private static final String MD5 = "MD5" ;
 
     /**
      * 计算 MD5 加密值，结果为小写字符串

@@ -11,7 +11,8 @@ import java.security.MessageDigest;
  * @since 17
  */
 public class SHAUtils {
-    private final static String SHA1 = "SHA1";
+
+    private static final String SHA1 = "SHA1";
 
     /**
      * 获取 sha1 签名

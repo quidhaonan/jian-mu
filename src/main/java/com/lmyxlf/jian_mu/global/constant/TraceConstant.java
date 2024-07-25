@@ -12,11 +12,11 @@ public class TraceConstant {
     /**
      * 链路追踪id的key
      */
-    public static final String LOG_B3_TRACEID = "traceId";
+    public static final String TRACE_ID = "traceId";
 
     /**
      * 链路追踪id的key
      */
-    public static final String LOG_B3_SPANID = "spanId";
+    public static final String SPAN_ID = "spanId";
 
 }

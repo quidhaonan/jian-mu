@@ -11,60 +11,65 @@ public class LmyXlfReqParamConstant {
     /**
      * 存储在 HttpServletRequest 的属性 Key
      */
-    public final static String KEY_ATTR_BIND_INFO = "lmyXlfBindInfo";
+    public static final String KEY_ATTR_BIND_INFO = "lmyXlfBindInfo";
 
     /**
      * 客户端远程 IP 的 Http 头
      */
-    public final static String KEY_REMOTE_ADDR = "REMOTE_ADDR";
+    public static final String KEY_REMOTE_ADDR = "REMOTE_ADDR";
+
+    /**
+     * 客户端真实 ip 地址
+     */
+    public static final String REMOTE_IP = "remoteIp";
 
     /**
      * 客户端真实 IP 的 Http 头，nginx 代理
      */
-    public final static String KEY_X_REAL_IP = "X-Real-IP";
+    public static final String KEY_X_REAL_IP = "X-Real-IP";
 
     /**
      * 客户端路由 IP 序列的 Http 头
      */
-    public final static String KEY_X_FORWARDED_FOR = "X-Forwarded-For";
+    public static final String KEY_X_FORWARDED_FOR = "X-Forwarded-For";
 
     /**
      * apache 服务代理
      */
-    public final static String KEY_PROXY_CLIENT_IP = "Proxy-Client-IP";
+    public static final String KEY_PROXY_CLIENT_IP = "Proxy-Client-IP";
 
     /**
      * weblogic 服务代理
      */
-    public final static String KEY_WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
+    public static final String KEY_WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
 
     /**
      * 其他服务代理
      */
-    public final static String KEY_HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
+    public static final String KEY_HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
 
     /**
      * 请求时间戳
      */
-    public final static String KEY_TIMESTAMP = "_rt";
+    public static final String KEY_TIMESTAMP = "_rt";
 
     /**
      * 电话号码，后台默认 +86
      */
-    public final static String KEY_PHONE = "phone";
+    public static final String KEY_PHONE = "phone";
 
     /**
      * 客户端 ip
      */
-    public final static String KEY_CLIENT_IP = "client_ip";
+    public static final String KEY_CLIENT_IP = "client_ip";
 
     /**
      * 随机字符串
      */
-    public final static String KEY_NONCE = "nonce";
+    public static final String KEY_NONCE = "nonce";
 
     /**
      * 签名
      */
-    public final static String KEY_SIGN = "sign";
+    public static final String KEY_SIGN = "sign";
 }

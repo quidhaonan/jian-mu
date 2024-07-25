@@ -15,23 +15,25 @@ import java.lang.reflect.Proxy;
  * @since 17
  */
 public class Log implements InvocationHandler {
-    private static Logger logger = LoggerFactory.getLogger(Log.class);
-    private static Logger proxy = (Logger) Proxy.newProxyInstance(logger.getClass().getClassLoader(), logger.getClass().getInterfaces(), new Log());
-    private static long pid = java.lang.management.ManagementFactory.getRuntimeMXBean().getPid();
-    private static ThreadLocal<Integer> logIndex = new ThreadLocal<Integer>() {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Log.class);
+    private static final Logger PROXY = (Logger) Proxy.newProxyInstance(LOGGER.getClass().getClassLoader(), LOGGER.getClass().getInterfaces(), new Log());
+    private static final Long PID = java.lang.management.ManagementFactory.getRuntimeMXBean().getPid();
+    public static final Integer MAX_LOG_INDEX = 9999;
+
+    private static ThreadLocal<Integer> LOG_INDEX = new ThreadLocal<Integer>() {
         @Override
         protected Integer initialValue() {
             return 0;
         }
     };
-    public static final int MAX_LOG_INDEX = 9999;
 
     private static int getLogIndex() {
-        int i = logIndex.get();
+        int i = LOG_INDEX.get();
         if (i < MAX_LOG_INDEX) {
-            logIndex.set(i + 1);
+            LOG_INDEX.set(i + 1);
         } else {
-            logIndex.set(0);
+            LOG_INDEX.set(0);
         }
         return i;
     }
@@ -46,7 +48,7 @@ public class Log implements InvocationHandler {
     public static String genLogHead(String className, String methodName, String fileName, int lineNumber) {
 
         return String.format("[%d:%d:%d][%s:%s][%s:%d]",
-                pid, Thread.currentThread().getId(), getLogIndex(),
+                PID, Thread.currentThread().getId(), getLogIndex(),
                 className, methodName,
                 fileName, lineNumber
         );
@@ -54,13 +56,13 @@ public class Log implements InvocationHandler {
 
     @Override
     public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
-        return method.invoke(logger, objects);
+        return method.invoke(LOGGER, objects);
     }
 
     /**
      * @return 返回日志对象
      */
     public static Logger get() {
-        return proxy;
+        return PROXY;
     }
 }
