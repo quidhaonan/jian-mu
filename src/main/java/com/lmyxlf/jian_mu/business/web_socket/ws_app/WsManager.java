@@ -34,23 +34,23 @@ public class WsManager {
 
 
     // ws 空闲时间， 毫秒
-    public static final int wsExpire = 1000 * 60 * 3;
+    public static final Integer WS_EXPIRE = 1000 * 60 * 3;
 
     // ws session 所使用内存的过期时间， 客户端发心跳，内存续期
-    private static final int cacheExpire = (int) (wsExpire * 2.5);
+    private static final Integer CACHE_EXPIRE = (int) (WS_EXPIRE * 2.5);
 
     // ws session 在 openSession 后没有进入活跃状态会被关闭
-    private static final int dangerDuration = 1000 * 10 * 3;
+    private static final Integer DANGER_DURATION = 1000 * 10 * 3;
 
-    private static final int cacheSize = 200;
+    private static final Integer CACHE_SIZE = 200;
 
     // ws 所有 session, 如果 session 不在活跃列表里，并且超过 dangerDuration 就会被断开
-    private static final Map<Session, Long> connectedSessions = new ConcurrentHashMap<>();
+    private static final Map<Session, Long> CONNECTED_SESSIONS = new ConcurrentHashMap<>();
 
     // clientId --> store(session)
-    public static final LoadingCache<String, WsStore> webStores = CacheBuilder.newBuilder()
-            .maximumSize(cacheSize)
-            .expireAfterAccess(Duration.ofMillis(cacheExpire))
+    public static final LoadingCache<String, WsStore> WEB_STORES = CacheBuilder.newBuilder()
+            .maximumSize(CACHE_SIZE)
+            .expireAfterAccess(Duration.ofMillis(CACHE_EXPIRE))
             .build(new CacheLoader<String, WsStore>() {
                 @Override
                 public WsStore load(@NotNull String key) {
@@ -59,9 +59,9 @@ public class WsManager {
             });
 
     // sessionId --> clientId
-    private static final LoadingCache<String, String> webSessions = CacheBuilder.newBuilder()
-            .maximumSize(cacheSize)
-            .expireAfterAccess(Duration.ofMillis(cacheExpire))
+    private static final LoadingCache<String, String> WEB_SESSIONS = CacheBuilder.newBuilder()
+            .maximumSize(CACHE_SIZE)
+            .expireAfterAccess(Duration.ofMillis(CACHE_EXPIRE))
             .build(new CacheLoader<String, String>() {
                 @Override
                 public String load(@NotNull String key) {
@@ -79,12 +79,12 @@ public class WsManager {
      */
     public static boolean renewCache(Session session) {
         String sessionId = session.getId();
-        String imei = webSessions.getIfPresent(sessionId);
+        String imei = WEB_SESSIONS.getIfPresent(sessionId);
         if (imei == null) {
             return false;
         }
 
-        webStores.getIfPresent(imei);
+        WEB_STORES.getIfPresent(imei);
         return true;
     }
 
@@ -93,11 +93,11 @@ public class WsManager {
     }
 
     public static LoadingCache<String, WsStore> getAllWebStores() {
-        return webStores;
+        return WEB_STORES;
     }
 
     public static void buildActiveCache() {
-        activeWebs = new HashSet<>(webSessions.asMap().values());
+        activeWebs = new HashSet<>(WEB_SESSIONS.asMap().values());
     }
 
     /**
@@ -107,9 +107,9 @@ public class WsManager {
 
         long now = System.currentTimeMillis();
 
-        Set<String> activeSessions = new HashSet<>(webSessions.asMap().keySet());
+        Set<String> activeSessions = new HashSet<>(WEB_SESSIONS.asMap().keySet());
 
-        for (Map.Entry<Session, Long> item : connectedSessions.entrySet()) {
+        for (Map.Entry<Session, Long> item : CONNECTED_SESSIONS.entrySet()) {
 
             Session session = item.getKey();
             Long openTime = item.getValue();
@@ -120,26 +120,26 @@ public class WsManager {
                 continue;
             }
 
-            if (now - openTime >= dangerDuration) {
+            if (now - openTime >= DANGER_DURATION) {
                 closeSession(session);
-                connectedSessions.remove(session);
-                log.info("[检查 ws 连接],关闭连接超过 dangerDuration：{} 的session, sessionId：[{}]，断开连接", dangerDuration, session.getId());
+                CONNECTED_SESSIONS.remove(session);
+                log.info("[检查 ws 连接],关闭连接超过 dangerDuration：{} 的session, sessionId：[{}]，断开连接", DANGER_DURATION, session.getId());
             } else {
-                log.debug("[检查 ws 连接],连接存续小于 dangerDuration ：{}的session, sessionId：[{}]，重新维护连接", dangerDuration, session.getId());
-                connectedSessions.put(session, System.currentTimeMillis());
+                log.debug("[检查 ws 连接],连接存续小于 dangerDuration ：{}的session, sessionId：[{}]，重新维护连接", DANGER_DURATION, session.getId());
+                CONNECTED_SESSIONS.put(session, System.currentTimeMillis());
             }
         }
 
-        return connectedSessions.keySet().stream().map(Session::getId).collect(Collectors.toSet());
+        return CONNECTED_SESSIONS.keySet().stream().map(Session::getId).collect(Collectors.toSet());
     }
 
     public static WsStore getStore(String clientId) {
-        return webStores.getIfPresent(clientId);
+        return WEB_STORES.getIfPresent(clientId);
     }
 
     public static WsStore getStoreBySessionId(String sessionId) {
 
-        String clientId = webSessions.getIfPresent(sessionId);
+        String clientId = WEB_SESSIONS.getIfPresent(sessionId);
         if (clientId == null) {
             return null;
         }
@@ -149,12 +149,12 @@ public class WsManager {
 
     public static String getClientIdBySessionId(String sessionId) {
 
-        String clientId = webSessions.getIfPresent(sessionId);
+        String clientId = WEB_SESSIONS.getIfPresent(sessionId);
         return clientId;
     }
 
     public static String getImei(String sessionId) {
-        String imei = webSessions.getIfPresent(sessionId);
+        String imei = WEB_SESSIONS.getIfPresent(sessionId);
 
         return imei;
     }
@@ -164,23 +164,23 @@ public class WsManager {
     }
 
     public static void openSession(Session session) {
-        session.setMaxIdleTimeout(WsManager.wsExpire);
+        session.setMaxIdleTimeout(WsManager.WS_EXPIRE);
         session.setMaxTextMessageBufferSize(5 * 1024 * 1024);
         session.setMaxBinaryMessageBufferSize(1024 * 1024);
 
-        connectedSessions.put(session, System.currentTimeMillis());
+        CONNECTED_SESSIONS.put(session, System.currentTimeMillis());
         log.info("[开启 ws web 连接],sessionId：[{}]", session.getId());
     }
 
     public static void initSession(Session session, String clientId) {
 
-        WsStore wsStore = webStores.getIfPresent(clientId);
+        WsStore wsStore = WEB_STORES.getIfPresent(clientId);
         if (wsStore != null) {
             return;
         }
 
-        webSessions.put(session.getId(), clientId);
-        webStores.put(clientId, new WsStore().setClientId(clientId).setSession(session));
+        WEB_SESSIONS.put(session.getId(), clientId);
+        WEB_STORES.put(clientId, new WsStore().setClientId(clientId).setSession(session));
         activeWebs.add(clientId);
     }
 
@@ -194,14 +194,14 @@ public class WsManager {
             }
         }
 
-        String imei = webSessions.getIfPresent(session.getId());
+        String imei = WEB_SESSIONS.getIfPresent(session.getId());
         if (imei != null) {
-            webStores.invalidate(imei);
-            webSessions.invalidate(session.getId());
+            WEB_STORES.invalidate(imei);
+            WEB_SESSIONS.invalidate(session.getId());
         }
 
         activeWebs.remove(imei);
-        if (connectedSessions.remove(session) != null) {
+        if (CONNECTED_SESSIONS.remove(session) != null) {
             log.info("[关闭 web session]，sessionId：[{}]，imei：[{}]", session.getId(), imei);
         }
     }
@@ -221,7 +221,7 @@ public class WsManager {
 
     public static void sendCmdByClientId(String clientId, WsBaseCmd wsWebBaseCmd) {
 
-        WsStore store = webStores.getIfPresent(clientId);
+        WsStore store = WEB_STORES.getIfPresent(clientId);
         if (store == null) {
             log.error("[发送设备指令]，设备不在线，clientId：[{}]，cmd：[{}]", clientId, wsWebBaseCmd);
             throw new LmyXlfException(WSExceptionEnum.DEVICE_NOT_ONLINE.getMsg());
@@ -276,13 +276,13 @@ public class WsManager {
 
 
     public static void updateUserCmd(String sessionId, WsCmdType type) {
-        String clientId = webSessions.getIfPresent(sessionId);
+        String clientId = WEB_SESSIONS.getIfPresent(sessionId);
 
         if (clientId == null) {
             return;
         }
 
-        WsStore wsStore = webStores.getIfPresent(clientId);
+        WsStore wsStore = WEB_STORES.getIfPresent(clientId);
         if (wsStore != null) {
             wsStore.setLastCmdType(type);
         }
@@ -298,7 +298,7 @@ public class WsManager {
      */
     public static boolean isNowClientCmd(String clientId, WsCmdType type) throws ExecutionException {
 
-        WsStore wsStore = webStores.getIfPresent(clientId);
+        WsStore wsStore = WEB_STORES.getIfPresent(clientId);
         if (wsStore != null) {
             WsCmdType lastCmdType = wsStore.getLastCmdType();
             return type == lastCmdType;

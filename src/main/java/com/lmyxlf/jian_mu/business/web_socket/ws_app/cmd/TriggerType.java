@@ -15,6 +15,5 @@ import lombok.Getter;
 public enum TriggerType {
 
     USER_SEND,
-    EVENT,
-    ;
+    EVENT
 }

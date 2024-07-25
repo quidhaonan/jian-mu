@@ -17,24 +17,22 @@ import java.util.Set;
 @Component
 public class WsSchedule {
 
-
     /**
      * 活跃设备监测
      */
-    @Scheduled(fixedRate = 1000 * 20)
+    @Scheduled(fixedRate = 20 * 1000)
     public void checkWsActive() {
         WsManager.buildActiveCache();
         int size = WsManager.getAllActiveWebs().size();
         if (size > 0) {
             log.info("活跃 web：{}", String.join(",", WsManager.getAllActiveWebs()));
         }
-
     }
 
     /**
      * 活跃 session 连接
      */
-    @Scheduled(fixedRate = 1000 * 60)
+    @Scheduled(fixedRate = 60 * 1000)
     public void checkConnectedSession() {
         Set<String> sessionIds = WsManager.checkConnectedSession();
         if (!sessionIds.isEmpty()) {
