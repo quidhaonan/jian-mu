@@ -8,6 +8,7 @@ import com.lmyxlf.jian_mu.business.raising_numbers.model.enums.RaisingNumbersTyp
 import com.lmyxlf.jian_mu.business.raising_numbers.model.req.ReqLibaoLand;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.resp.RespLibaoLand;
 import com.lmyxlf.jian_mu.business.raising_numbers.service.RaisingNumbersService;
+import com.lmyxlf.jian_mu.business.raising_numbers.util.UserAgentUtil;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
 import com.lmyxlf.jian_mu.global.util.LmyXlfHttp;
 import com.lmyxlf.jian_mu.global.util.XiZhiNoticeUtil;
@@ -114,7 +115,7 @@ public class LibaoLandScheduled {
             put("Host", "m.mallcoo.cn");
             put("Connection", "keep-alive");
             put("xweb_xhr", "1");
-            put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090819)XWEB/11097");
+            put("User-Agent", UserAgentUtil.generateRandomUA());
             put("Content-Type", "application/json");
             put("Accept", "*/*");
             put("Sec-Fetch-Site", "cross-site");
