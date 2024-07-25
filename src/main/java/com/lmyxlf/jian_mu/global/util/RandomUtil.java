@@ -59,12 +59,12 @@ public class RandomUtil {
         return ipBuilder.toString();
     }
 
-    private final static char[] CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    private static final Character[] CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
     // 指定 IP 范围
-    private final static int[][] IP_RANGES = {
+    private static final Integer[][] IP_RANGES = {
             {607649792, 608174079}, // 36.56.0.0-36.63.255.255
             {1038614528, 1039007743}, // 61.232.0.0-61.237.255.255
             {1783627776, 1784676351}, // 106.80.0.0-106.95.255.255

@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class ThreadPoolsConfig {
 
     // 线程池维护线程所允许的空闲时间
-    private static final int KEEP_ALIVE_SECONDS = 60;
+    private static final Integer KEEP_ALIVE_SECONDS = 60;
 
     /**
      * 核心线程池
