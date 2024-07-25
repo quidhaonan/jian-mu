@@ -6,6 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -20,24 +21,13 @@ import java.util.Map;
 public class XiZhiNoticeUtil {
 
     // 单点推送接口地址
-    private static final String PUSH_URL = "https://xizhi.qqoq.net/XZd79d6a005769aa7591f2da559521d2a7.send";
+    private static final String DEFAULT_PUSH_URL = "https://xizhi.qqoq.net/XZd79d6a005769aa7591f2da559521d2a7.send";
 
     public static JSONObject xiZhiMsgNotice(String title, String content) {
 
-        Map<String, String> params = Map.ofEntries(
-                Map.entry("title", title),
-                Map.entry("content", content)
-        );
+        List<String> pushUrls = Collections.singletonList(DEFAULT_PUSH_URL);
 
-        String result = LmyXlfHttp
-                .post(PUSH_URL)
-                .json(params)
-                .build()
-                .json(new TypeReference<>() {
-                });
-        log.info("单点推送，pushUrl：{}，params：{}，result：{}", PUSH_URL, params, result);
-
-        return JSON.parseObject(result);
+        return xiZhiMsgNotice(pushUrls, title, content);
     }
 
     public static JSONObject xiZhiMsgNotice(List<String> pushUrls, String title, String content) {
