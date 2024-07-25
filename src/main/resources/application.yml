@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: jian_mu
+  # 不返回 null 字段
+  jackson:
+    default-property-inclusion: non_null
   config:
     import: classpath:application-local.yml,
                       business/web_socket/web-socket.yml
