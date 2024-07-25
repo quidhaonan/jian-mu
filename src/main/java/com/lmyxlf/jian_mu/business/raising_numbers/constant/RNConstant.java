@@ -12,5 +12,5 @@ public class RNConstant {
     /**
      * 随机休眠时长
      */
-    public final static Integer SLEEP_DURATION = 9999;
+    public static final Integer SLEEP_DURATION = 9999;
 }

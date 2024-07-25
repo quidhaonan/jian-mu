@@ -12,10 +12,10 @@ public class RNCornConstant {
     /**
      * 每天凌晨 0 点 1 分
      */
-    public final static String EVERY_DAY_0_CLOCK_1_MINUTE_AM = "0 1 0 * * *";
+    public static final String EVERY_DAY_0_CLOCK_1_MINUTE_AM = "0 1 0 * * *";
 
     /**
      * 每天中午 12 点 0 分
      */
-    public final static String EVERY_DAY_12_CLOCK_0_MINUTE_PM = "0 0 12 * * *";
+    public static final String EVERY_DAY_12_CLOCK_0_MINUTE_PM = "0 0 12 * * *";
 }

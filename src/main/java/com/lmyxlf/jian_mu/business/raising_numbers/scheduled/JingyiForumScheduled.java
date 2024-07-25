@@ -40,17 +40,17 @@ public class JingyiForumScheduled {
     /**
      * 签到 url
      */
-    private final static String SIGN_IN_URL = "https://bbs.125.la/plugin.php?" +
+    private static final String DAILY_CHECK_IN_URL = "https://bbs.125.la/plugin.php?" +
             "id=dsu_paulsign:sign&operation=qiandao&infloat=1&formhash=ad509b0f&submit=1&targerurl=&todaysay=&qdxq=kx";
 
     /**
      * 签到成功码
      */
-    private final static String CODE_SUCCESS = "0";
+    private static final String CODE_SUCCESS = "0";
 
     @Async("async_executor_rn")
     @Scheduled(cron = RNCornConstant.EVERY_DAY_12_CLOCK_0_MINUTE_PM)
-    public void signIn() {
+    public void dailyCheckIn() {
         log.info("开始[{}]养号", RaisingNumbersTypeEnums.JINGYI_FORUM.getName());
         // 养号失败列表
         List<RespJingyiForum> failList = new ArrayList<>();
@@ -64,7 +64,7 @@ public class JingyiForumScheduled {
         raisingNumbersList.forEach(item -> {
             // 请求头
             Map<String, String> headers = getHeaders(item.getToken());
-            RespJingyiForum result = LmyXlfHttp.post(SIGN_IN_URL)
+            RespJingyiForum result = LmyXlfHttp.post(DAILY_CHECK_IN_URL)
                     .header(headers)
                     .build()
                     .json(RespJingyiForum.class);

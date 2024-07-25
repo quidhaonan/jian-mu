@@ -41,24 +41,24 @@ public class LibaoLandScheduled {
     /**
      * 签到 url
      */
-    private final static String SIGN_IN_URL = "https://m.mallcoo.cn/api/user/User/CheckinV2";
+    private static final String DAILY_CHECK_IN_URL = "https://m.mallcoo.cn/api/user/User/CheckinV2";
 
     /**
      * 签到成功码
      */
-    private final static String CODE_SUCCESS = "1";
+    private static final String CODE_SUCCESS = "1";
 
     /**
      * 今日已签到成功码
      */
-    private final static String CODE_REPEAT = "2054";
+    private static final String CODE_REPEAT = "2054";
 
     /**
      * 签到
      */
     @Async("async_executor_rn")
     @Scheduled(cron = RNCornConstant.EVERY_DAY_0_CLOCK_1_MINUTE_AM)
-    public void signIn() {
+    public void dailyCheckIn() {
         log.info("开始[{}]养号", RaisingNumbersTypeEnums.LIBAO_LAND.getName());
         // 养号失败列表
         List<RespLibaoLand> failList = new ArrayList<>();
@@ -75,11 +75,12 @@ public class LibaoLandScheduled {
             // 请求参数
             ReqLibaoLand params = new ReqLibaoLand(item.getToken());
             RespLibaoLand result = LmyXlfHttp
-                    .post(SIGN_IN_URL)
+                    .post(DAILY_CHECK_IN_URL)
                     .header(headers)
                     .json(params)
                     .proxy()
-                    .build().json(RespLibaoLand.class);
+                    .build()
+                    .json(RespLibaoLand.class);
             log.info("[{}]养号，item：{}，result：{}", RaisingNumbersTypeEnums.LIBAO_LAND.getName(), item, result);
 
             String m = result.getM();
