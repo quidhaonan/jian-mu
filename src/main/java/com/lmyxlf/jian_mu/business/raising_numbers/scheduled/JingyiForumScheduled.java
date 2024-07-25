@@ -7,6 +7,8 @@ import com.lmyxlf.jian_mu.business.raising_numbers.model.entity.RaisingNumbers;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.enums.RaisingNumbersTypeEnums;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.resp.RespJingyiForum;
 import com.lmyxlf.jian_mu.business.raising_numbers.service.RaisingNumbersService;
+import com.lmyxlf.jian_mu.business.raising_numbers.util.RandomHibernationUtil;
+import com.lmyxlf.jian_mu.business.raising_numbers.util.UserAgentUtil;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
 import com.lmyxlf.jian_mu.global.util.LmyXlfHttp;
 import com.lmyxlf.jian_mu.global.util.XiZhiNoticeUtil;
@@ -46,14 +48,20 @@ public class JingyiForumScheduled {
     /**
      * 签到成功码
      */
-    private static final String CODE_SUCCESS = "0";
+    private static final String CODE_SUCCESS = "1";
+
+    /**
+     * 已签到成功码
+     */
+    private static final String CODE_REPEAT = "0";
 
     @Async("async_executor_rn")
     @Scheduled(cron = RNCornConstant.EVERY_DAY_12_CLOCK_0_MINUTE_PM)
     public void dailyCheckIn() {
-        log.info("开始[{}]养号", RaisingNumbersTypeEnums.JINGYI_FORUM.getName());
+        String projectName = RaisingNumbersTypeEnums.JINGYI_FORUM.getName();
+        log.info("开始[{}]养号", projectName);
         // 养号失败列表
-        List<RespJingyiForum> failList = new ArrayList<>();
+        List<RespJingyiForum> failedList = new ArrayList<>();
 
         // 请求 cookie
         List<RaisingNumbers> raisingNumbersList = raisingNumbersService.lambdaQuery()
@@ -68,27 +76,20 @@ public class JingyiForumScheduled {
                     .header(headers)
                     .build()
                     .json(RespJingyiForum.class);
-            log.info("[{}]养号，item：{}，result：{}", RaisingNumbersTypeEnums.JINGYI_FORUM.getName(), item, result);
+            log.info("[{}]养号，item：{}，result：{}", projectName, item, result);
 
             String status = result.getStatus();
-            if (!CODE_SUCCESS.equals(status)) {
+            if (!CODE_SUCCESS.equals(status) && !CODE_REPEAT.equals(status)) {
                 result.setRaisingNumbers(item);
-                failList.add(result);
+                failedList.add(result);
             }
 
             // 随机休眠
-            int nextInt = ThreadLocalRandom.current().nextInt(RNConstant.SLEEP_DURATION);
-            try {
-                Thread.sleep(nextInt);
-            } catch (InterruptedException e) {
-                log.error("休眠失败，nextInt：{}", nextInt);
-            }
+            RandomHibernationUtil.randomHibernation();
         });
 
-        if (!failList.isEmpty()) {
-            log.error("[{}]养号失败，failList：{}", RaisingNumbersTypeEnums.JINGYI_FORUM.getName(), failList);
-            XiZhiNoticeUtil.xiZhiMsgNotice(RaisingNumbersTypeEnums.JINGYI_FORUM.getName(), JSONUtil.toJsonStr(LmyXlfResult.ok(failList)));
-        }
+        String title = failedList.isEmpty() ? projectName + RNConstant.RN_SUCCEED : projectName + RNConstant.RN_FAILED;
+        XiZhiNoticeUtil.xiZhiMsgNotice(title, JSONUtil.toJsonStr(LmyXlfResult.ok(failedList)));
     }
 
     /**
@@ -105,7 +106,7 @@ public class JingyiForumScheduled {
             put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
             put("X-Requested-With", "XMLHttpRequest");
             put("sec-ch-ua-mobile", "?0");
-            put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36 Core/1.94.263.400 QQBrowser/12.7.5748.400");
+            put("User-Agent", UserAgentUtil.generateRandomUA());
             put("sec-ch-ua-platform", "\"Windows\"");
             put("Origin", "https://bbs.125.la");
             put("Sec-Fetch-Site", "same-origin");
