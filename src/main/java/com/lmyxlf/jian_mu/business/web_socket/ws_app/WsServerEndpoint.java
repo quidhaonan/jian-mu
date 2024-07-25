@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WsServerEndpoint {
 
 
-    public static Map<WsCmdType, WsHandler<? extends WsCmd>> handlerMap = new ConcurrentHashMap<>();
+    public static final Map<WsCmdType, WsHandler<? extends WsCmd>> HANDLER_MAP = new ConcurrentHashMap<>();
 
     /**
      * 连接成功
@@ -92,7 +92,7 @@ public class WsServerEndpoint {
             // WsCmd wsRes = ObjectUtils.convertValue(wsBaseRes.getData(), type.getResClazz());
             WsCmd wsRes = JSONUtil.toBean(JSONUtil.toJsonStr(wsBaseRes.getData()), type.getResClazz());
             try {
-                WsHandler wsHandler = handlerMap.get(type);
+                WsHandler wsHandler = HANDLER_MAP.get(type);
                 wsHandler.handle(wsRes, session, wsBaseRes);
                 log.info("[ws web 接收处理消息]，type：[{}]，sessionId：[{}]，cmd：[{}]", type, session.getId(), wsBaseRes);
             } catch (Exception e) {
@@ -114,6 +114,6 @@ public class WsServerEndpoint {
      * @param handler 执行方法
      */
     public static void registerHandler(WsCmdType type, WsHandler<? extends WsCmd> handler) {
-        handlerMap.put(type, handler);
+        HANDLER_MAP.put(type, handler);
     }
 }

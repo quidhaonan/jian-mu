@@ -11,9 +11,8 @@ import lombok.Getter;
  */
 @Getter
 public enum WSParamEnum {
-    HEARTBEAT_PARM_STRING(1,"heartbeat_parm_string"),
-    HEARTBEAT_WORD(2,"heartbeat_word")
-    ;
+    HEARTBEAT_PARM_STRING(1, "heartbeat_parm_string"),
+    HEARTBEAT_WORD(2, "heartbeat_word");
 
 
     private final Integer code;

@@ -12,20 +12,20 @@ public class WSConstant {
     /**
      * 浏览器加密，存储 redis key 前缀
      */
-    public final static String REDIS_BROWSER_ENCRYPT_PREFIX = "browserEncrypt:";
+    public static final String REDIS_BROWSER_ENCRYPT_PREFIX = "browserEncrypt:";
 
     /**
      * redis countDownLatch 前缀
      */
-    public final static String REDIS_COUNTDOWNLATCH_PREFIX = "countDownLatch:";
+    public static final String REDIS_COUNTDOWNLATCH_PREFIX = "countDownLatch:";
 
     /**
      * redis 过期时间，单位：秒
      */
-    public final static Long REDIS_EXPIRE_TIME = 10 * 60L;
+    public static final Long REDIS_EXPIRE_TIME = 10 * 60L;
 
     /**
      * redis countDownLatch 超时时间，单位：秒
      */
-    public final static Long COUNTDOWNLATCH_AWAIT_TIME = 5L;
+    public static final Long COUNTDOWNLATCH_AWAIT_TIME = 5L;
 }

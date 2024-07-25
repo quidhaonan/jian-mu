@@ -1,6 +1,7 @@
 package com.lmyxlf.jian_mu.log;
 
 import cn.hutool.core.date.DateUtil;
+
 import java.util.concurrent.atomic.AtomicLong;
 import java.lang.management.ManagementFactory;
 
@@ -12,21 +13,22 @@ import java.lang.management.ManagementFactory;
  * @since 17
  */
 public class TraceIdGenerator {
+
     private static final AtomicLong SEQUENCE = new AtomicLong(1000);
-    private static final int MAX_SEQUENCE = 9000;
-    private static final int MIN_SEQUENCE = 1000;
+    private static final Integer MAX_SEQUENCE = 9000;
+    private static final Integer MIN_SEQUENCE = 1000;
     private static final String PROCESS_ID = getProcessId();
 
     /**
-     * 生成 TraceId
+     * 生成 traceId
      */
     public static String generateTraceId(String ipAddr) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(convertIpToHex(ipAddr));
-        sb.append(DateUtil.current());
-        sb.append(nextSequence());
-        sb.append(PROCESS_ID);
-        return sb.toString();
+        StringBuilder traceIdBuilder = new StringBuilder();
+        traceIdBuilder.append(convertIpToHex(ipAddr));
+        traceIdBuilder.append(DateUtil.current());
+        traceIdBuilder.append(nextSequence());
+        traceIdBuilder.append(PROCESS_ID);
+        return traceIdBuilder.toString();
     }
 
     /**

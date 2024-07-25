@@ -3,8 +3,6 @@ package com.lmyxlf.jian_mu.log;
 
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -17,8 +15,6 @@ import java.net.UnknownHostException;
  * @since 17
  */
 public class IPLogConverter extends ClassicConverter {
-
-    private final static Logger log = LoggerFactory.getLogger(IPLogConverter.class);
 
     @Override
     public String convert(ILoggingEvent event) {

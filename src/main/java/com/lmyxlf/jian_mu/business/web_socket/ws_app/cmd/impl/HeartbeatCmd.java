@@ -22,5 +22,4 @@ public class HeartbeatCmd implements WsCmd {
      * 客户端ping，服务端pong
      */
     private String param = WSParamEnum.HEARTBEAT_PARM_STRING.getMsg();
-
 }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.lmyxlf.jian_mu.global.constant.TraceConstant;
 import com.lmyxlf.jian_mu.global.util.XiZhiNoticeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -33,19 +34,17 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class LogAspect {
 
-    public static Cache<String, String> cache =
+    private static final Cache<String, String> CACHE =
             Caffeine.newBuilder().expireAfterAccess(1, TimeUnit.HOURS)
                     .maximumSize(100).build();
 
-    public static final String responseByteSuffix = "/responseByte";
-    public static final String responseTimeSuffix = "/responseTime";
+    private static final String RESPONSE_BYTE_SUFFIX = "/responseByte";
+    private static final String RESPONSE_TIME_SUFFIX = "/responseTime";
+    private static final Integer DEFAULT_EXCEED_BYTE_SIZE = 1024;
+    private static final Integer DEFAULT_EXCEED_TIME = 5 * 1000;
 
     @Value("#{${lmyxlf.response.urls.map:{}}}")
     private Map<String, Integer> urls;
-
-    private static int defaultExceedByteSize = 1024;
-    private static int defaultExceedTime = 5 * 1000;
-
 
     // 定义一个切点
     @Pointcut("@annotation(org.springframework.web.bind.annotation.PostMapping)" +
@@ -60,28 +59,28 @@ public class LogAspect {
         long startTime = System.currentTimeMillis();
         Object result = proceedingJoinPoint.proceed();
         byte[] bytes = JSON.toJSONBytes(result);
-        if (bytes.length > defaultExceedByteSize) {
+        if (bytes.length > DEFAULT_EXCEED_BYTE_SIZE) {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             boolean flag = true;
-            if (urls != null && urls.getOrDefault(request.getRequestURI(), defaultExceedByteSize) > bytes.length) {
+            if (urls != null && urls.getOrDefault(request.getRequestURI(), DEFAULT_EXCEED_BYTE_SIZE) > bytes.length) {
                 flag = false;
             }
-            if (flag && StrUtil.isEmpty(cache.getIfPresent(request.getRequestURI() + responseByteSuffix))) {
+            if (flag && StrUtil.isEmpty(CACHE.getIfPresent(request.getRequestURI() + RESPONSE_BYTE_SUFFIX))) {
                 // MonitorUtil.sendMsgToQyApi("接口响应数据超过1K", request.getRequestURI());
                 sendWarnMsgToXiZhi("接口响应数据超过1K", request.getRequestURI());
-                cache.put(request.getRequestURI() + responseByteSuffix, "1");
+                CACHE.put(request.getRequestURI() + RESPONSE_BYTE_SUFFIX, "1");
             }
         }
         log.info("返回的结果: {}", JSON.toJSONString(result));
-        if (System.currentTimeMillis() - startTime > defaultExceedTime) {
+        if (System.currentTimeMillis() - startTime > DEFAULT_EXCEED_TIME) {
             // Monitor.warn("response_exceeds").unLog().inc();
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
-            if (StrUtil.isEmpty(cache.getIfPresent(request.getRequestURI() + responseTimeSuffix))) {
+            if (StrUtil.isEmpty(CACHE.getIfPresent(request.getRequestURI() + RESPONSE_TIME_SUFFIX))) {
                 // MonitorUtil.sendMsgToQyApi("接口响应时间超过5s", request.getRequestURI());
                 sendWarnMsgToXiZhi("接口响应时间超过5s", request.getRequestURI());
-                cache.put(request.getRequestURI() + responseTimeSuffix, "1");
+                CACHE.put(request.getRequestURI() + RESPONSE_TIME_SUFFIX, "1");
             }
         }
         log.info("=== 结束时，总耗时：{} ms ===", System.currentTimeMillis() - startTime);
@@ -92,7 +91,7 @@ public class LogAspect {
         String content = StrUtil.format("异常描述：异常抛出\n" +
                 "接口路径：{}\n" +
                 "异常消息：{}\n" +
-                "traceId：{}", url, message, MDC.get("traceId"));
+                "traceId：{}", url, message, MDC.get(TraceConstant.TRACE_ID));
 
         return XiZhiNoticeUtil.xiZhiMsgNotice(message, content);
     }

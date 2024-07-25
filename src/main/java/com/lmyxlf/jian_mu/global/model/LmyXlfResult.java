@@ -61,8 +61,7 @@ public class LmyXlfResult<T> {
     private LmyXlfResult(String code, String msg, T data) {
         this.code = code;
         this.msg = msg;
-        this.traceId = MDC.get(TraceConstant.LOG_B3_TRACEID);
-        ;
+        this.traceId = MDC.get(TraceConstant.TRACE_ID);
         this.data = data;
     }
 

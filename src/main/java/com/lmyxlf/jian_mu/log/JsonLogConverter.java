@@ -2,6 +2,7 @@ package com.lmyxlf.jian_mu.log;
 
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import com.lmyxlf.jian_mu.global.constant.TraceConstant;
 import org.slf4j.MDC;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,7 +20,7 @@ import java.util.Objects;
  * @author lmy
  * @email 2130546401@qq.com
  * @date 2024/7/6 15:27
- * @description javax 升级为 jakarta，因此 HttpServletRequest request = sra.getRequest(); 需要强转
+ * @description
  * @since 17
  */
 public class JsonLogConverter extends ClassicConverter {
@@ -46,14 +47,13 @@ public class JsonLogConverter extends ClassicConverter {
         map.put("time", sdf.format(date));
         map.put("srv", appName);
         map.put("pod", hostName);
-        map.put("trace_id", MDC.get("traceId"));
+        map.put("trace_id", MDC.get(TraceConstant.TRACE_ID));
         map.put("uid", MDC.get("uid"));
         map.put("session_id", MDC.get("sessionId"));
         map.put("socket_id", MDC.get("socketId"));
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (Objects.nonNull(sra)) {
            HttpServletRequest request = sra.getRequest();
-            // HttpServletRequest request = (HttpServletRequest) sra.getRequest();
             map.put("req_id", request.getHeader("X-Request-ID"));
         }
         // 截取前后符号

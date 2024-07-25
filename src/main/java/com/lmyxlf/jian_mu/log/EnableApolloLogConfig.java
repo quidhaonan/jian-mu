@@ -1,8 +1,7 @@
 package com.lmyxlf.jian_mu.log;
 
 import com.ctrip.framework.apollo.Config;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.logging.LoggingSystem;
@@ -16,17 +15,14 @@ import org.springframework.context.annotation.Configuration;
  * @description
  * @since 17
  */
+@Slf4j
 @Configuration
 @ConditionalOnClass(Config.class)
 @ConditionalOnProperty(value = "apollo.bootstrap.enabled", havingValue = "true")
 public class EnableApolloLogConfig {
 
-    private static final Logger log = LoggerFactory.getLogger(EnableApolloLogConfig.class);
-
     @Bean
     public LogListenerConfig logListenerConfig(LoggingSystem loggingSystem) {
         return new LogListenerConfig(loggingSystem);
     }
-
-
 }

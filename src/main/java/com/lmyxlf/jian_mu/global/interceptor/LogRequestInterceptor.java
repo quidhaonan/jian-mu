@@ -1,6 +1,8 @@
 package com.lmyxlf.jian_mu.global.interceptor;
 
+import com.lmyxlf.jian_mu.global.constant.TraceConstant;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.MDC;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -19,8 +21,8 @@ public class LogRequestInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler) throws Exception {
-        String traceId = MDC.get("traceId");
+                             @NotNull HttpServletResponse response, Object handler) throws Exception {
+        String traceId = MDC.get(TraceConstant.TRACE_ID);
         log.info("url：{}，traceId：{}", request.getServletPath(), traceId);
         return true;
     }
