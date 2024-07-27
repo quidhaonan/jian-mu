@@ -1,8 +1,10 @@
-package com.lmyxlf.jian_mu.global.config;
+package com.lmyxlf.jian_mu.global.aspect;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.lmyxlf.jian_mu.global.constant.TraceConstant;
@@ -61,14 +63,12 @@ public class LogAspect {
         byte[] bytes = JSON.toJSONBytes(result);
         if (bytes.length > DEFAULT_EXCEED_BYTE_SIZE) {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            assert attributes != null;
             HttpServletRequest request = attributes.getRequest();
-            boolean flag = true;
-            if (urls != null && urls.getOrDefault(request.getRequestURI(), DEFAULT_EXCEED_BYTE_SIZE) > bytes.length) {
-                flag = false;
-            }
+            boolean flag = urls == null || bytes.length >= urls.getOrDefault(request.getRequestURI(), DEFAULT_EXCEED_BYTE_SIZE);
             if (flag && StrUtil.isEmpty(CACHE.getIfPresent(request.getRequestURI() + RESPONSE_BYTE_SUFFIX))) {
-                // MonitorUtil.sendMsgToQyApi("接口响应数据超过1K", request.getRequestURI());
-                sendWarnMsgToXiZhi("接口响应数据超过1K", request.getRequestURI());
+                // MonitorUtil.sendMsgToQyApi("接口响应数据超过 1 K", request.getRequestURI());
+                sendWarnMsgToXiZhi("接口响应数据超过 1 K", request.getRequestURI());
                 CACHE.put(request.getRequestURI() + RESPONSE_BYTE_SUFFIX, "1");
             }
         }
@@ -76,10 +76,11 @@ public class LogAspect {
         if (System.currentTimeMillis() - startTime > DEFAULT_EXCEED_TIME) {
             // Monitor.warn("response_exceeds").unLog().inc();
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            assert attributes != null;
             HttpServletRequest request = attributes.getRequest();
             if (StrUtil.isEmpty(CACHE.getIfPresent(request.getRequestURI() + RESPONSE_TIME_SUFFIX))) {
-                // MonitorUtil.sendMsgToQyApi("接口响应时间超过5s", request.getRequestURI());
-                sendWarnMsgToXiZhi("接口响应时间超过5s", request.getRequestURI());
+                // MonitorUtil.sendMsgToQyApi("接口响应时间超过 5 s", request.getRequestURI());
+                sendWarnMsgToXiZhi("接口响应时间超过 5 s", request.getRequestURI());
                 CACHE.put(request.getRequestURI() + RESPONSE_TIME_SUFFIX, "1");
             }
         }
@@ -87,12 +88,14 @@ public class LogAspect {
         return result;
     }
 
-    private JSONObject sendWarnMsgToXiZhi(String message, String url) {
-        String content = StrUtil.format("异常描述：异常抛出\n" +
-                "接口路径：{}\n" +
-                "异常消息：{}\n" +
-                "traceId：{}", url, message, MDC.get(TraceConstant.TRACE_ID));
+    private JSONArray sendWarnMsgToXiZhi(String message, String url) {
+        Map<String, String> content = Map.ofEntries(
+                Map.entry("接口路径", url),
+                Map.entry("异常消息", message),
+                Map.entry("时间", DateUtil.now()),
+                Map.entry(TraceConstant.TRACE_ID, MDC.get(TraceConstant.TRACE_ID))
+        );
 
-        return XiZhiNoticeUtil.xiZhiMsgNotice(message, content);
+        return XiZhiNoticeUtil.xiZhiMsgNotice(message, JSONUtil.toJsonStr(content));
     }
 }
