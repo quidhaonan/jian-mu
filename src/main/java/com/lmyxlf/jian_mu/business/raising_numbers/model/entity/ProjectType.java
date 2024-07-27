@@ -8,13 +8,13 @@ import lombok.experimental.Accessors;
 /**
  * @author lmy
  * @email 2130546401@qq.com
- * @date 2024/7/24 14:08
- * @description 养号实体类
+ * @date 2024/7/28 3:05
+ * @description 项目类别
  * @since 17
  */
 @Data
 @Accessors(chain = true)
-public class RaisingNumbers {
+public class ProjectType {
 
     /**
      * 主键 id
@@ -23,14 +23,9 @@ public class RaisingNumbers {
     private Integer id;
 
     /**
-     * token
+     * 项目名称
      */
-    private String token;
-
-    /**
-     * project_type 表主键 id
-     */
-    private Integer projectId;
+    private String name;
 
     /**
      * 是否删除，0：未删除，1：已删除

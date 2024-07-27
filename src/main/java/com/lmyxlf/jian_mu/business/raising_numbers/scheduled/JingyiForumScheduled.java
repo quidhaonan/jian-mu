@@ -4,11 +4,13 @@ import cn.hutool.json.JSONUtil;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNCornConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.entity.RaisingNumbers;
-import com.lmyxlf.jian_mu.business.raising_numbers.model.enums.RaisingNumbersTypeEnums;
+import com.lmyxlf.jian_mu.business.raising_numbers.model.enums.ProjectTypeEnums;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.resp.RespJingyiForum;
 import com.lmyxlf.jian_mu.business.raising_numbers.service.RaisingNumbersService;
 import com.lmyxlf.jian_mu.business.raising_numbers.util.RandomHibernationUtil;
 import com.lmyxlf.jian_mu.business.raising_numbers.util.UserAgentUtil;
+import com.lmyxlf.jian_mu.global.annotation.NoticeErrorAnnotation;
+import com.lmyxlf.jian_mu.global.constant.DBConstant;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
 import com.lmyxlf.jian_mu.global.util.LmyXlfHttp;
 import com.lmyxlf.jian_mu.global.util.XiZhiNoticeUtil;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author lmy
@@ -57,15 +58,17 @@ public class JingyiForumScheduled {
 
     @Async("async_executor_rn")
     @Scheduled(cron = RNCornConstant.EVERY_DAY_12_CLOCK_0_MINUTE_PM)
+    @NoticeErrorAnnotation(title = "精易论坛-未知错误", filter = {"精易论坛"})
     public void dailyCheckIn() {
-        String projectName = RaisingNumbersTypeEnums.JINGYI_FORUM.getName();
+        String projectName = ProjectTypeEnums.JINGYI_FORUM.getName();
         log.info("开始[{}]养号", projectName);
         // 养号失败列表
         List<RespJingyiForum> failedList = new ArrayList<>();
 
         // 请求 cookie
         List<RaisingNumbers> raisingNumbersList = raisingNumbersService.lambdaQuery()
-                .eq(RaisingNumbers::getType, RaisingNumbersTypeEnums.JINGYI_FORUM.getType())
+                .eq(RaisingNumbers::getProjectId, ProjectTypeEnums.JINGYI_FORUM.getId())
+                .eq(RaisingNumbers::getIsDelete, DBConstant.NOT_DELETED)
                 .list();
 
         // 养号
