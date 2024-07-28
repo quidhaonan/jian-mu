@@ -1,7 +1,8 @@
 package com.lmyxlf.jian_mu.global.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,14 +24,18 @@ public class XiZhiNoticeUtil {
     // 单点推送接口地址
     private static final String DEFAULT_PUSH_URL = "https://xizhi.qqoq.net/XZd79d6a005769aa7591f2da559521d2a7.send";
 
-    public static JSONObject xiZhiMsgNotice(String title, String content) {
+    public static JSONArray xiZhiMsgNotice(String title, String content) {
 
         List<String> pushUrls = Collections.singletonList(DEFAULT_PUSH_URL);
 
         return xiZhiMsgNotice(pushUrls, title, content);
     }
 
-    public static JSONObject xiZhiMsgNotice(List<String> pushUrls, String title, String content) {
+    public static JSONArray xiZhiMsgNotice(List<String> pushUrls, String title, String content) {
+
+        if (CollUtil.isEmpty(pushUrls)) {
+            return xiZhiMsgNotice(title, content);
+        }
         List<String> resultList = new ArrayList<>();
 
         Map<String, String> params = Map.ofEntries(
@@ -50,6 +55,6 @@ public class XiZhiNoticeUtil {
             resultList.add(result);
         });
 
-        return JSON.parseObject(resultList.toString());
+        return JSONUtil.parseArray(resultList);
     }
 }

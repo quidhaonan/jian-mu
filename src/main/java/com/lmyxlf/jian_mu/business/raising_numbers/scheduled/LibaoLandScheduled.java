@@ -4,12 +4,14 @@ import cn.hutool.json.JSONUtil;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNCornConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.entity.RaisingNumbers;
-import com.lmyxlf.jian_mu.business.raising_numbers.model.enums.RaisingNumbersTypeEnums;
+import com.lmyxlf.jian_mu.business.raising_numbers.model.enums.ProjectTypeEnums;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.req.ReqLibaoLand;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.resp.RespLibaoLand;
 import com.lmyxlf.jian_mu.business.raising_numbers.service.RaisingNumbersService;
 import com.lmyxlf.jian_mu.business.raising_numbers.util.RandomHibernationUtil;
 import com.lmyxlf.jian_mu.business.raising_numbers.util.UserAgentUtil;
+import com.lmyxlf.jian_mu.global.annotation.NoticeErrorAnnotation;
+import com.lmyxlf.jian_mu.global.constant.DBConstant;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
 import com.lmyxlf.jian_mu.global.util.LmyXlfHttp;
 import com.lmyxlf.jian_mu.global.util.XiZhiNoticeUtil;
@@ -24,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author lmy
@@ -60,8 +61,9 @@ public class LibaoLandScheduled {
      */
     @Async("async_executor_rn")
     @Scheduled(cron = RNCornConstant.EVERY_DAY_0_CLOCK_1_MINUTE_AM)
+    @NoticeErrorAnnotation(title = "丽宝乐园-未知错误", filter = {"丽宝乐园"})
     public void dailyCheckIn() {
-        String projectName = RaisingNumbersTypeEnums.LIBAO_LAND.getName();
+        String projectName = ProjectTypeEnums.LIBAO_LAND.getName();
         log.info("开始[{}]养号", projectName);
         // 养号失败列表
         List<RespLibaoLand> failedList = new ArrayList<>();
@@ -71,7 +73,8 @@ public class LibaoLandScheduled {
 
         // 请求 token
         List<RaisingNumbers> raisingNumbersList = raisingNumbersService.lambdaQuery()
-                .eq(RaisingNumbers::getType, RaisingNumbersTypeEnums.LIBAO_LAND.getType())
+                .eq(RaisingNumbers::getProjectId, ProjectTypeEnums.LIBAO_LAND.getId())
+                .eq(RaisingNumbers::getIsDelete, DBConstant.NOT_DELETED)
                 .list();
         // 养号
         raisingNumbersList.forEach(item -> {

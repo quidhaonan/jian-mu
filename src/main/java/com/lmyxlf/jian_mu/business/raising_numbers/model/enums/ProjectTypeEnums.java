@@ -12,10 +12,10 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum RaisingNumbersTypeEnums {
+public enum ProjectTypeEnums {
     LIBAO_LAND(1, "丽宝乐园"),
-    JINGYI_FORUM(2, "精益论坛");
+    JINGYI_FORUM(2, "精易论坛");
 
-    private final Integer type;
+    private final Integer id;
     private final String name;
 }
