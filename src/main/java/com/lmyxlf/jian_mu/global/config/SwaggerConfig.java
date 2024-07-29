@@ -41,7 +41,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
         return new Docket(DocumentationType.SWAGGER_2)
                 .produces(produces)
-                .host("lmyxlf.com")
+                .host("127.0.0.1:9999")
                 .apiInfo(apiInfo())
                 .pathMapping("/")
                 .select()

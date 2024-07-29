@@ -9,7 +9,8 @@ spring:
     default-property-inclusion: non_null
   config:
     import: classpath:application-local.yml,
-                      business/web_socket/web-socket.yml
+                      business/web_socket/web-socket.yml,
+                      business/own_tools/own-tools.yml
   
   # 数据源
   datasource:
