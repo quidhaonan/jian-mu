@@ -41,16 +41,20 @@ public class IPUtils {
      */
     public static String getIpAddr(HttpServletRequest request) {
         String ipAddress = request.getHeader(LmyXlfReqParamConstant.KEY_X_REAL_IP);
+        log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_X_REAL_IP, ipAddress);
 
         // 各服务代理 ip
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader(LmyXlfReqParamConstant.KEY_PROXY_CLIENT_IP);
+            log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_PROXY_CLIENT_IP, ipAddress);
         }
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader(LmyXlfReqParamConstant.KEY_WL_PROXY_CLIENT_IP);
+            log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_WL_PROXY_CLIENT_IP, ipAddress);
         }
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader(LmyXlfReqParamConstant.KEY_HTTP_CLIENT_IP);
+            log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_HTTP_CLIENT_IP, ipAddress);
         }
 
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
@@ -61,6 +65,7 @@ public class IPUtils {
                 try {
                     inet = InetAddress.getLocalHost();
                     ipAddress = inet.getHostAddress();
+                    log.info("getRemoteAddr 获得 ip：{}", ipAddress);
                 } catch (UnknownHostException e) {
                     // Monitor.error("get_local_host_error").log("获取本地host异常：{}", ExceptionUtil.getMessage(e)).inc();
                     log.error("获取本地 host 异常：{}", ExceptionUtil.getMessage(e));
@@ -71,6 +76,7 @@ public class IPUtils {
         // X-Forwarded-For ip，可能会存在伪装 ip
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader(LmyXlfReqParamConstant.KEY_X_FORWARDED_FOR);
+            log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_X_FORWARDED_FOR, ipAddress);
         }
 
         // 对于通过多个代理的情况，第一个 IP 为客户端真实 IP,多个 IP 按照 ',' 分割 //"***.***.***.***".length() = 15
@@ -85,16 +91,20 @@ public class IPUtils {
     public static String getIpAddr(ServerHttpRequest request) {
         HttpHeaders headers = request.getHeaders();
         String ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_X_REAL_IP);
+        log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_X_REAL_IP, ipAddress);
 
         // 各服务代理 ip
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_PROXY_CLIENT_IP);
+            log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_PROXY_CLIENT_IP, ipAddress);
         }
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_WL_PROXY_CLIENT_IP);
+            log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_WL_PROXY_CLIENT_IP, ipAddress);
         }
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_HTTP_CLIENT_IP);
+            log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_HTTP_CLIENT_IP, ipAddress);
         }
 
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
@@ -106,6 +116,7 @@ public class IPUtils {
                 try {
                     InetAddress inet = InetAddress.getLocalHost();
                     ipAddress = inet.getHostAddress();
+                    log.info("getHostAddress 获得 ip：{}", ipAddress);
                 } catch (UnknownHostException e) {
                     // ignore
                     log.error("获取本地 host 异常：{}", ExceptionUtil.getMessage(e));
@@ -116,6 +127,7 @@ public class IPUtils {
         // X-Forwarded-For ip，可能会存在伪装 ip
         if (ipAddress == null || ipAddress.isEmpty() || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = headers.getFirst(LmyXlfReqParamConstant.KEY_X_FORWARDED_FOR);
+            log.info("{} 获得 ip：{}", LmyXlfReqParamConstant.KEY_X_FORWARDED_FOR, ipAddress);
         }
 
         // 对于通过多个代理的情况，第一个 IP 为客户端真实 IP,多个 IP 按照 ',' 分割 //"***.***.***.***".length() = 15
