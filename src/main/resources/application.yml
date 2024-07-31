@@ -7,6 +7,9 @@ spring:
   # 不返回 null 字段
   jackson:
     default-property-inclusion: non_null
+  # banner 图
+  banner:
+    location: classpath:static/banner.txt
   config:
     import: classpath:application-local.yml,
                       business/web_socket/web-socket.yml,

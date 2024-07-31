@@ -31,7 +31,7 @@ public enum CODE_MSG implements CodeMsg {
     /**
      * 该账号已在其他地方登录
      */
-    LOG_IN_ELSEWHERE("403","该账号已在其他地方登录"),
+    LOG_IN_ELSEWHERE("403", "该账号已在其他地方登录"),
 
     /**
      * 请求url不存在
@@ -162,20 +162,22 @@ public enum CODE_MSG implements CodeMsg {
     /**
      * 仅用在union_account 无权限
      */
-    MISS_SUPER_PERMISSION("lmyxlf5106","高危操作需要最高权限，请通知管理员"),
+    MISS_SUPER_PERMISSION("lmyxlf5106", "高危操作需要最高权限，请通知管理员"),
 
     /**
      * 仅在union_account 存在用户无角色
      */
-    MISS_ROLE("lmyxlf5107","请通知管理员给你开通权限"),
+    MISS_ROLE("lmyxlf5107", "请通知管理员给你开通权限"),
 
     /**
      * 第三方服务异常
      */
-    OTHER_SERVICE_UNAVAILABLE("lmyxlf5108","第三方服务异常");
+    OTHER_SERVICE_UNAVAILABLE("lmyxlf5108", "第三方服务异常"),
 
-    String code;
-    String msg;
+    IP_ERROR("lmyxlf6001", "IP 错误");
+
+    final String code;
+    final String msg;
 
     CODE_MSG(String code, String msg) {
         this.code = code;

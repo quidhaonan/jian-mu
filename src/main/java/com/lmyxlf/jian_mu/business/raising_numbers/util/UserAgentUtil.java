@@ -7,6 +7,7 @@ import com.lmyxlf.jian_mu.global.util.LmyXlfHttp;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,10 +54,10 @@ public class UserAgentUtil {
      */
     public static List<String> generateRandomUA(Integer count, PlatformTypeEnums type) {
 
-        Map<String, String> params = Map.ofEntries(
-                Map.entry("count", String.valueOf(count)),
-                Map.entry("type", type.getName())
-        );
+        Map<String, String> params = new HashMap<>() {{
+            put("count", String.valueOf(count));
+            put("type", type.getName());
+        }};
 
         RespUserAgent result = LmyXlfHttp
                 .post(GENERATE_URL)

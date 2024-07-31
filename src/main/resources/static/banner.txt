@@ -1,0 +1,33 @@
+
+
+
+
+
+
+
+
+
+LLLLLLLLLLL                  MMMMMMMM               MMMMMMMM     YYYYYYY       YYYYYYY     XXXXXXX       XXXXXXX     LLLLLLLLLLL                  FFFFFFFFFFFFFFFFFFFFFF
+L:::::::::L                  M:::::::M             M:::::::M     Y:::::Y       Y:::::Y     X:::::X       X:::::X     L:::::::::L                  F::::::::::::::::::::F
+L:::::::::L                  M::::::::M           M::::::::M     Y:::::Y       Y:::::Y     X:::::X       X:::::X     L:::::::::L                  F::::::::::::::::::::F
+LL:::::::LL                  M:::::::::M         M:::::::::M     Y::::::Y     Y::::::Y     X::::::X     X::::::X     LL:::::::LL                  FF::::::FFFFFFFFF::::F
+  L:::::L                    M::::::::::M       M::::::::::M     YYY:::::Y   Y:::::YYY     XXX:::::X   X:::::XXX       L:::::L                      F:::::F       FFFFFF
+  L:::::L                    M:::::::::::M     M:::::::::::M        Y:::::Y Y:::::Y           X:::::X X:::::X          L:::::L                      F:::::F             
+  L:::::L                    M:::::::M::::M   M::::M:::::::M         Y:::::Y:::::Y             X:::::X:::::X           L:::::L                      F::::::FFFFFFFFFF   
+  L:::::L                    M::::::M M::::M M::::M M::::::M          Y:::::::::Y               X:::::::::X            L:::::L                      F:::::::::::::::F   
+  L:::::L                    M::::::M  M::::M::::M  M::::::M           Y:::::::Y                X:::::::::X            L:::::L                      F:::::::::::::::F   
+  L:::::L                    M::::::M   M:::::::M   M::::::M            Y:::::Y                X:::::X:::::X           L:::::L                      F::::::FFFFFFFFFF   
+  L:::::L                    M::::::M    M:::::M    M::::::M            Y:::::Y               X:::::X X:::::X          L:::::L                      F:::::F             
+  L:::::L         LLLLLL     M::::::M     MMMMM     M::::::M            Y:::::Y            XXX:::::X   X:::::XXX       L:::::L         LLLLLL       F:::::F             
+LL:::::::LLLLLLLLL:::::L     M::::::M               M::::::M            Y:::::Y            X::::::X     X::::::X     LL:::::::LLLLLLLLL:::::L     FF:::::::FF           
+L::::::::::::::::::::::L     M::::::M               M::::::M         YYYY:::::YYYY         X:::::X       X:::::X     L::::::::::::::::::::::L     F::::::::FF           
+L::::::::::::::::::::::L     M::::::M               M::::::M         Y:::::::::::Y         X:::::X       X:::::X     L::::::::::::::::::::::L     F::::::::FF           
+LLLLLLLLLLLLLLLLLLLLLLLL     MMMMMMMM               MMMMMMMM         YYYYYYYYYYYYY         XXXXXXX       XXXXXXX     LLLLLLLLLLLLLLLLLLLLLLLL     FFFFFFFFFFF
+
+
+
+
+
+
+
+

@@ -17,10 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author lmy
@@ -50,10 +47,12 @@ public class NoticeErrorAspect {
 
         if (ObjUtil.isNotNull(noticeErrorAnnotation)) {
             List<String> pushUrls = new ArrayList<>();
+            // 获得所有实现了 PutPushUrlsAble 接口的实现类
             Map<String, PutPushUrlsAble> providers = context.getBeansOfType(PutPushUrlsAble.class);
             if (!providers.isEmpty()) {
                 String[] filter = noticeErrorAnnotation.filter();
                 for (PutPushUrlsAble provider : providers.values()) {
+                    // 使用过滤参数获得符合条件的实现类
                     if (provider.filter(filter)) {
                         String[] urls = provider.put();
                         // 添加到总列表中
@@ -70,12 +69,12 @@ public class NoticeErrorAspect {
             String methodName = joinPoint.getSignature().getName();
             String fullyLimitedName = className + "." + methodName;
 
-            Map<String, String> contentMap = Map.ofEntries(
-                    Map.entry("异常位置", fullyLimitedName),
-                    Map.entry("异常信息", StrUtil.isBlank(content) ? ex.getMessage() : content),
-                    Map.entry(TraceConstant.TRACE_ID, MDC.get(TraceConstant.TRACE_ID)),
-                    Map.entry("时间", DateUtil.now())
-            );
+            Map<String, String> contentMap = new HashMap<>() {{
+                put("异常位置", fullyLimitedName);
+                put("异常信息", StrUtil.isBlank(content) ? ex.getMessage() : content);
+                put(TraceConstant.TRACE_ID, MDC.get(TraceConstant.TRACE_ID));
+                put("时间", DateUtil.now());
+            }};
             XiZhiNoticeUtil.xiZhiMsgNotice(pushUrls, title, JSONUtil.toJsonStr(contentMap));
         }
     }

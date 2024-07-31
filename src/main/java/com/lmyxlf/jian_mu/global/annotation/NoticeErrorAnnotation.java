@@ -18,9 +18,24 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NoticeErrorAnnotation {
 
+    /**
+     * 标题
+     *
+     * @return
+     */
     String title() default "异常通知";
 
+    /**
+     * 异常内容
+     *
+     * @return
+     */
     String content() default "";
 
+    /**
+     * 过滤参数
+     *
+     * @return
+     */
     String[] filter() default SysConstant.LMYXLF;
 }
