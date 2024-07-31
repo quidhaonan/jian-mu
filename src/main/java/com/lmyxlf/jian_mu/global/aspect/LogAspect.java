@@ -21,6 +21,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -89,12 +90,12 @@ public class LogAspect {
     }
 
     private JSONArray sendWarnMsgToXiZhi(String message, String url) {
-        Map<String, String> content = Map.ofEntries(
-                Map.entry("接口路径", url),
-                Map.entry("异常消息", message),
-                Map.entry("时间", DateUtil.now()),
-                Map.entry(TraceConstant.TRACE_ID, MDC.get(TraceConstant.TRACE_ID))
-        );
+        Map<String, String> content = new HashMap<>() {{
+            put("接口路径", url);
+            put("异常消息", message);
+            put("时间", DateUtil.now());
+            put(TraceConstant.TRACE_ID, MDC.get(TraceConstant.TRACE_ID));
+        }};
 
         return XiZhiNoticeUtil.xiZhiMsgNotice(message, JSONUtil.toJsonStr(content));
     }
