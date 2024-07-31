@@ -6,10 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author lmy
@@ -38,10 +35,10 @@ public class XiZhiNoticeUtil {
         }
         List<String> resultList = new ArrayList<>();
 
-        Map<String, String> params = Map.ofEntries(
-                Map.entry("title", title),
-                Map.entry("content", content)
-        );
+        Map<String, String> params = new HashMap<>() {{
+            put("title", title);
+            put("content", content);
+        }};
 
         pushUrls.forEach(pushUrl -> {
             String result = LmyXlfHttp

@@ -1,6 +1,10 @@
 package com.lmyxlf.jian_mu.log;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Validator;
+import com.lmyxlf.jian_mu.global.constant.CODE_MSG;
+import com.lmyxlf.jian_mu.global.exception.LmyXlfException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.lang.management.ManagementFactory;
@@ -12,6 +16,7 @@ import java.lang.management.ManagementFactory;
  * @description 生成 traceId
  * @since 17
  */
+@Slf4j
 public class TraceIdGenerator {
 
     private static final AtomicLong SEQUENCE = new AtomicLong(1000);
@@ -47,6 +52,11 @@ public class TraceIdGenerator {
      * 将 IP 地址转换为十六进制字符串
      */
     private static String convertIpToHex(String ipAddr) {
+        if (!Validator.isIpv4(ipAddr) && !Validator.isIpv6(ipAddr)) {
+            log.error("生成 traceId 失败，ipAddr：{}", ipAddr);
+            throw new LmyXlfException(CODE_MSG.IP_ERROR);
+        }
+
         String[] octets = ipAddr.split("\\.");
         StringBuilder hexString = new StringBuilder();
         for (String octet : octets) {
