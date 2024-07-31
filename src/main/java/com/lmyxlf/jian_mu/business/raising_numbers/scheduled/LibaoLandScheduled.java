@@ -1,6 +1,7 @@
 package com.lmyxlf.jian_mu.business.raising_numbers.scheduled;
 
 import cn.hutool.json.JSONUtil;
+import com.lmyxlf.jian_mu.business.raising_numbers.constant.ProjectTypeConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNCornConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.entity.RaisingNumbers;
@@ -61,7 +62,7 @@ public class LibaoLandScheduled {
      */
     @Async("async_executor_rn")
     @Scheduled(cron = RNCornConstant.EVERY_DAY_0_CLOCK_1_MINUTE_AM)
-    @NoticeErrorAnnotation(title = "丽宝乐园-未知错误", filter = {"丽宝乐园"})
+    @NoticeErrorAnnotation(title = ProjectTypeConstant.LIBAO_LAND + ProjectTypeConstant.UN_KNOWN_ERROR, filter = {ProjectTypeConstant.LIBAO_LAND})
     public void dailyCheckIn() {
         String projectName = ProjectTypeEnums.LIBAO_LAND.getName();
         log.info("开始[{}]养号", projectName);

@@ -1,6 +1,7 @@
 package com.lmyxlf.jian_mu.business.raising_numbers.scheduled;
 
 import cn.hutool.json.JSONUtil;
+import com.lmyxlf.jian_mu.business.raising_numbers.constant.ProjectTypeConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNCornConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.entity.RaisingNumbers;
@@ -58,7 +59,7 @@ public class JingyiForumScheduled {
 
     @Async("async_executor_rn")
     @Scheduled(cron = RNCornConstant.EVERY_DAY_12_CLOCK_0_MINUTE_PM)
-    @NoticeErrorAnnotation(title = "精易论坛-未知错误", filter = {"精易论坛"})
+    @NoticeErrorAnnotation(title = ProjectTypeConstant.JINGYI_FORUM + ProjectTypeConstant.UN_KNOWN_ERROR, filter = {ProjectTypeConstant.JINGYI_FORUM})
     public void dailyCheckIn() {
         String projectName = ProjectTypeEnums.JINGYI_FORUM.getName();
         log.info("开始[{}]养号", projectName);
