@@ -29,7 +29,7 @@ public class AsyncMethods {
 
     private final RedissonClient redissonClient;
 
-    @Async("async_executor_ws")
+    @Async("async_executor_ot")
     public Boolean copyAndRenameFile(Path tempDir, Path path, String randomStr, List<String> suffixs) {
         suffixs.forEach(item -> {
             String originalName = path.getFileName().toString();
