@@ -3,7 +3,6 @@ package com.lmyxlf.jian_mu.business.raising_numbers.scheduled;
 import cn.hutool.json.JSONUtil;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.ProjectTypeConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNConstant;
-import com.lmyxlf.jian_mu.business.raising_numbers.constant.RNCornConstant;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.entity.RaisingNumbers;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.enums.ProjectTypeEnums;
 import com.lmyxlf.jian_mu.business.raising_numbers.model.resp.RespJingyiForum;
@@ -15,11 +14,11 @@ import com.lmyxlf.jian_mu.global.constant.DBConstant;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
 import com.lmyxlf.jian_mu.global.util.LmyXlfHttp;
 import com.lmyxlf.jian_mu.global.util.XiZhiNoticeUtil;
+import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -58,7 +57,8 @@ public class JingyiForumScheduled {
     private static final String CODE_REPEAT = "0";
 
     @Async("async_executor_rn")
-    @Scheduled(cron = RNCornConstant.EVERY_DAY_12_CLOCK_0_MINUTE_PM)
+    @XxlJob("jingyiForumHandler")
+    // @Scheduled(cron = RNCornConstant.EVERY_DAY_12_CLOCK_0_MINUTE_PM)
     @NoticeErrorAnnotation(title = ProjectTypeConstant.JINGYI_FORUM + ProjectTypeConstant.UN_KNOWN_ERROR, filter = {ProjectTypeConstant.JINGYI_FORUM})
     public void dailyCheckIn() {
         String projectName = ProjectTypeEnums.JINGYI_FORUM.getName();
