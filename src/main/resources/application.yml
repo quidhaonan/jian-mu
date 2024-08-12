@@ -81,7 +81,7 @@ xxl:
   job:
     admin:
       # xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
-      addresses: ${xxl.job.admin.XXL_JOB_ADMIN_URL:xxl_job:10002/xxl-job-admin}
+      addresses: http://${xxl.job.admin.XXL_JOB_ADMIN_HOST:xxl-job-admin:10002}/xxl-job-admin
     # xxl-job, access token
     accessToken: default_token
     executor:
