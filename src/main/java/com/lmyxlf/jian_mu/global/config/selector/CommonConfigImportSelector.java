@@ -1,5 +1,6 @@
 package com.lmyxlf.jian_mu.global.config.selector;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -12,7 +13,7 @@ import org.springframework.core.type.AnnotationMetadata;
  */
 public class CommonConfigImportSelector implements ImportSelector {
     @Override
-    public String[] selectImports(AnnotationMetadata importingClassMetadata) {
+    public String @NotNull [] selectImports(@NotNull AnnotationMetadata importingClassMetadata) {
         return new String[]{
                 "com.lmyxlf.jian_mu.global.config.SpringConfig",
                 "com.lmyxlf.jian_mu.global.config.SwaggerConfig",

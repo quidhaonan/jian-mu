@@ -21,7 +21,8 @@ public class LogRequestInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request,
-                             @NotNull HttpServletResponse response, Object handler) throws Exception {
+                             @NotNull HttpServletResponse response,
+                             @NotNull Object handler) {
         String traceId = MDC.get(TraceConstant.TRACE_ID);
         log.info("url：{}，traceId：{}", request.getServletPath(), traceId);
         return true;

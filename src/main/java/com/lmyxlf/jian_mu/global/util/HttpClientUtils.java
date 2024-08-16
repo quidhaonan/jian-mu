@@ -16,7 +16,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -44,8 +43,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class HttpClientUtils {
 
-    private static HttpClient HTTP_CLIENT;
-    private static HttpClientManager HTTP_CLIENT_MANAGER;
+    private static final HttpClient HTTP_CLIENT;
+    private static final HttpClientManager HTTP_CLIENT_MANAGER;
 
     static {
         // 配置连接池
@@ -102,10 +101,7 @@ public class HttpClientUtils {
             // HttpEntityEnclosingRequest 指的是有请求体的 request，比 HttpRequest 多一个 Entity 属性
             // 而常用的 GET 请求是没有请求体的，POST、PUT 都是有请求体的
             // Rest 一般用 GET 请求获取数据，故幂等，POST 用于新增数据，故不幂等
-            if (!(request instanceof HttpEntityEnclosingRequest)) {
-                return true;
-            }
-            return false;
+            return !(request instanceof HttpEntityEnclosingRequest);
         };
 
         HTTP_CLIENT = HttpClients.custom()

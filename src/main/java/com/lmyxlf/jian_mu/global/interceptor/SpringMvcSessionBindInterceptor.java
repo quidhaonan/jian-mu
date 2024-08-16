@@ -1,6 +1,7 @@
 package com.lmyxlf.jian_mu.global.interceptor;
 
 import com.lmyxlf.jian_mu.global.session.SessionBindInfo;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SpringMvcSessionBindInterceptor implements HandlerInterceptor {
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(@NotNull HttpServletRequest request,
+                             @NotNull HttpServletResponse response,
+                             @NotNull Object handler) {
         SessionBindInfo.initInfo();
         return true;
     }

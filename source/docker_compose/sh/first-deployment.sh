@@ -22,11 +22,14 @@ sudo bash -c "cat > $FILE <<EOF
 {
     \"registry-mirrors\": [
         \"https://docker.m.daocloud.io\",
-        \"https://docker.1panel.live\"
+        \"https://docker.1panel.live\",
+        \"https://noohub.ru\",
+        \"https://huecker.io\",
+        \"https://dockerhub.timeweb.cloud\"
     ]
 }
 EOF"
 echo "Contents written to $FILE"
 
 echo `sudo service docker restart`
-echo `docker compose -f ../docker-compose.yml up -d`
+echo `docker compose up -d`
