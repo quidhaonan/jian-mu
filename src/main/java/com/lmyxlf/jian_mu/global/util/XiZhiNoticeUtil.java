@@ -51,7 +51,8 @@ public class XiZhiNoticeUtil {
                     .build().exchange();
             String result = exchange.getResult();
 
-            if (!CODE_MSG.SUCCESS.getCode().equals(String.valueOf(exchange.getStatusCode()))) {
+            if (!CODE_MSG.SUCCESS.getCode().equals(String.valueOf(exchange.getStatusCode()))
+                    && !DEFAULT_CONENT.equals(content)) {
                 // 存在 content 是整个网页，发送失败的情况
                 result = xiZhiMsgNotice(Collections.singletonList(pushUrl), title, DEFAULT_CONENT).toString();
             }
