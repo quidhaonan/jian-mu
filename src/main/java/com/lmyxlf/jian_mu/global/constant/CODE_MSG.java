@@ -93,11 +93,6 @@ public enum CODE_MSG implements CodeMsg {
     REQUEST_COUNT_LIMIT("lmyxlf4201", "请求次数超出限制"),
 
     /**
-     * 车机请求次数超出限制
-     */
-    REQUEST_COUNT_LIMIT_UID("lmyxlf4202", "当前车机请求次数超出限制"),
-
-    /**
      * 当前项目请求次数超出限制
      */
     REQUEST_COUNT_LIMIT_APP_ID("lmyxlf4203", "当前项目请求次数超出限制"),

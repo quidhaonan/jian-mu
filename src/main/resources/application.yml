@@ -14,7 +14,8 @@ spring:
   config:
     import: classpath:application-local.yml,
                       business/web_socket/web-socket.yml,
-                      business/own_tools/own-tools.yml
+                      business/own_tools/own-tools.yml,
+                      business/batch_invitation/batch-invitation.yml
   
   # 数据源
   datasource:

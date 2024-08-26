@@ -56,5 +56,4 @@ public class PageData<T> implements Serializable {
      */
     @ApiModelProperty(value = "当前页")
     private long current;
-
 }

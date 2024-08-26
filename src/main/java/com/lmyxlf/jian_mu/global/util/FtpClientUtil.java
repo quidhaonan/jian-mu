@@ -1,9 +1,6 @@
 package com.lmyxlf.jian_mu.global.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +20,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 public class FtpClientUtil {
@@ -44,7 +42,7 @@ public class FtpClientUtil {
 
     private static final String DEFAULT_WORKING_PATH = "/";
 
-    public static final String ANONYMOUS_USERNAME = "anonymous";
+    private static final String ANONYMOUS_USERNAME = "anonymous";
 
     /**
      * 连接 FTP Server
@@ -52,7 +50,7 @@ public class FtpClientUtil {
      * @throws IOException
      */
 
-    public FTPClient connect(String host, Integer port, String username, String password) throws Exception {
+    public static FTPClient connect(String host, Integer port, String username, String password) {
         log.info("FTP 服务器连接，host：{}，port：{}，username：{}，password：{}", host, port, username, password);
 
         String encryptStr = MD5Utils.encrypt(String.format(host, port, username, password));
@@ -114,8 +112,9 @@ public class FtpClientUtil {
      *
      * @return
      */
-    public String getHome(FTPClient ftpClient) {
-        log.info("FTP 服务器获得所在目录位置，ftpClient：{}", ftpClient);
+    public static String getHome(FTPClient ftpClient) {
+        log.info("FTP 服务器获得所在目录位置，host：{}，port：{}",
+                ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
 
         return FTP_PATH_MAP.getIfPresent(MD5Utils.encrypt(JSONUtil.toJsonStr(ftpClient)));
     }
@@ -126,15 +125,17 @@ public class FtpClientUtil {
      * @param ftpClient
      * @throws IOException
      */
-    public void close(FTPClient ftpClient) {
-        log.info("FTP 服务器断开连接，ftpClient：{}", ftpClient);
+    public static void close(FTPClient ftpClient) {
+        log.info("FTP 服务器断开连接，host：{}，port：{}",
+                ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
 
         if (ObjUtil.isNotNull(ftpClient) && ftpClient.isConnected()) {
             try {
                 ftpClient.logout();
                 ftpClient.disconnect();
             } catch (IOException e) {
-                log.error("FTP 服务器关闭失败，e：{}", e.getMessage());
+                log.error("FTP 服务器关闭失败，e：{}，host：{}，port：{}",
+                        e.getMessage(), ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
             }
         }
     }
@@ -144,11 +145,11 @@ public class FtpClientUtil {
      *
      * @return
      */
-    public List<FTPFile> list(FTPClient ftpClient) {
+    public static List<FTPFile> list(FTPClient ftpClient) {
         List<FTPFile> list = null;
         try {
             String ftpPath = FTP_PATH_MAP.getIfPresent(MD5Utils.encrypt(JSONUtil.toJsonStr(ftpClient)));
-            FTPFile ff[] = ftpClient.listFiles(ftpPath);
+            FTPFile[] ff = ftpClient.listFiles(ftpPath);
             if (ff != null && ff.length > 0) {
                 list = new ArrayList<FTPFile>(ff.length);
                 Collections.addAll(list, ff);
@@ -156,10 +157,12 @@ public class FtpClientUtil {
                 list = new ArrayList<FTPFile>(0);
             }
         } catch (Exception e) {
-            log.error("FTP 获取文件失败，ftpClient：{}，e：{}", ftpClient, e.getMessage());
+            log.error("FTP 获取文件失败，e：{}，host：{}，port：{}",
+                    e.getMessage(), ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
         }
 
-        log.info("FTP 服务器获得文件列表，ftpClient：{}，list：{}", ftpClient, list);
+        log.info("FTP 服务器获得文件列表，list：{}，host：{}，port：{}",
+                list, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
         return list;
     }
 
@@ -169,26 +172,30 @@ public class FtpClientUtil {
      * @param path           需要切换的目录
      * @param forcedIncrease 如果目录不存在，是否增加
      */
-    public void switchDirectory(FTPClient ftpClient, String path, boolean forcedIncrease) {
-        log.info("FTP 服务器切换目录，ftpClient：{}，path：{}，forcedIncrease：{}", ftpClient, path, forcedIncrease);
+    public static void switchDirectory(FTPClient ftpClient, String path, boolean forcedIncrease) {
+        log.info("FTP 服务器切换目录，path：{}，forcedIncrease：{}，host：{}，port：{}",
+                path, forcedIncrease, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
 
         try {
             if (StrUtil.isNotEmpty(path)) {
                 boolean ok = ftpClient.changeWorkingDirectory(path);
                 if (ok) {
-                    log.info("FTP 服务器切换目录成功，path：{}", path);
+                    log.info("FTP 服务器切换目录成功，path：{}，host：{}，port：{}",
+                            path, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
                     String encryptPath = MD5Utils.encrypt(JSONUtil.toJsonStr(ftpClient));
                     FTP_PATH_MAP.put(encryptPath, path);
                 } else if (forcedIncrease) {
                     // ftpPath 不存在，手动创建目录
-                    log.info("FTP 服务器目录不存在，手动创建，path：{}", path);
-                    StringTokenizer token = new StringTokenizer(path, "\\//");
+                    log.info("FTP 服务器目录不存在，手动创建，path：{}，host：{}，port：{}",
+                            path, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
+                    StringTokenizer token = new StringTokenizer(path, "\\/");
                     while (token.hasMoreTokens()) {
                         String npath = token.nextToken();
                         ftpClient.makeDirectory(npath);
                         ok = ftpClient.changeWorkingDirectory(npath);
                         if (ok) {
-                            log.info("FTP 服务器切换目录成功，path：{}", path);
+                            log.info("FTP 服务器切换目录成功，path：{}，host：{}，port：{}",
+                                    path, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
                             String encryptPath = MD5Utils.encrypt(JSONUtil.toJsonStr(ftpClient));
                             FTP_PATH_MAP.put(encryptPath, path);
                         }
@@ -196,8 +203,8 @@ public class FtpClientUtil {
                 }
             }
         } catch (Exception e) {
-            log.error("FTP 切换目录失败，ftpClient：{}，path：{}，forcedIncrease：{}，e：{}"
-                    , ftpClient, path, forcedIncrease, e.getMessage());
+            log.error("FTP 切换目录失败，path：{}，forcedIncrease：{}，e：{}，host：{}，port：{}",
+                    path, forcedIncrease, e.getMessage(), ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
         }
     }
 
@@ -206,16 +213,18 @@ public class FtpClientUtil {
      *
      * @param path
      */
-    public void createDirectory(FTPClient ftpClient, String path) {
-        log.info("FTP 服务器创建目录，ftpClient：{}，path：{}", ftpClient, path);
+    public static void createDirectory(FTPClient ftpClient, String path) {
+        log.info("FTP 服务器创建目录，path：{}，host：{}，port：{}",
+                path, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
 
         try {
             if (StrUtil.isNotEmpty(path)) {
                 boolean ok = ftpClient.changeWorkingDirectory(path);
                 if (!ok) {
                     // ftpPath 不存在，手动创建目录
-                    log.info("FTP 创建目录不存在，手动创建目录，path：{}", path);
-                    StringTokenizer token = new StringTokenizer(path, "\\//");
+                    log.info("FTP 创建目录不存在，手动创建目录，path：{}，host：{}，port：{}",
+                            path, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
+                    StringTokenizer token = new StringTokenizer(path, "\\/");
                     while (token.hasMoreTokens()) {
                         String npath = token.nextToken();
                         ftpClient.makeDirectory(npath);
@@ -228,8 +237,8 @@ public class FtpClientUtil {
             String ftpPath = FTP_PATH_MAP.getIfPresent(encryptPath);
             ftpClient.changeWorkingDirectory(ftpPath);
         } catch (Exception e) {
-            log.error("FTP 创建目录失败，ftpClient：{}，path：{}，e：{}"
-                    , ftpClient, path, e.getMessage());
+            log.error("FTP 创建目录失败，path：{}，e：{}，host：{}，port：{}",
+                    path, e.getMessage(), ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
         }
     }
 
@@ -239,14 +248,15 @@ public class FtpClientUtil {
      * @param path
      * @return
      */
-    public boolean deleteDirectory(FTPClient ftpClient, String path) {
-        log.info("FTP 服务器删除目录，ftpClient：{}，path：{}", ftpClient, path);
+    public static boolean deleteDirectory(FTPClient ftpClient, String path) {
+        log.info("FTP 服务器删除目录，path：{}，host：{}，port：{}",
+                path, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
 
         try {
             return ftpClient.removeDirectory(path);
         } catch (Exception e) {
-            log.error("FTP 删除目录失败，ftpClient：{}，path：{}：{}，e：{}"
-                    , ftpClient, path, e.getMessage());
+            log.error("FTP 删除目录失败，path：{}，e：{}，host：{}，port：{}",
+                    path, e.getMessage(), ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
         }
         return Boolean.FALSE;
     }
@@ -257,14 +267,15 @@ public class FtpClientUtil {
      * @param path
      * @return
      */
-    public boolean deleteFile(FTPClient ftpClient, String path) {
-        log.info("FTP 服务器删除文件，ftpClient：{}，path：{}", ftpClient, path);
+    public static boolean deleteFile(FTPClient ftpClient, String path) {
+        log.info("FTP 服务器删除文件，path：{}，host：{}，port：{}",
+                path, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
 
         try {
             return ftpClient.deleteFile(path);
         } catch (Exception e) {
-            log.error("FTP 删除文件失败，ftpClient：{}，path：{}：{}，e：{}"
-                    , ftpClient, path, e.getMessage());
+            log.error("FTP 删除文件失败，path：{}，e：{}，host：{}，port：{}",
+                    path, e.getMessage(), ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
         }
         return Boolean.FALSE;
     }
@@ -275,8 +286,18 @@ public class FtpClientUtil {
      * @param localFile 本地文件
      * @return
      */
-    public boolean upload(FTPClient ftpClient, File localFile) {
-        return this.upload(ftpClient, localFile, "");
+    public static boolean upload(FTPClient ftpClient, File localFile) {
+        return upload(ftpClient, localFile, "");
+    }
+
+    /**
+     * 上传文件，上传文件只会传到当前所在目录
+     *
+     * @param file 文件
+     * @return
+     */
+    public static boolean upload(FTPClient ftpClient, MultipartFile file) {
+        return upload(ftpClient, file, "");
     }
 
     /**
@@ -286,14 +307,16 @@ public class FtpClientUtil {
      * @param reName    重名
      * @return
      */
-    public boolean upload(FTPClient ftpClient, File localFile, String reName) {
-        log.info("FTP 服务器上传文件，ftpClient：{}，localFile：{}", ftpClient, localFile);
+    public static boolean upload(FTPClient ftpClient, File localFile, String reName) {
+        log.info("FTP 服务器上传文件，localFile：{}，reName：{}，host：{}，port：{}",
+                localFile, reName, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
 
         String targetName = reName;
         // 设置上传后文件名
         if (StrUtil.isEmpty(reName)) {
             targetName = localFile.getName();
-            log.info("FTP 服务器上传文件，使用文件本身名称，targetName：{}", targetName);
+            log.info("FTP 服务器上传文件，使用文件本身名称，targetName：{}，host：{}，port：{}",
+                    targetName, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
         }
         FileInputStream fis = null;
         try {
@@ -303,8 +326,40 @@ public class FtpClientUtil {
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
             return ftpClient.storeFile(targetName, fis);
         } catch (Exception e) {
-            log.error("FTP 上传文件失败，ftpClient：{}，localFile：{}，reName：{}，e：{}"
-                    , ftpClient, localFile, reName, e.getMessage());
+            log.error("FTP 上传文件失败，localFile：{}，reName：{}，e：{}，host：{}，port：{}",
+                    localFile, reName, e.getMessage(), ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
+        }
+        return Boolean.FALSE;
+    }
+
+    /**
+     * 上传文件，会覆盖 FTP 上原有文件
+     *
+     * @param file   文件
+     * @param reName 重名
+     * @return
+     */
+    public static boolean upload(FTPClient ftpClient, MultipartFile file, String reName) {
+        log.info("FTP 服务器上传文件，file：{}，reName：{}，host：{}，port：{}",
+                file, reName, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
+
+        String targetName = reName;
+        // 设置上传后文件名
+        if (StrUtil.isEmpty(reName)) {
+            targetName = file.getOriginalFilename();
+            log.info("FTP 服务器上传文件，使用文件本身名称，targetName：{}，host：{}，port：{}",
+                    targetName, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
+        }
+        InputStream fis = null;
+        try {
+            // 开始上传文件
+            fis = file.getInputStream();
+            ftpClient.setControlEncoding(DEFAULT_ENCODING);
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+            return ftpClient.storeFile(targetName, fis);
+        } catch (Exception e) {
+            log.error("FTP 上传文件失败，file：{}，reName：{}，e：{}，host：{}，port：{}",
+                    file, reName, e.getMessage(), ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
         }
         return Boolean.FALSE;
     }
@@ -316,8 +371,9 @@ public class FtpClientUtil {
      * @param savePath    保存目录，本地保存目录
      * @return
      */
-    public boolean download(FTPClient ftpClient, String ftpFileName, String savePath) {
-        log.info("FTP 服务器下载文件，ftpClient：{}，ftpFileName：{}，savePath：{}", ftpClient, ftpFileName, savePath);
+    public static boolean download(FTPClient ftpClient, String ftpFileName, String savePath) {
+        log.info("FTP 服务器下载文件，ftpFileName：{}，savePath：{}，host：{}，port：{}",
+                ftpFileName, savePath, ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
 
         File dir = new File(savePath);
         if (!dir.exists()) {
@@ -327,11 +383,11 @@ public class FtpClientUtil {
         FileOutputStream fos = null;
         try {
             String saveFile = dir.getAbsolutePath() + File.separator + ftpFileName;
-            fos = new FileOutputStream(new File(saveFile));
+            fos = new FileOutputStream(saveFile);
             return ftpClient.retrieveFile(ftpFileName, fos);
         } catch (Exception e) {
-            log.error("FTP 下载文件失败，ftpClient：{}，ftpFileName：{}，savePath：{}，e：{}"
-                    , ftpClient, ftpFileName, savePath, e.getMessage());
+            log.error("FTP 下载文件失败，ftpFileName：{}，savePath：{}，e：{}，host：{}，port：{}",
+                    ftpFileName, savePath, e.getMessage(), ftpClient.getRemoteAddress(), ftpClient.getRemotePort());
         }
         return Boolean.FALSE;
     }
