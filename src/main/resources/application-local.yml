@@ -15,5 +15,5 @@
 #xxl:
 #  job:
 #    admin:
-#      # xxl-job 客户端地址
-#      XXL_JOB_ADMIN_URL: http://127.0.0.1:8080/xxl-job-admin
+#      # xxl-job-admin ip+端口
+#      XXL_JOB_ADMIN_HOST: 127.0.0.1:8080

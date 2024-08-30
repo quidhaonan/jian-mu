@@ -79,7 +79,7 @@ public class SignUtils {
      * @return 按字典排序后生成的字符串
      */
     public static String generateSortStr(Map<String, String> params) {
-        if (params.size() == 0) {
+        if (params.isEmpty()) {
             return "";
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -87,11 +87,11 @@ public class SignUtils {
         Object[] keys = params.keySet().toArray();
         Arrays.sort(keys);
 
-        stringBuilder.append(keys[0]).append("=").append(params.get(keys[0]));
+        stringBuilder.append(keys[0]).append("=").append(params.get((String) keys[0]));
 
         for (int i = 1; i < keys.length; i++) {
             Object key = keys[i];
-            stringBuilder.append("&").append(key).append("=").append(params.get(key));
+            stringBuilder.append("&").append(key).append("=").append(params.get((String) key));
         }
         return stringBuilder.toString();
     }
@@ -103,7 +103,7 @@ public class SignUtils {
      * @return 按字典排序后生成的字符串
      */
     public static String generateSortStr2(Map<String, String[]> params) {
-        if (params.size() == 0) {
+        if (params.isEmpty()) {
             return "";
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -112,12 +112,12 @@ public class SignUtils {
         Arrays.sort(keys);
 
         // 默认每一个参数都只有一个值
-        final String[] obj = params.get(keys[0]);
+        final String[] obj = params.get((String) keys[0]);
         stringBuilder.append(keys[0]).append("=").append(obj[0]);
 
         for (int i = 1; i < keys.length; i++) {
             Object key = keys[i];
-            final String[] values = params.get(key);
+            final String[] values = params.get((String) key);
             if (values.length > 0) {
                 stringBuilder.append("&").append(key).append("=").append(values[0]);
             } else {

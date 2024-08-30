@@ -6,6 +6,7 @@ import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +27,9 @@ public class DatasourceCustomeMetrics implements MeterBinder {
     private DataSource dataSource;
 
     @Override
-    public void bindTo(MeterRegistry meterRegistry) {
+    public void bindTo(@NotNull MeterRegistry meterRegistry) {
 
-        if (dataSource instanceof DynamicRoutingDataSource) {
-            DynamicRoutingDataSource dynamicRoutingDataSource = (DynamicRoutingDataSource) dataSource;
+        if (dataSource instanceof DynamicRoutingDataSource dynamicRoutingDataSource) {
             Map<String, DataSource> dataSourceMap = dynamicRoutingDataSource.getDataSources();
 
             Gauge.builder("datasource.active.count", () -> getActiveCount(dataSourceMap))

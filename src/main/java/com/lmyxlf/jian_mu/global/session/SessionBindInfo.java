@@ -2,6 +2,7 @@ package com.lmyxlf.jian_mu.global.session;
 
 import com.lmyxlf.jian_mu.global.constant.LmyXlfReqParamConstant;
 import feign.RequestTemplate;
+import lombok.Getter;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -15,10 +16,17 @@ import javax.servlet.http.HttpServletRequest;
  * @description 请求会话的绑定信息
  * @since 17
  */
+@Getter
 public class SessionBindInfo {
 
+    /**
+     * 客户端 IP
+     */
     private String clientIp;
-    private String phone;
+    /**
+     * 手机号码
+     */
+    private final String phone;
 
     /**
      * 从 HttpServletRequest 构造绑定信息并在 HttpServletRequest 记录下来
@@ -41,20 +49,6 @@ public class SessionBindInfo {
             phone = httpRequest.getParameter(LmyXlfReqParamConstant.KEY_PHONE);
         }
         this.phone = phone;
-    }
-
-    /**
-     * @return 返回客户端IP
-     */
-    public String getClientIp() {
-        return clientIp;
-    }
-
-    /**
-     * @return 返回手机号码
-     */
-    public String getPhone() {
-        return phone;
     }
 
     private String longToString(Long l) {

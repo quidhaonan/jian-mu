@@ -30,12 +30,14 @@ public class JsonParamModelAttributeMethodProcessor implements HandlerMethodArgu
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         // 2、获取参数名
         JsonParam jsonParam = parameter.getParameterAnnotation(JsonParam.class);
+        assert jsonParam != null;
         String paramName = jsonParam.value();
         // 3、注解没有给的参数名字，默认取参数名
         if (StringUtils.isBlank(paramName)) {
             paramName = parameter.getParameterName();
         }
         // 4、从 request 中拿到参数
+        assert request != null;
         String json = request.getParameter(paramName);
         Class<?> parameterType = parameter.getParameterType();
         if (StringUtils.isNotBlank(json)) {

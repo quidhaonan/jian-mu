@@ -101,7 +101,7 @@ public class Snowflake {
         return timestamp - this.epoch << this.timestampLeftShift | this.workerId << this.workerIdShift | this.sequence;
     }
 
-    private static Snowflake flowIdWorker = new Snowflake();
+    private static final Snowflake flowIdWorker = new Snowflake();
 
     public static Snowflake getInstance() {
         return flowIdWorker;

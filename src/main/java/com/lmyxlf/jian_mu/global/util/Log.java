@@ -21,7 +21,7 @@ public class Log implements InvocationHandler {
     private static final Long PID = java.lang.management.ManagementFactory.getRuntimeMXBean().getPid();
     public static final Integer MAX_LOG_INDEX = 9999;
 
-    private static ThreadLocal<Integer> LOG_INDEX = new ThreadLocal<Integer>() {
+    private static final ThreadLocal<Integer> LOG_INDEX = new ThreadLocal<Integer>() {
         @Override
         protected Integer initialValue() {
             return 0;

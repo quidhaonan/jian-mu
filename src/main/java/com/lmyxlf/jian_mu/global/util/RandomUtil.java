@@ -48,15 +48,13 @@ public class RandomUtil {
      * 将十进制转换成 IP 地址
      */
     public static String decimalToIpAddress(int ip) {
-        StringBuilder ipBuilder = new StringBuilder();
-        ipBuilder.append((ip >> 24) & 0xff);
-        ipBuilder.append(".");
-        ipBuilder.append((ip >> 16) & 0xff);
-        ipBuilder.append(".");
-        ipBuilder.append((ip >> 8) & 0xff);
-        ipBuilder.append(".");
-        ipBuilder.append(ip & 0xff);
-        return ipBuilder.toString();
+        return ((ip >> 24) & 0xff) +
+                "." +
+                ((ip >> 16) & 0xff) +
+                "." +
+                ((ip >> 8) & 0xff) +
+                "." +
+                (ip & 0xff);
     }
 
     private static final Character[] CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',

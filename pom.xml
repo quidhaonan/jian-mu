@@ -64,6 +64,8 @@
         <jackson.databind.version>2.11.4</jackson.databind.version>
         <caffeine.version>2.8.4</caffeine.version>
         <xxl.job.core.version>2.4.1</xxl.job.core.version>
+        <commons.net.version>3.11.1</commons.net.version>
+        <ip2region.version>2.7.0</ip2region.version>
 
         <!-- feat/lmyxlf/web_socket 分支依赖 -->
         <spring.boot.starter.websocket.version>3.2.4</spring.boot.starter.websocket.version>
@@ -279,6 +281,19 @@
             <groupId>com.xuxueli</groupId>
             <artifactId>xxl-job-core</artifactId>
             <version>${xxl.job.core.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${commons.net.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.lionsoul/ip2region -->
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>${ip2region.version}</version>
         </dependency>
 
         <!-- feat/lmyxlf/web_socket 分支依赖 -->

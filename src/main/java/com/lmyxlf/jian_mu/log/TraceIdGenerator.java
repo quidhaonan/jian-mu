@@ -28,12 +28,10 @@ public class TraceIdGenerator {
      * 生成 traceId
      */
     public static String generateTraceId(String ipAddr) {
-        StringBuilder traceIdBuilder = new StringBuilder();
-        traceIdBuilder.append(convertIpToHex(ipAddr));
-        traceIdBuilder.append(DateUtil.current());
-        traceIdBuilder.append(nextSequence());
-        traceIdBuilder.append(PROCESS_ID);
-        return traceIdBuilder.toString();
+        return convertIpToHex(ipAddr) +
+                DateUtil.current() +
+                nextSequence() +
+                PROCESS_ID;
     }
 
     /**

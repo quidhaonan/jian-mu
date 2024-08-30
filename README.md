@@ -11,11 +11,11 @@ A spring boot project with all the ideas
 
 ### ① 服务器
 
-1. 将 `source/docker_compose` 整个文件夹复制进服务器中（本文档放入服务器根目录中），并将项目打包成 jar 包，将其放入至 `source/docker_compose/java` 中，结构如下：
+1. 将 `source/docker_compose` 整个文件夹复制进服务器中（本文档放入服务器根目录中），并将项目打包成 jar 包，将其放入至 `source/docker_compose/jian_mu` 中，结构如下：
 
     ```shell
     [root@ser161310378998 java]# pwd
-    /docker_compose/java
+    /docker_compose/jian_mu
     [root@ser161310378998 java]# ls
     Dockerfile  jian_mu.jar
     ```
@@ -23,7 +23,7 @@ A spring boot project with all the ideas
 2. 进入 `docker_compose` 目录，进行后续步骤
 
     ```shell
-    [root@ser161310378998 /]# cd docker_compose/
+    [root@ser161310378998 /]# cd /docker_compose
     [root@ser161310378998 docker_compose]# pwd
     /docker_compose
     ```
@@ -31,15 +31,15 @@ A spring boot project with all the ideas
 3. 授予 `.sh` 文件执行权限
 
     ```shell
-    [root@ser161310378998 docker_compose]# sudo chmod 777 first-deployment.sh
-    [root@ser161310378998 docker_compose]# sudo chmod 777 jar-version-update.sh
+    [root@ser161310378998 docker_compose]# sudo chmod 777 ./sh/first-deployment.sh
+    [root@ser161310378998 docker_compose]# sudo chmod 777 ./sh/jar-version-update.sh
     ```
 
 3. 如服务器无 docker 环境，则运行 `first-deployment.sh` 脚本，如有 docker 环境，则执行 `docker compose up -d` 命令启动
 
     ```shell
     # 无 docker 环境
-    [root@ser161310378998 docker_compose]# ./first-deployment.sh
+    [root@ser161310378998 docker_compose]# ./sh/first-deployment.sh
     # 有 docker 环境
     [root@ser161310378998 docker_compose]# docker compose up -d
     ```
@@ -49,7 +49,7 @@ A spring boot project with all the ideas
     ```shell
     [root@ser161310378998 docker_compose]# pwd
     /docker_compose
-    [root@ser161310378998 docker_compose]# ./jar-version-update.sh
+    [root@ser161310378998 docker_compose]# ./sh/jar-version-update.sh
     ```
 
 ### ② 本地
@@ -61,15 +61,26 @@ A spring boot project with all the ideas
         + 修改 `pom.xml` 文件中 `mysql.connector.java.version` 版本（仅加上或放开注释即可）
 
 2. 在 `src/main/resources/application-local.yml` 配置文件中加上本地 redis 的 ip 地址与密码
+3. 在 `src/main/resources/application-local.yml` 配置文件中加上本地 xxl-job-admin 的 ip 地址
 
 ## 3. 基本信息
 
-1. 数据库默认密码：`lmyxlf`，默认连接数据库名 `lmyxlf`
-2. redis 默认密码：`lmyxlf`
-3. 假设 ip 地址为：`127.0.0.1`
+1. mysql
+   + 账号：`root`
+   + 密码：`lmyxlf`
+   + 数据库名：`lmyxlf`
+2. redis
+   + 账号：`root`
+   + 密码：`lmyxlf`
+3. xxl-job-admin
+   + 账号：`lmyxlf`
+   + 密码：`lmyxlf`
+4. 假设 ip 地址为：`127.0.0.1`
     + 如服务器上运行，使用了 nginx，则地址默认加上 `/api/jianmu`
         + 项目默认前缀：`127.0.0.1/api/jianmu`
-        + swagger 地址：`127.0.0.1/api/jianmu/doc.html` 或 `127.0.0.1/api/jianmu/swagger-ui.html`
+        + swagger：`127.0.0.1/api/jianmu/doc.html` 或 `127.0.0.1/api/jianmu/swagger-ui.html`
+        + xxl-job-admin：`127.0.0.1/xxl-job-admin`
     + 如普通本地运行，则无默认前缀
         + 项目默认前缀：`127.0.0.1:9999`
-        + swagger 地址：`127.0.0.1:9999/doc.html` 或 `127.0.0.1:9999/swagger-ui.html`
+        + swagger：`127.0.0.1:9999/doc.html` 或 `127.0.0.1:9999/swagger-ui.html`
+        + xxl-job-admin：`127.0.0.1:8080/xxl-job-admin`
