@@ -3,7 +3,6 @@ package com.lmyxlf.jian_mu.global.aspect;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -97,6 +96,6 @@ public class LogAspect {
             put(TraceConstant.TRACE_ID, MDC.get(TraceConstant.TRACE_ID));
         }};
 
-        return XiZhiNoticeUtil.xiZhiMsgNotice(message, JSONUtil.toJsonStr(content));
+        return XiZhiNoticeUtil.xiZhiMsgNotice(message, content);
     }
 }
