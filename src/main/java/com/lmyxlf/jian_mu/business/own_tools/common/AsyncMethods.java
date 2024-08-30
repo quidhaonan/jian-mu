@@ -1,5 +1,6 @@
 package com.lmyxlf.jian_mu.business.own_tools.common;
 
+import cn.hutool.core.util.StrUtil;
 import com.lmyxlf.jian_mu.business.own_tools.constant.OTConstant;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +34,13 @@ public class AsyncMethods {
     public Boolean copyAndRenameFile(Path tempDir, Path path, String randomStr, List<String> suffixs) {
         suffixs.forEach(item -> {
             String originalName = path.getFileName().toString();
-            int dotIndex = originalName.lastIndexOf('.');
-            String baseName = originalName.substring(0, dotIndex);
-            String extension = originalName.substring(dotIndex);
-
-            String newName = baseName + "_" + item + extension;
+            String newName = StrUtil.format(originalName, item);
+            // int dotIndex = originalName.lastIndexOf('.');
+            // String baseName = originalName.substring(0, dotIndex);
+            // String extension = originalName.substring(dotIndex);
+            //
+            // String newName = baseName + "_" + item + extension;
+            // log.info("新文件名：newName：{}，item：{}，originalName：{}", newName, item,originalName);
             Path targetPath = Paths.get(tempDir.toString(), newName);
             try {
                 Files.copy(path, targetPath);
