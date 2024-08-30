@@ -110,6 +110,7 @@ public class GenerateImagesServiceImpl implements GenerateImagesService {
      */
     private static void unzip(MultipartFile file, String destDir) throws IOException {
         ZipInputStream zipIn = new ZipInputStream(file.getInputStream());
+        // fixme:不能正常接收名称为中文的图片
         ZipEntry entry = zipIn.getNextEntry();
         while (entry != null) {
             String filePath = Paths.get(destDir, entry.getName()).toString();

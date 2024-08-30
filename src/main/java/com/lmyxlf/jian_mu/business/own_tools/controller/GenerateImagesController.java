@@ -3,6 +3,7 @@ package com.lmyxlf.jian_mu.business.own_tools.controller;
 import com.lmyxlf.jian_mu.business.own_tools.model.req.ReqGenerateImages;
 import com.lmyxlf.jian_mu.business.own_tools.service.GenerateImagesService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ public class GenerateImagesController {
     private final GenerateImagesService generateImagesService;
 
     @PostMapping("/images")
+    @ApiOperation(value = "批量复制图片，添加名称后缀")
     public void generateImages(ReqGenerateImages reqGenerateImages, @RequestPart MultipartFile file, HttpServletResponse response) throws IOException {
 
         generateImagesService.generateImages(reqGenerateImages, file, response);
