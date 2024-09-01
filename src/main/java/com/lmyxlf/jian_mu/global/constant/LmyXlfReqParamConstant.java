@@ -72,4 +72,6 @@ public class LmyXlfReqParamConstant {
      * 签名
      */
     public static final String KEY_SIGN = "sign";
+
+    public static final String AUTHORIZATION = "Authorization";
 }
