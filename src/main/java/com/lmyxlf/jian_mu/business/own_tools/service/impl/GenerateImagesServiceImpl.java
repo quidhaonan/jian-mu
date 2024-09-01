@@ -1,10 +1,13 @@
 package com.lmyxlf.jian_mu.business.own_tools.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.excel.EasyExcel;
 import com.lmyxlf.jian_mu.business.own_tools.common.AsyncMethods;
 import com.lmyxlf.jian_mu.business.own_tools.constant.OTConstant;
+import com.lmyxlf.jian_mu.business.own_tools.model.dto.AsinDto;
 import com.lmyxlf.jian_mu.business.own_tools.model.req.ReqGenerateImages;
 import com.lmyxlf.jian_mu.business.own_tools.service.GenerateImagesService;
+import com.lmyxlf.jian_mu.global.exception.LmyXlfException;
 import com.lmyxlf.jian_mu.global.util.RandomUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +22,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -43,8 +48,11 @@ public class GenerateImagesServiceImpl implements GenerateImagesService {
 
     @Override
     public void generateImages(ReqGenerateImages reqGenerateImages, MultipartFile file, HttpServletResponse response) throws IOException {
-        log.info("批量复制图片，reqGenerateImages：{},fileName：{}，fileSize：{}", reqGenerateImages, file.getOriginalFilename(), file.getSize());
+
         List<String> suffixs = reqGenerateImages.getSuffixs();
+        Set<String> suffixsSet = new HashSet<>(suffixs);
+        log.info("批量复制图片，reqGenerateImages：{},fileName：{}，fileSize：{}，suffixsSet：{}，suffixsSize：{}，suffixsSetSize：{}",
+                reqGenerateImages, file.getOriginalFilename(), file.getSize(), suffixsSet, suffixs.size(), suffixsSet.size());
 
         // 临时目录存储文件
         String primaryPath = System.getProperty("user.dir");
@@ -60,7 +68,7 @@ public class GenerateImagesServiceImpl implements GenerateImagesService {
 
         RCountDownLatch countDownLatch = redissonClient.getCountDownLatch(OTConstant.REDIS_COUNTDOWNLATCH_PREFIX + randomStr);
         // 复制文件
-        copyFile(tempDir, suffixs, randomStr);
+        copyFile(tempDir, suffixsSet, randomStr);
 
         try {
             boolean completed = countDownLatch.await(10 * 60, TimeUnit.SECONDS);
@@ -101,6 +109,26 @@ public class GenerateImagesServiceImpl implements GenerateImagesService {
         }
     }
 
+    @Override
+    public void generateImagesExcel(MultipartFile file, MultipartFile excel, HttpServletResponse response) throws IOException {
+        log.info("通过 excel 导入，批量复制图片，file：{}，fileSize：{}，excel：{}，excelSize：{}",
+                file.getOriginalFilename(), file.getSize(), excel.getOriginalFilename(), excel.getSize());
+
+        try {
+            List<AsinDto> result = EasyExcel.read(excel.getInputStream())
+                    .head(AsinDto.class)
+                    .sheet()
+                    .doReadSync();
+            System.out.println("result = " + result);
+            List<String> asinList = result.stream().map(AsinDto::getAsin).toList();
+            generateImages(new ReqGenerateImages().setSuffixs(asinList), file, response);
+        } catch (Exception e) {
+            log.error("解析excel出错，excel：{}，excelSize：{}，e：{}",
+                    excel.getOriginalFilename(), excel.getSize(), e.getMessage());
+            throw new LmyXlfException("excel 解析出错");
+        }
+    }
+
     /**
      * 解压 ZIP 文件
      *
@@ -136,7 +164,7 @@ public class GenerateImagesServiceImpl implements GenerateImagesService {
         bos.close();
     }
 
-    public void copyFile(Path tempDir, List<String> suffixs, String randomStr) throws IOException {
+    public void copyFile(Path tempDir, Set<String> suffixsSet, String randomStr) throws IOException {
         log.info("线程池：{}", Thread.currentThread().getName());
 
         try (Stream<Path> files = Files.list(tempDir)) {
@@ -148,7 +176,7 @@ public class GenerateImagesServiceImpl implements GenerateImagesService {
 
             // 重新获取Stream进行文件操作，因为流已经被消费
             Files.list(tempDir).forEach(path -> {
-                asyncMethods.copyAndRenameFile(tempDir, path, randomStr, suffixs);
+                asyncMethods.copyAndRenameFile(tempDir, path, randomStr, suffixsSet);
             });
         }
     }

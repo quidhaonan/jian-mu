@@ -16,4 +16,6 @@ import java.io.IOException;
 public interface GenerateImagesService {
 
     void generateImages(ReqGenerateImages reqGenerateImages, MultipartFile file, HttpServletResponse response) throws IOException;
+
+    void generateImagesExcel(MultipartFile file, MultipartFile excel, HttpServletResponse response) throws IOException;
 }
