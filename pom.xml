@@ -72,6 +72,14 @@
         <annotations.version>24.1.0</annotations.version>
         <!-- feat/lmyxlf/web_socket 分支依赖 -->
 
+        <!-- feat/lmyxlf/own_tools 分支依赖 -->
+        <easyexcel.version>3.1.1</easyexcel.version>
+        <!-- feat/lmyxlf/own_tools 分支依赖 -->
+
+        <!-- feat/lmyxlf/admin 分支依赖 -->
+        <kaptcha.version>2.3.3</kaptcha.version>
+        <!-- feat/lmyxlf/admin 分支依赖 -->
+
     </properties>
 
     <dependencies>
@@ -310,6 +318,24 @@
             <version>${annotations.version}</version>
         </dependency>
         <!-- feat/lmyxlf/web_socket 分支依赖 -->
+
+        <!-- feat/lmyxlf/own_tools 分支依赖 -->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>${easyexcel.version}</version>
+        </dependency>
+        <!-- feat/lmyxlf/own_tools 分支依赖 -->
+
+        <!-- feat/lmyxlf/admin 分支依赖 -->
+        <!-- https://mvnrepository.com/artifact/pro.fessional/kaptcha -->
+        <dependency>
+            <groupId>pro.fessional</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>${kaptcha.version}</version>
+        </dependency>
+        <!-- feat/lmyxlf/admin 分支依赖 -->
 
     </dependencies>
 

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.Arrays;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -21,8 +21,9 @@ import java.util.List;
 public class ReqGenerateImages {
 
     @ApiModelProperty(value = "后缀")
-    // @NotEmpty(message = "后缀不能为空")
-    private List<String> suffixs = Arrays.asList("S", "M", "L", "2L", "3L");
+    @NotEmpty(message = "后缀不能为空")
+    // private List<String> suffixs = Arrays.asList("S", "M", "L", "2L", "3L");
+    private List<String> suffixs;
 
     // @ApiModelProperty(value = "图片")
     // @NotNull(message = "压缩包不能为空")
