@@ -1,5 +1,6 @@
 server:
   port: 9999
+  shutdown: graceful
   
 spring:
   application:
@@ -13,7 +14,8 @@ spring:
   config:
     import: classpath:application-local.yml,
                       business/web_socket/web-socket.yml,
-                      business/own_tools/own-tools.yml
+                      business/own_tools/own-tools.yml,
+                      business/batch_invitation/batch-invitation.yml
   
   # 数据源
   datasource:
@@ -75,3 +77,24 @@ logging:
 # 是否开启swagger文档
 swagger:
   enabled: ${SWAGGER_ENABLE:true}
+  
+# xxl-job
+xxl:
+  job:
+    admin:
+      # xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
+      addresses: http://${xxl.job.admin.XXL_JOB_ADMIN_HOST:xxl-job-admin:10002}/xxl-job-admin
+    # xxl-job, access token
+    accessToken: default_token
+    executor:
+      # xxl-job executor appname
+      appname: lmyxlf
+      # xxl-job executor registry-address: default use address to registry , otherwise use ip:port if address is null
+      address:
+      # xxl-job executor server-info
+      ip:
+      port: 10001
+      # xxl-job executor log-path
+      logpath: ./jian_mu/logs/xxl_job/executor
+      # xxl-job executor log-retention-days
+      logretentiondays: 9

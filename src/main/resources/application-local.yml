@@ -11,3 +11,9 @@
 #  REDIS_HOST: 127.0.0.1:6379
 #  # redis 密码
 #  REDIS_PASSWORD: lmyxlf
+#
+#xxl:
+#  job:
+#    admin:
+#      # xxl-job-admin ip+端口
+#      XXL_JOB_ADMIN_HOST: 127.0.0.1:8080

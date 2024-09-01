@@ -1,6 +1,5 @@
 package com.lmyxlf.jian_mu.log;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -13,10 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 public class LogWebMvcConfig implements WebMvcConfigurer {
 
-    private RemoteIpLogInterceptor remoteIpLogInterceptor;
+    private final RemoteIpLogInterceptor remoteIpLogInterceptor;
 
-
-    @Autowired
     public LogWebMvcConfig() {
         this.remoteIpLogInterceptor = new RemoteIpLogInterceptor();
     }

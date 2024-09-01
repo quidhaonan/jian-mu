@@ -20,7 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 public class RemoteIpLogInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(@NotNull HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(@NotNull HttpServletRequest request,
+                             @NotNull HttpServletResponse response,
+                             @NotNull Object handler) {
         String ipAddr = IPUtils.getIpAddr(request);
         MDC.put(LmyXlfReqParamConstant.REMOTE_IP, ipAddr);
         MDC.put(TraceConstant.TRACE_ID, TraceIdGenerator.generateTraceId(ipAddr));

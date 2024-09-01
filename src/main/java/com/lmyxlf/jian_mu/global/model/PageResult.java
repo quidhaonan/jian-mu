@@ -40,8 +40,8 @@ public class PageResult<T> implements Serializable {
      * @return
      */
     @Deprecated
-    public static PageResult createPageResult(List list) {
-        PageInfo pageInfo = new PageInfo<>(list);
+    public static PageResult<Object> createPageResult(List<Object> list) {
+        PageInfo<Object> pageInfo = new PageInfo<>(list);
         return PageResult.builder().data(pageInfo.getList()).code(0).count(pageInfo.getTotal()).build();
     }
 }

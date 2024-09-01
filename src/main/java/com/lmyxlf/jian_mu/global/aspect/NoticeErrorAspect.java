@@ -3,7 +3,6 @@ package com.lmyxlf.jian_mu.global.aspect;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.lmyxlf.jian_mu.global.annotation.NoticeErrorAnnotation;
 import com.lmyxlf.jian_mu.global.constant.TraceConstant;
 import com.lmyxlf.jian_mu.global.util.XiZhiNoticeUtil;
@@ -75,7 +74,7 @@ public class NoticeErrorAspect {
                 put(TraceConstant.TRACE_ID, MDC.get(TraceConstant.TRACE_ID));
                 put("时间", DateUtil.now());
             }};
-            XiZhiNoticeUtil.xiZhiMsgNotice(pushUrls, title, JSONUtil.toJsonStr(contentMap));
+            XiZhiNoticeUtil.xiZhiMsgNotice(pushUrls, title, contentMap);
         }
     }
 

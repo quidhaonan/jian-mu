@@ -1,15 +1,23 @@
 package com.lmyxlf.jian_mu.global.util;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.ObjUtil;
+import com.lmyxlf.jian_mu.global.constant.CODE_MSG;
 import com.lmyxlf.jian_mu.global.constant.LmyXlfReqParamConstant;
+import com.lmyxlf.jian_mu.global.exception.LmyXlfException;
 import lombok.extern.slf4j.Slf4j;
+import org.lionsoul.ip2region.xdb.Searcher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lmy
@@ -26,6 +34,54 @@ public class IPUtils {
     public static final String DEFAULT_IP_4_ADDRESS = "127.0.0.1";
     public static final String DEFAULT_IP_6_ADDRESS = "0:0:0:0:0:0:0:1";
     public static final Integer IP_LEN = 15;
+    /**
+     * ip2region.xdb 路径
+     */
+    public static final String IP2REGION_XDB_PATH = "global/ip2region.xdb";
+
+    /**
+     * 根据 IP 获得地区
+     * 备注：并发使用，每个线程需要创建一个独立的 searcher 对象单独使用
+     *
+     * @param ip
+     * @return
+     */
+    public static String getAddressByIp(String ip) {
+        log.info("根据 ip 获得地区，ip：{}", ip);
+
+        if (!Validator.isIpv4(ip) && !Validator.isIpv6(ip)) {
+            log.error("根据 ip 获得地区失败，ip：{}", ip);
+            throw new LmyXlfException(CODE_MSG.IP_ERROR);
+        }
+        // 创建 searcher 对象
+        String path = Objects.requireNonNull(
+                IPUtils.class.getClassLoader().getResource(IP2REGION_XDB_PATH)).getPath();
+        Searcher searcher = null;
+        try {
+            searcher = Searcher.newWithFileOnly(path);
+
+            // 查询
+            long startTime = System.nanoTime();
+            String region = searcher.search(ip);
+            long costTime = TimeUnit.NANOSECONDS.toMicros((long) (System.nanoTime() - startTime));
+
+            log.info("根据 ip 成功获得地区，ip：{}，region：{}，ioCount：{}，花费时长：{}",
+                    ip, region, searcher.getIOCount(), costTime);
+            return region;
+        } catch (Exception e) {
+            log.error("根据 ip 获得地区失败，ip：{}，path：{}，e：{}", ip, path, e.getMessage());
+            return null;
+        } finally {
+            // 关闭资源
+            if (ObjUtil.isNotNull(searcher)) {
+                try {
+                    searcher.close();
+                } catch (IOException e) {
+                    log.error("根据 ip 获得地区，资源关闭失败，ip：{}，path：{}，e：{}", ip, path, e.getMessage());
+                }
+            }
+        }
+    }
 
     /**
      * 获取 IP 地址
@@ -112,7 +168,7 @@ public class IPUtils {
                     .map(address -> address.getAddress().getHostAddress())
                     .orElse("");
             if (DEFAULT_IP_4_ADDRESS.equals(ipAddress) || DEFAULT_IP_6_ADDRESS.equals(ipAddress)) {
-                // 根据网卡取本机配置的IP
+                // 根据网卡取本机配置的 IP
                 try {
                     InetAddress inet = InetAddress.getLocalHost();
                     ipAddress = inet.getHostAddress();
@@ -139,5 +195,19 @@ public class IPUtils {
         }
 
         return ipAddress;
+    }
+
+    /**
+     * 获得本地 IP
+     *
+     * @return
+     */
+    public static String getLocalIp() {
+
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            return DEFAULT_IP_4_ADDRESS;
+        }
     }
 }
