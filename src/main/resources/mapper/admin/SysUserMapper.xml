@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmyxlf.jian_mu.admin.dao.SysUserDao">
+
+    <select id="selectUserList" resultType="com.lmyxlf.jian_mu.admin.model.resp.RespSysUser">
+        select sys_user.id, sys_user.dept_id, sys_user.nick_name, sys_user.user_name, sys_user.email,
+               sys_user.phonenumber, sys_user.sex, sys_user.avatar, sys_user.status,  sys_user.login_ip,
+               sys_user.last_login_time, sys_user.create_user, sys_user.create_time, sys_user.remark,
+               sys_dept.dept_name, sys_dept.leader
+        from sys_user
+        left join sys_dept on sys_user.dept_id = sys_dept.id
+        where sys_user.delete_time = '1970-01-01 00:00:00'
+        <if test="id != null and id != 0">
+            AND sys_user.id = #{id}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND sys_user.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND sys_user.status = #{status}
+        </if>
+        <if test="phonenumber != null and phonenumber != ''">
+            AND sys_user.phonenumber like concat('%', #{phonenumber}, '%')
+        </if>
+        <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(sys_user.create_time,'%Y%m%d') &gt;= date_format(#{beginTime},'%Y%m%d')
+        </if>
+        <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(sys_user.create_time,'%Y%m%d') &lt;= date_format(#{endTime},'%Y%m%d')
+        </if>
+        <if test="deptId != null and deptId != 0">
+            AND (sys_user.dept_id = #{deptId}
+            OR sys_user.dept_id IN (
+                SELECT t.dept_id
+                FROM sys_dept t
+                WHERE find_in_set(#{deptId}, ancestors) ))
+        </if>
+        <!-- 数据范围过滤 -->
+        ${dataScopeSql}
+    </select>
+
+    <select id="selectAllocatedList" resultType="com.lmyxlf.jian_mu.admin.model.entity.SysUser">
+        select distinct sys_user.id, sys_user.dept_id, sys_user.user_name, sys_user.nick_name,
+                        sys_user.email, sys_user.phonenumber, sys_user.status, sys_user.create_time
+        from sys_user `user`
+        left join sys_dept dept on sys_user.dept_id = sys_dept.id
+        left join sys_user_role on sys_user.id = sys_user_role.user_id
+        left join sys_role on sys_role.id = sys_user_role.role_id
+        where sys_user.delete_time = '1970-01-01 00:00:00' and sys_role.id = #{roleId}
+        <if test="userName != null and userName != ''">
+            AND sys_user.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="phonenumber != null and phonenumber != ''">
+            AND sys_user.phonenumber like concat('%', #{phonenumber}, '%')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${dataScopeSql}
+    </select>
+
+    <select id="selectUnallocatedList" resultType="com.lmyxlf.jian_mu.admin.model.entity.SysUser">
+        select distinct sys_user.id, sys_user.dept_id, sys_user.user_name, sys_user.nick_name,
+                        sys_user.email, sys_user.phonenumber, sys_user.status, sys_user.create_time
+        from sys_user `user`
+        left join sys_dept on sys_user.dept_id = sys_dept.dept_id
+        left join sys_user_role on sys_user.id = sys_user_role.user_id
+        left join sys_role on sys_role.id = sys_user_role.role_id
+        where sys_user.delete_time = '1970-01-01 00:00:00'
+        and (sys_role.id != #{roleId} or sys_role.id IS NULL)
+        and sys_user.id not in
+            (select sys_user.id
+             from sys_user
+             inner join sys_user_role ur on sys_user.id = sys_user_role.user_id
+             and sys_user_role.role_id = #{roleId})
+        <if test="userName != null and userName != ''">
+            AND sys_user.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="phonenumber != null and phonenumber != ''">
+            AND sys_user.phonenumber like concat('%', #{phonenumber}, '%')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${dataScopeSql}
+    </select>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmyxlf.jian_mu.admin.dao.SysMenuDao">
+
+    <select id="selectMenuTreeByUserId" resultType="com.lmyxlf.jian_mu.admin.model.entity.SysMenu">
+        select distinct sys_menu.id,sys_menu.menu_name,sys_menu.parent_id,sys_menu.order_num,sys_menu.path,
+                        sys_menu.component, sys_menu.`query`, sys_menu.route_name,sys_menu.is_frame,
+                        sys_menu.is_cache,sys_menu.menu_type,sys_menu.visible, sys_menu.status,
+                        ifnull(sys_menu.perms,'') as perms,sys_menu.icon
+        from sys_menu
+        left join sys_role_menu rm on sys_menu.id = sys_role_menu.menu_id
+        left join sys_user_role ur on sys_role_menu.role_id = sys_user_role.role_id
+        left join sys_role ro on sys_user_role.role_id = sys_role.id
+        left join sys_user u on sys_user_role.user_id = sys_user.id
+        where sys_user.id = #{userId}
+        and sys_menu.menu_type in (0, 1)
+        and sys_menu.status = 0
+        and sys_role.status = 0
+        order by sys_menu.parent_id, sys_menu.order_num
+    </select>
+
+    <select id="selectMenuListByUserId" resultType="com.lmyxlf.jian_mu.admin.model.entity.SysMenu">
+        select distinct sys_menu.id,sys_menu.menu_name,sys_menu.parent_id,sys_menu.order_num,sys_menu.path,
+                        sys_menu.component, sys_menu.`query`, sys_menu.route_name,sys_menu.is_frame,
+                        sys_menu.is_cache,sys_menu.menu_type,sys_menu.visible, sys_menu.status,
+                        ifnull(sys_menu.perms,'') as perms,sys_menu.icon
+        from sys_menu
+        left join sys_role_menu on sys_menu.id = sys_role_menu.menu_id
+        left join sys_user_role on sys_role_menu.role_id = sys_user_role.role_id
+        left join sys_role on sys_user_role.role_id = sys_role.id
+        where sys_user_role.user_id = #{userId}
+        <if test="menuName != null and menuName != ''">
+            AND sys_menu.menu_name like concat('%', #{menuName}, '%')
+        </if>
+        <if test="visible != null and visible != ''">
+            AND sys_menu.visible = #{visible}
+        </if>
+        <if test="status != null and status != ''">
+            AND sys_menu.status = #{status}
+        </if>
+        order by sys_menu.parent_id, sys_menu.order_num
+    </select>
+
+    <select id="selectMenuListByRoleId" resultType="java.lang.Integer">
+        select sys_menu.id
+        from sys_menu
+        left join sys_role_menu on sys_menu.id = sys_role_menu.menu_id
+        where sys_role_menu.role_id = #{roleId}
+        <if test="menuCheckStrictly == 1">
+            and sys_menu.id not in
+                (select sys_menu.parent_id
+                 from sys_menu
+                 inner join sys_role_menu on sys_menu.id = sys_role_menu.menu_id
+                 and sys_role_menu.role_id = #{roleId})
+        </if>
+        order by sys_menu.parent_id, sys_menu.order_num
+    </select>
+</mapper>
