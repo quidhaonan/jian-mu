@@ -5,6 +5,7 @@ import com.lmyxlf.jian_mu.admin.model.dto.SysUserOnlineDTO;
 import com.lmyxlf.jian_mu.admin.model.enums.BusinessTypeEnum;
 import com.lmyxlf.jian_mu.admin.service.SysUserOnlineService;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
+import com.lmyxlf.jian_mu.global.model.PageData;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +29,20 @@ public class SysUserOnlineController {
 
     private SysUserOnlineService sysUserOnlineService;
 
-    @PreAuthorize("@ss.hasPermi('monitor:online:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:online:list')")
     @GetMapping("/list")
-    public LmyXlfResult<List<SysUserOnlineDTO>> list(String ipaddr, String userName) {
+    public LmyXlfResult<PageData<SysUserOnlineDTO>> list(String ipaddr, String userName) {
 
-        return LmyXlfResult.ok(sysUserOnlineService.list(ipaddr, userName));
+        List<SysUserOnlineDTO> sysUserOnlineDTOList = sysUserOnlineService.list(ipaddr, userName);
+        return LmyXlfResult.ok(new PageData<SysUserOnlineDTO>()
+                .setRecords(sysUserOnlineDTOList)
+                .setTotal(sysUserOnlineDTOList.size()));
     }
 
     /**
      * 强退用户
      */
-    @PreAuthorize("@ss.hasPermi('monitor:online:forceLogout')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:online:forceLogout')")
     @Log(title = "在线用户", businessType = BusinessTypeEnum.FORCE)
     @DeleteMapping("/{tokenId}")
     public LmyXlfResult<Boolean> forceLogout(@PathVariable String tokenId) {

@@ -1,5 +1,6 @@
 package com.lmyxlf.jian_mu.admin.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lmyxlf.jian_mu.admin.model.entity.SysUser;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface SysUserService extends IService<SysUser> {
 
-    Page<RespSysUser> list(ReqSysUser reqSysUser);
+    IPage<RespSysUser> list(ReqSysUser reqSysUser);
 
     void export(ReqSysUser reqSysUser, HttpServletResponse response);
 

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lmyxlf.jian_mu.admin.annotation.DataScope;
 import com.lmyxlf.jian_mu.admin.model.entity.SysDept;
 import com.lmyxlf.jian_mu.admin.model.req.ReqSysDept;
+import com.lmyxlf.jian_mu.admin.model.resp.RespSysDept;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,7 +27,7 @@ public interface SysDeptDao extends BaseMapper<SysDept> {
      * @return 部门信息集合
      */
     @DataScope(deptAlias = "dept")
-    List<SysDept> selectDeptList(ReqSysDept reqSysDept);
+    List<RespSysDept> selectDeptList(ReqSysDept reqSysDept);
 
     /**
      * 根据部门 id 查询信息

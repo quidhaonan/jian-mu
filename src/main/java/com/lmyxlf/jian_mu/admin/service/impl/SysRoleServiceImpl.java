@@ -3,6 +3,7 @@ package com.lmyxlf.jian_mu.admin.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lmyxlf.jian_mu.admin.constant.UserConstant;
@@ -52,39 +53,21 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     private final SysDeptService sysDeptService;
 
     @Override
-    public Page<RespSysRole> list(ReqSysRole reqSysRole) {
+    public IPage<RespSysRole> list(ReqSysRole reqSysRole) {
 
         Integer current = reqSysRole.getPage();
         Integer size = reqSysRole.getSize();
 
         Page<SysRole> page = new Page<>(current, size);
-        List<SysRole> sysRoleList = sysRoleDao.selectRoleList(reqSysRole, page);
-
-
-        // 仅为将返回对象转为 Resp
-        List<RespSysRole> respSysRoleList = sysRoleList.stream()
-                .map(item -> {
-                    RespSysRole respSysRole = new RespSysRole();
-                    BeanUtils.copyProperties(item, respSysRole);
-                    return respSysRole;
-                }).toList();
-
-        Page<RespSysRole> result = new Page<>();
-        result
-                .setRecords(respSysRoleList)
-                .setCurrent(page.getCurrent())
-                .setSize(page.getSize())
-                .setTotal(page.getTotal());
-
-        return result;
+        return sysRoleDao.selectRoleList(reqSysRole, page);
     }
 
     @Override
     public void export(ReqSysRole reqSysRole, HttpServletResponse response) {
 
-        List<SysRole> list = sysRoleDao.selectRoleList(reqSysRole, null);
-        ExcelUtil<SysRole> util = new ExcelUtil<>(SysRole.class);
-        util.exportExcel(response, list, "角色数据");
+        IPage<RespSysRole> iPage = sysRoleDao.selectRoleList(reqSysRole, null);
+        ExcelUtil<RespSysRole> util = new ExcelUtil<>(RespSysRole.class);
+        util.exportExcel(response, iPage.getRecords(), "角色数据");
     }
 
     @Override
@@ -211,7 +194,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
 
         this.lambdaUpdate()
                 .set(SysRole::getStatus, status)
-                .set(SysRole::getId, id)
+                .eq(SysRole::getId, id)
                 .eq(SysRole::getDeleteTime, DBConstant.INITIAL_TIME)
                 .update();
 
@@ -261,15 +244,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     @Override
     public List<RespSysRole> optionselect() {
 
-        List<SysRole> sysRoleList = sysRoleDao.selectRoleList(new ReqSysRole(), null);
+        IPage<RespSysRole> iPage = sysRoleDao.selectRoleList(new ReqSysRole(), new Page<>());
 
-        // 仅为将返回对象转为 Resp
-        return sysRoleList.stream()
-                .map(item -> {
-                    RespSysRole respSysRole = new RespSysRole();
-                    BeanUtils.copyProperties(item, respSysRole);
-                    return respSysRole;
-                }).toList();
+        return iPage.getRecords();
     }
 
     @Override
@@ -356,7 +333,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     public RespDeptTree deptTree(Integer id) {
 
         List<Integer> checkedKeys = sysDeptService.selectDeptListByRoleId(id);
-        List<RespTreeSelect> depts = sysDeptService.selectDeptTreeList(new ReqSysDept());
+        List<RespTreeSelect> depts = sysDeptService.selectDeptTreeList();
 
         RespDeptTree respDeptTree = new RespDeptTree();
         respDeptTree
@@ -392,8 +369,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
 
                 ReqSysRole reqSysRole = new ReqSysRole();
                 reqSysRole.setId(roleId);
-                List<SysRole> roles = sysRoleDao.selectRoleList(reqSysRole, null);
-                if (CollUtil.isEmpty(roles)) {
+                IPage<RespSysRole> iPage = sysRoleDao.selectRoleList(reqSysRole, null);
+                if (CollUtil.isEmpty(iPage.getRecords())) {
 
                     throw new LmyXlfException("没有权限访问角色数据");
                 }
@@ -402,9 +379,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     }
 
     @Override
-    public List<SysRole> selectRoleList(ReqSysRole reqSysRole, Page<SysRole> page) {
+    public List<RespSysRole> selectRoleList(ReqSysRole reqSysRole, Page<SysRole> page) {
 
-        return sysRoleDao.selectRoleList(reqSysRole, page);
+        IPage<RespSysRole> iPage = sysRoleDao.selectRoleList(reqSysRole, page);
+
+        return iPage.getRecords();
     }
 
     /**

@@ -36,6 +36,11 @@ public class ReqSysLoginInfo extends PageEntity {
     private String loginIp;
 
     /**
+     * 登录地点
+     */
+    private String loginLocation;
+
+    /**
      * 登录状态，0：成功，1：失败
      */
     private Integer status;

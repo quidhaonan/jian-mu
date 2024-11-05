@@ -1,8 +1,10 @@
 package com.lmyxlf.jian_mu.admin.model.req;
 
+import com.lmyxlf.jian_mu.admin.model.entity.DataScopeEntity;
 import com.lmyxlf.jian_mu.global.validation.group.Insert;
 import com.lmyxlf.jian_mu.global.validation.group.Update;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.*;
@@ -16,7 +18,8 @@ import javax.validation.constraints.*;
  */
 @Data
 @Accessors(chain = true)
-public class ReqSysDept {
+@EqualsAndHashCode(callSuper = true)
+public class ReqSysDept extends DataScopeEntity {
 
     /**
      * 主键 id

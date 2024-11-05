@@ -68,7 +68,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfig> i
                 .le(ObjUtil.isNotNull(endTime), SysConfig::getCreateTime, endTime);
 
         Page<SysConfig> sysConfigPage = this.page(
-                new Page<>(page, size), sysConfigLambdaQueryChainWrapper);
+                new Page<>(page, size), sysConfigLambdaQueryChainWrapper.getWrapper());
 
 
         // 仅为将返回对象转为 Resp

@@ -71,7 +71,7 @@ public class RespSysUser {
     /**
      * 帐号状态，0：正常，1：停用
      */
-    private Integer status;
+    private String status;
 
     /**
      * 最后登录 ip

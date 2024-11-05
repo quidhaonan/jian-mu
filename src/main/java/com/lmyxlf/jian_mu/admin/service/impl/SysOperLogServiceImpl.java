@@ -43,7 +43,7 @@ public class SysOperLogServiceImpl extends ServiceImpl<SysOperLogDao, SysOperLog
         Integer page = reqSysOperLog.getPage();
         Integer size = reqSysOperLog.getSize();
         String title = reqSysOperLog.getTitle();
-        List<Integer> businessType = reqSysOperLog.getBusinessType();
+        Integer businessType = reqSysOperLog.getBusinessType();
         String operName = reqSysOperLog.getOperName();
         String operIp = reqSysOperLog.getOperIp();
         Integer status = reqSysOperLog.getStatus();
@@ -53,7 +53,7 @@ public class SysOperLogServiceImpl extends ServiceImpl<SysOperLogDao, SysOperLog
         LambdaQueryChainWrapper<SysOperLog> sysOperLogLambdaQueryChainWrapper = this.lambdaQuery()
                 .eq(SysOperLog::getDeleteTime, DBConstant.INITIAL_TIME)
                 .like(StrUtil.isNotEmpty(title), SysOperLog::getTitle, title)
-                .in(CollUtil.isNotEmpty(businessType), SysOperLog::getBusinessType, businessType)
+                .eq(ObjUtil.isNotNull(businessType), SysOperLog::getBusinessType, businessType)
                 .like(StrUtil.isNotEmpty(operName), SysOperLog::getOperName, operName)
                 .like(StrUtil.isNotEmpty(operIp), SysOperLog::getOperIp, operIp)
                 .eq(ObjUtil.isNotNull(status), SysOperLog::getStatus, status)
@@ -62,7 +62,7 @@ public class SysOperLogServiceImpl extends ServiceImpl<SysOperLogDao, SysOperLog
                 .orderByDesc(SysOperLog::getId);
 
         Page<SysOperLog> sysOperLogPage = this.page(
-                new Page<>(page, size), sysOperLogLambdaQueryChainWrapper);
+                new Page<>(page, size), sysOperLogLambdaQueryChainWrapper.getWrapper());
 
 
         // 仅为将返回对象转为 Resp
@@ -84,7 +84,7 @@ public class SysOperLogServiceImpl extends ServiceImpl<SysOperLogDao, SysOperLog
     public void export(ReqSysOperLog reqSysOperLog, HttpServletResponse response) {
 
         String title = reqSysOperLog.getTitle();
-        List<Integer> businessType = reqSysOperLog.getBusinessType();
+        Integer businessType = reqSysOperLog.getBusinessType();
         String operName = reqSysOperLog.getOperName();
         String operIp = reqSysOperLog.getOperIp();
         Integer status = reqSysOperLog.getStatus();
@@ -94,7 +94,7 @@ public class SysOperLogServiceImpl extends ServiceImpl<SysOperLogDao, SysOperLog
         List<SysOperLog> list = this.lambdaQuery()
                 .eq(SysOperLog::getDeleteTime, DBConstant.INITIAL_TIME)
                 .like(StrUtil.isNotEmpty(title), SysOperLog::getTitle, title)
-                .in(CollUtil.isNotEmpty(businessType), SysOperLog::getBusinessType, businessType)
+                .eq(ObjUtil.isNotNull(businessType), SysOperLog::getBusinessType, businessType)
                 .like(StrUtil.isNotEmpty(operName), SysOperLog::getOperName, operName)
                 .like(StrUtil.isNotEmpty(operIp), SysOperLog::getOperIp, operIp)
                 .eq(ObjUtil.isNotNull(status), SysOperLog::getStatus, status)

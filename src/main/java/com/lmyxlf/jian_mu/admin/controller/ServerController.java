@@ -27,7 +27,7 @@ public class ServerController {
     private final ServerService serverService;
 
     @GetMapping()
-    @PreAuthorize("@ss.hasPermi('monitor:server:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:server:list')")
     public LmyXlfResult<RespServer> getInfo() throws Exception {
 
         return LmyXlfResult.ok(serverService.getInfo());

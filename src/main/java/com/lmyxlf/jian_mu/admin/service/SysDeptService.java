@@ -40,10 +40,9 @@ public interface SysDeptService extends IService<SysDept> {
     /**
      * 查询部门树结构信息
      *
-     * @param reqSysDept 部门信息
      * @return 部门树信息集合
      */
-    List<RespTreeSelect> selectDeptTreeList(ReqSysDept reqSysDept);
+    List<RespTreeSelect> selectDeptTreeList();
 
     /**
      * 校验部门是否有数据权限

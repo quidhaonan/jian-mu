@@ -5,9 +5,9 @@ import com.lmyxlf.jian_mu.admin.annotation.Excel.Type;
 import com.lmyxlf.jian_mu.admin.annotation.Excel.ColumnType;
 import com.lmyxlf.jian_mu.admin.annotation.Excels;
 import com.lmyxlf.jian_mu.admin.annotation.Xss;
+import com.lmyxlf.jian_mu.admin.model.entity.DataScopeEntity;
 import com.lmyxlf.jian_mu.admin.model.entity.SysDept;
 import com.lmyxlf.jian_mu.admin.model.entity.SysRole;
-import com.lmyxlf.jian_mu.global.model.PageEntity;
 import com.lmyxlf.jian_mu.global.validation.group.Delete;
 import com.lmyxlf.jian_mu.global.validation.group.Insert;
 import com.lmyxlf.jian_mu.global.validation.group.Other;
@@ -30,7 +30,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class ReqSysUser extends PageEntity {
+public class ReqSysUser extends DataScopeEntity {
 
     /**
      * 主键 id

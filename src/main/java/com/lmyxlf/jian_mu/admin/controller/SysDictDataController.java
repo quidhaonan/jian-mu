@@ -35,7 +35,7 @@ public class SysDictDataController {
 
     private SysDictDataService sysDictDataService;
 
-    @PreAuthorize("@ss.hasPermi('system:dict:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:list')")
     @PostMapping("/list")
     public LmyXlfResult<PageData<RespSysDictData>> list(@RequestBody ReqSysDictData reqSysDictData) {
 
@@ -43,7 +43,7 @@ public class SysDictDataController {
     }
 
     @Log(title = "字典数据", businessType = BusinessTypeEnum.EXPORT)
-    @PreAuthorize("@ss.hasPermi('system:dict:export')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:export')")
     @PostMapping("/export")
     public void export(ReqSysDictData reqSysDictData, HttpServletResponse response) {
 
@@ -53,7 +53,7 @@ public class SysDictDataController {
     /**
      * 查询字典数据详细
      */
-    @PreAuthorize("@ss.hasPermi('system:dict:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:query')")
     @GetMapping(value = "/{id}")
     public LmyXlfResult<RespSysDictData> getInfo(@PathVariable Integer id) {
 
@@ -72,7 +72,7 @@ public class SysDictDataController {
     /**
      * 新增字典类型
      */
-    @PreAuthorize("@ss.hasPermi('system:dict:add')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:add')")
     @Log(title = "字典数据", businessType = BusinessTypeEnum.INSERT)
     @PostMapping("/add")
     public LmyXlfResult<Boolean> add(@Validated({Insert.class}) @RequestBody ReqSysDictData reqSysDictData) {
@@ -83,7 +83,7 @@ public class SysDictDataController {
     /**
      * 修改保存字典类型
      */
-    @PreAuthorize("@ss.hasPermi('system:dict:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:edit')")
     @Log(title = "字典数据", businessType = BusinessTypeEnum.UPDATE)
     @PostMapping("/edit")
     public LmyXlfResult<Boolean> edit(@Validated({Update.class}) @RequestBody ReqSysDictData reqSysDictData) {
@@ -94,7 +94,7 @@ public class SysDictDataController {
     /**
      * 删除字典类型
      */
-    @PreAuthorize("@ss.hasPermi('system:dict:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:remove')")
     @Log(title = "字典类型", businessType = BusinessTypeEnum.DELETE)
     @PostMapping("/remove")
     public LmyXlfResult<Boolean> remove(@Validated({Delete.class}) @RequestBody ReqSysDictData reqSysDictData) {

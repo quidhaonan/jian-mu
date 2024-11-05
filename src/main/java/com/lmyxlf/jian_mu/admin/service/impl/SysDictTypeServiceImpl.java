@@ -69,7 +69,7 @@ public class SysDictTypeServiceImpl extends ServiceImpl<SysDictTypeDao, SysDictT
                 .le(ObjUtil.isNotNull(endTime), SysDictType::getCreateTime, endTime);
 
         Page<SysDictType> sysDictTypePage = this.page(
-                new Page<>(page, size), sysDictTypeLambdaQueryChainWrapper);
+                new Page<>(page, size), sysDictTypeLambdaQueryChainWrapper.getWrapper());
 
 
         // 仅为将返回对象转为 Resp

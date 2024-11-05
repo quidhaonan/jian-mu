@@ -38,7 +38,7 @@ public class SysConfigController {
     /**
      * 获取参数配置列表
      */
-    @PreAuthorize("@ss.hasPermi('system:config:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:config:list')")
     @PostMapping("/list")
     public LmyXlfResult<PageData<RespSysConfig>> list(@RequestBody ReqSysConfig reqSysConfig) {
 
@@ -46,7 +46,7 @@ public class SysConfigController {
     }
 
     @Log(title = "参数管理", businessType = BusinessTypeEnum.EXPORT)
-    @PreAuthorize("@ss.hasPermi('system:config:export')")
+    @PreAuthorize("@permissionService.hasPermi('system:config:export')")
     @PostMapping("/export")
     public void export(@RequestBody ReqSysConfig reqSysConfig, HttpServletResponse response) {
 
@@ -56,7 +56,7 @@ public class SysConfigController {
     /**
      * 根据参数编号获取详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:config:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:config:query')")
     @GetMapping(value = "/{id}")
     public LmyXlfResult<RespSysConfig> getInfo(@PathVariable("id") Integer id) {
 
@@ -75,7 +75,7 @@ public class SysConfigController {
     /**
      * 新增参数配置
      */
-    @PreAuthorize("@ss.hasPermi('system:config:add')")
+    @PreAuthorize("@permissionService.hasPermi('system:config:add')")
     @Log(title = "参数管理", businessType = BusinessTypeEnum.INSERT)
     @PostMapping("/add")
     public LmyXlfResult<Boolean> add(@Validated({Insert.class}) @RequestBody ReqSysConfig reqSysConfig) {
@@ -86,7 +86,7 @@ public class SysConfigController {
     /**
      * 修改参数配置
      */
-    @PreAuthorize("@ss.hasPermi('system:config:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:config:edit')")
     @Log(title = "参数管理", businessType = BusinessTypeEnum.UPDATE)
     @PostMapping("/edit")
     public LmyXlfResult<Boolean> edit(@Validated({Update.class}) @RequestBody ReqSysConfig reqSysConfig) {
@@ -97,7 +97,7 @@ public class SysConfigController {
     /**
      * 删除参数配置
      */
-    @PreAuthorize("@ss.hasPermi('system:config:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:config:remove')")
     @Log(title = "参数管理", businessType = BusinessTypeEnum.DELETE)
     @PostMapping("/remove")
     public LmyXlfResult<Boolean> remove(@Validated({Delete.class}) @RequestBody ReqSysConfig reqSysConfig) {
@@ -108,7 +108,7 @@ public class SysConfigController {
     /**
      * 刷新参数缓存
      */
-    @PreAuthorize("@ss.hasPermi('system:config:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:config:remove')")
     @Log(title = "参数管理", businessType = BusinessTypeEnum.CLEAN)
     @DeleteMapping("/refreshCache")
     public LmyXlfResult<Boolean> refreshCache() {

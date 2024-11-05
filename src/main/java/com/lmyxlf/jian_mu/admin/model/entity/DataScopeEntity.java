@@ -1,6 +1,9 @@
 package com.lmyxlf.jian_mu.admin.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.lmyxlf.jian_mu.global.model.PageEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -12,7 +15,9 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class DataScopeEntity {
+@EqualsAndHashCode(callSuper = true)
+public class DataScopeEntity extends PageEntity {
 
+    @TableField(exist = false)
     private String dataScopeSql;
 }

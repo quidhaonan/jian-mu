@@ -2,7 +2,7 @@ package com.lmyxlf.jian_mu.admin.model.req;
 
 import com.lmyxlf.jian_mu.admin.annotation.Excel;
 import com.lmyxlf.jian_mu.admin.annotation.Excel.ColumnType;
-import com.lmyxlf.jian_mu.global.model.PageEntity;
+import com.lmyxlf.jian_mu.admin.model.entity.DataScopeEntity;
 import com.lmyxlf.jian_mu.global.validation.group.Delete;
 import com.lmyxlf.jian_mu.global.validation.group.Insert;
 import com.lmyxlf.jian_mu.global.validation.group.Other;
@@ -26,7 +26,7 @@ import java.util.Set;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class ReqSysRole extends PageEntity {
+public class ReqSysRole extends DataScopeEntity {
 
     /**
      * 主键 id

@@ -52,27 +52,17 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDept> impleme
     @Override
     public List<RespSysDept> list(ReqSysDept reqSysDept) {
 
-        List<SysDept> sysDeptList = sysDeptDao.selectDeptList(reqSysDept);
-
-        return sysDeptList.stream().map(item -> {
-            RespSysDept respSysDept = new RespSysDept();
-            BeanUtils.copyProperties(item, respSysDept);
-            return respSysDept;
-        }).collect(Collectors.toList());
+        return sysDeptDao.selectDeptList(reqSysDept);
     }
 
     @Override
     public List<RespSysDept> excludeChild(Integer id) {
 
-        List<SysDept> sysDeptList = sysDeptDao.selectDeptList(new ReqSysDept());
-        sysDeptList.removeIf(d -> d.getId().intValue() == id
+        List<RespSysDept> respSysDeptList = sysDeptDao.selectDeptList(new ReqSysDept());
+        respSysDeptList.removeIf(d -> d.getId().intValue() == id
                 || ArrayUtils.contains(StringUtils.split(d.getAncestors(), ","), id + ""));
 
-        return sysDeptList.stream().map(item -> {
-            RespSysDept respSysDept = new RespSysDept();
-            BeanUtils.copyProperties(item, respSysDept);
-            return respSysDept;
-        }).collect(Collectors.toList());
+        return respSysDeptList;
     }
 
     @Override
@@ -205,14 +195,9 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDept> impleme
     }
 
     @Override
-    public List<RespTreeSelect> selectDeptTreeList(ReqSysDept reqSysDept) {
+    public List<RespTreeSelect> selectDeptTreeList() {
 
-        List<SysDept> sysDeptList = sysDeptDao.selectDeptList(reqSysDept);
-        List<RespSysDept> respSysDeptList = sysDeptList.stream().map(item -> {
-            RespSysDept respSysDept = new RespSysDept();
-            BeanUtils.copyProperties(item, respSysDept);
-            return respSysDept;
-        }).toList();
+        List<RespSysDept> respSysDeptList = sysDeptDao.selectDeptList(new ReqSysDept());
 
         return buildDeptTreeSelect(respSysDeptList);
     }
@@ -224,8 +209,8 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDept> impleme
 
             ReqSysDept reqSysDept = new ReqSysDept();
             reqSysDept.setId(id);
-            List<SysDept> sysDeptList = sysDeptDao.selectDeptList(reqSysDept);
-            if (CollUtil.isEmpty(sysDeptList)) {
+            List<RespSysDept> respSysDeptList = sysDeptDao.selectDeptList(reqSysDept);
+            if (CollUtil.isEmpty(respSysDeptList)) {
 
                 throw new LmyXlfException("没有权限访问部门数据");
             }

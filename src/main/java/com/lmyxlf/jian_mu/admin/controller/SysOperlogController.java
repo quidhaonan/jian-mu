@@ -30,7 +30,7 @@ public class SysOperlogController {
 
     private final SysOperLogService sysOperLogService;
 
-    @PreAuthorize("@ss.hasPermi('monitor:operlog:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:operlog:list')")
     @PostMapping("/list")
     public LmyXlfResult<PageData<RespSysOperLog>> list(@RequestBody ReqSysOperLog reqSysOperLog) {
 
@@ -38,7 +38,7 @@ public class SysOperlogController {
     }
 
     @Log(title = "操作日志", businessType = BusinessTypeEnum.EXPORT)
-    @PreAuthorize("@ss.hasPermi('monitor:operlog:export')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:operlog:export')")
     @PostMapping("/export")
     public void export(@RequestBody ReqSysOperLog reqSysOperLog, HttpServletResponse response) {
 
@@ -46,7 +46,7 @@ public class SysOperlogController {
     }
 
     @Log(title = "操作日志", businessType = BusinessTypeEnum.DELETE)
-    @PreAuthorize("@ss.hasPermi('monitor:operlog:remove')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:operlog:remove')")
     @DeleteMapping("/remove")
     public LmyXlfResult<Boolean> remove(@RequestBody ReqSysOperLog reqSysOperLog) {
 
@@ -54,7 +54,7 @@ public class SysOperlogController {
     }
 
     @Log(title = "操作日志", businessType = BusinessTypeEnum.CLEAN)
-    @PreAuthorize("@ss.hasPermi('monitor:operlog:remove')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:operlog:remove')")
     @DeleteMapping("/clean")
     public LmyXlfResult<Boolean> clean() {
 

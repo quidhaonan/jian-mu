@@ -21,8 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @ApiModel("用户对象 sys_user")
-@EqualsAndHashCode(callSuper = true)
-public class SysUser extends DataScopeEntity {
+public class SysUser {
 
     @TableId
     @ApiModelProperty(value = "主键 id")

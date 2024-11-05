@@ -29,48 +29,48 @@ public class CacheController {
     private final CacheService cacheService;
 
     @GetMapping()
-    @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:cache:list')")
     public LmyXlfResult<RespMonitorCache> getInfo() throws ExecutionException, InterruptedException {
 
         return LmyXlfResult.ok(cacheService.getInfo());
     }
 
     @GetMapping("/getNames")
-    @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:cache:list')")
     public LmyXlfResult<List<RespSysCache>> cache() {
         return LmyXlfResult.ok(cacheService.cache());
     }
 
     @GetMapping("/getKeys/{cacheName}")
-    @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:cache:list')")
     public LmyXlfResult<TreeSet<String>> getCacheKeys(@PathVariable String cacheName) {
 
         return LmyXlfResult.ok(cacheService.getCacheKeys(cacheName));
     }
 
     @GetMapping("/getValue/{cacheName}/{cacheKey}")
-    @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:cache:list')")
     public LmyXlfResult<RespSysCache> getCacheValue(@PathVariable String cacheName, @PathVariable String cacheKey) {
 
         return LmyXlfResult.ok(cacheService.getCacheValue(cacheName, cacheKey));
     }
 
     @DeleteMapping("/clearCacheName/{cacheName}")
-    @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:cache:list')")
     public LmyXlfResult<Boolean> clearCacheName(@PathVariable String cacheName) {
 
         return LmyXlfResult.ok(cacheService.clearCacheName(cacheName));
     }
 
     @DeleteMapping("/clearCacheKey/{cacheKey}")
-    @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:cache:list')")
     public LmyXlfResult<Boolean> clearCacheKey(@PathVariable String cacheKey) {
 
         return LmyXlfResult.ok(cacheService.clearCacheKey(cacheKey));
     }
 
     @DeleteMapping("/clearCacheAll")
-    @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:cache:list')")
     public LmyXlfResult<Boolean> clearCacheAll() {
 
         return LmyXlfResult.ok(cacheService.clearCacheAll());

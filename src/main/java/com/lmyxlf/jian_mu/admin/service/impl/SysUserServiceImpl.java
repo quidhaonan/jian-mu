@@ -5,6 +5,7 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lmyxlf.jian_mu.admin.dao.SysUserDao;
@@ -54,23 +55,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
     private final SysConfigService sysConfigService;
 
     @Override
-    public Page<RespSysUser> list(ReqSysUser reqSysUser) {
+    public IPage<RespSysUser> list(ReqSysUser reqSysUser) {
 
         Integer current = reqSysUser.getPage();
         Integer size = reqSysUser.getSize();
 
         Page<RespSysUser> page = new Page<>(current, size);
-        sysUserDao.selectUserList(reqSysUser, page);
 
-        return page;
+        return sysUserDao.selectUserList(reqSysUser, page);
     }
 
     @Override
     public void export(ReqSysUser reqSysUser, HttpServletResponse response) {
 
-        List<RespSysUser> list = sysUserDao.selectUserList(reqSysUser, null);
-        ExcelUtil<RespSysUser> util = new ExcelUtil<RespSysUser>(RespSysUser.class);
-        util.exportExcel(response, list, "用户数据");
+        IPage<RespSysUser> iPage = sysUserDao.selectUserList(reqSysUser, null);
+        ExcelUtil<RespSysUser> util = new ExcelUtil<>(RespSysUser.class);
+        util.exportExcel(response, iPage.getRecords(), "用户数据");
     }
 
     @Override
@@ -280,18 +280,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
                 .eq(SysRole::getDeleteTime, DBConstant.INITIAL_TIME)
                 .list();
         List<Integer> userRoleIds = userRoleList.stream().map(SysRole::getId).toList();
-        List<SysRole> sysRoleListAll = sysRoleService.selectRoleList(new ReqSysRole(), null);
+        List<RespSysRole> respSysRoleList = sysRoleService.selectRoleList(new ReqSysRole(), null);
 
-        List<RespSysRole> respSysRoleList = sysRoleListAll.stream().map(item -> {
-            RespSysRole respSysRole = new RespSysRole();
-            BeanUtils.copyProperties(item, respSysRole);
+        respSysRoleList.forEach(item -> {
 
             if (userRoleIds.contains(item.getId())) {
 
-                respSysRole.setFlag(Boolean.TRUE);
+                item.setFlag(Boolean.TRUE);
             }
-            return respSysRole;
-        }).toList();
+        });
 
         respSysUser.setRoles(SysUserDTO.isAdmin(id) ?
                 respSysRoleList :
@@ -519,8 +516,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
 
             ReqSysUser reqSysUser = new ReqSysUser();
             reqSysUser.setId(userId);
-            List<RespSysUser> users = sysUserDao.selectUserList(reqSysUser, null);
-            if (CollUtil.isEmpty(users)) {
+            IPage<RespSysUser> iPage = sysUserDao.selectUserList(reqSysUser, null);
+            if (CollUtil.isEmpty(iPage.getRecords())) {
 
                 throw new LmyXlfException("没有权限访问用户数据！");
             }

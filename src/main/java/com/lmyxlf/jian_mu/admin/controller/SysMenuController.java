@@ -37,7 +37,7 @@ public class SysMenuController {
     /**
      * 获取菜单列表
      */
-    @PreAuthorize("@ss.hasPermi('system:menu:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:menu:list')")
     @PostMapping("/list")
     public LmyXlfResult<List<RespSysMenu>> list(@RequestBody ReqSysMenu reqSysMenu) {
 
@@ -47,7 +47,7 @@ public class SysMenuController {
     /**
      * 根据菜单编号获取详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:menu:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:menu:query')")
     @GetMapping(value = "/{id}")
     public LmyXlfResult<RespSysMenu> getInfo(@PathVariable Integer id) {
 
@@ -75,7 +75,7 @@ public class SysMenuController {
     /**
      * 新增菜单
      */
-    @PreAuthorize("@ss.hasPermi('system:menu:add')")
+    @PreAuthorize("@permissionService.hasPermi('system:menu:add')")
     @Log(title = "菜单管理", businessType = BusinessTypeEnum.INSERT)
     @PostMapping("/add")
     public LmyXlfResult<Boolean> add(@Validated({Insert.class}) @RequestBody ReqSysMenu reqSysMenu) {
@@ -86,7 +86,7 @@ public class SysMenuController {
     /**
      * 修改菜单
      */
-    @PreAuthorize("@ss.hasPermi('system:menu:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:menu:edit')")
     @Log(title = "菜单管理", businessType = BusinessTypeEnum.UPDATE)
     @PutMapping("/edit")
     public LmyXlfResult<Boolean> edit(@Validated({Update.class}) @RequestBody ReqSysMenu reqSysMenu) {
@@ -97,7 +97,7 @@ public class SysMenuController {
     /**
      * 删除菜单
      */
-    @PreAuthorize("@ss.hasPermi('system:menu:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:menu:remove')")
     @Log(title = "菜单管理", businessType = BusinessTypeEnum.DELETE)
     @DeleteMapping("/{id}")
     public LmyXlfResult<Boolean> remove(@PathVariable("id") Integer id) {

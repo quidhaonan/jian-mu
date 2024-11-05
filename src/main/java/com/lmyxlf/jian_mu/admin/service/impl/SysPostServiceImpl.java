@@ -51,13 +51,13 @@ public class SysPostServiceImpl extends ServiceImpl<SysPostDao, SysPost> impleme
         Integer status = reqSysPost.getStatus();
 
         LambdaQueryChainWrapper<SysPost> sysPostLambdaQueryChainWrapper = this.lambdaQuery()
-                .eq(SysPost::getDeleteTime, DBConstant.INITIAL_TIME)
                 .like(StrUtil.isNotEmpty(postCode), SysPost::getPostCode, postCode)
                 .like(StrUtil.isNotEmpty(postName), SysPost::getPostName, postName)
-                .eq(ObjUtil.isNotNull(status), SysPost::getStatus, status);
+                .eq(ObjUtil.isNotNull(status), SysPost::getStatus, status)
+                .eq(SysPost::getDeleteTime, DBConstant.INITIAL_TIME);
 
         Page<SysPost> sysPostPage = this.page(
-                new Page<>(page, size), sysPostLambdaQueryChainWrapper);
+                new Page<>(page, size), sysPostLambdaQueryChainWrapper.getWrapper());
 
 
         // 仅为将返回对象转为 Resp

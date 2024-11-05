@@ -32,7 +32,7 @@ public class SysLoginInfoController {
     private final SysLoginInfoService sysLoginInfoService;
     private final SysPasswordService sysPasswordService;
 
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:list')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:logininfor:list')")
     @PostMapping("/list")
     public LmyXlfResult<PageData<RespSysLoginInfo>> list(@RequestBody ReqSysLoginInfo reqSysLoginInfo) {
 
@@ -40,14 +40,14 @@ public class SysLoginInfoController {
     }
 
     @Log(title = "登录日志", businessType = BusinessTypeEnum.EXPORT)
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:export')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:logininfor:export')")
     @PostMapping("/export")
     public void export(@RequestBody ReqSysLoginInfo reqSysLoginInfo, HttpServletResponse response) {
 
         sysLoginInfoService.export(reqSysLoginInfo, response);
     }
 
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:logininfor:remove')")
     @Log(title = "登录日志", businessType = BusinessTypeEnum.DELETE)
     @PostMapping("/remove")
     public LmyXlfResult<Boolean> remove(@RequestBody ReqSysLoginInfo reqSysLoginInfo) {
@@ -55,7 +55,7 @@ public class SysLoginInfoController {
         return LmyXlfResult.ok(sysLoginInfoService.remove(reqSysLoginInfo));
     }
 
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:logininfor:remove')")
     @Log(title = "登录日志", businessType = BusinessTypeEnum.CLEAN)
     @DeleteMapping("/clean")
     public LmyXlfResult<Boolean> clean() {
@@ -63,7 +63,7 @@ public class SysLoginInfoController {
         return LmyXlfResult.ok(sysLoginInfoService.clean());
     }
 
-    @PreAuthorize("@ss.hasPermi('monitor:logininfor:unlock')")
+    @PreAuthorize("@permissionService.hasPermi('monitor:logininfor:unlock')")
     @Log(title = "账户解锁", businessType = BusinessTypeEnum.OTHER)
     @GetMapping("/unlock/{userName}")
     public LmyXlfResult<Object> unlock(@PathVariable("userName") String userName) {

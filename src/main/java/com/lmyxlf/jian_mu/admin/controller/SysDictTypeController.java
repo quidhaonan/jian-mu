@@ -35,7 +35,7 @@ public class SysDictTypeController {
 
     private final SysDictTypeService sysDictTypeService;
 
-    @PreAuthorize("@ss.hasPermi('system:dict:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:list')")
     @PostMapping("/list")
     public LmyXlfResult<PageData<RespSysDictType>> list(@RequestBody ReqSysDictType reqSysDictType) {
 
@@ -43,7 +43,7 @@ public class SysDictTypeController {
     }
 
     @Log(title = "字典类型", businessType = BusinessTypeEnum.EXPORT)
-    @PreAuthorize("@ss.hasPermi('system:dict:export')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:export')")
     @PostMapping("/export")
     public void export(ReqSysDictType reqSysDictType, HttpServletResponse response) {
 
@@ -53,7 +53,7 @@ public class SysDictTypeController {
     /**
      * 查询字典类型详细
      */
-    @PreAuthorize("@ss.hasPermi('system:dict:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:query')")
     @GetMapping(value = "/{id}")
     public LmyXlfResult<RespSysDictType> getInfo(@PathVariable Integer id) {
 
@@ -63,7 +63,7 @@ public class SysDictTypeController {
     /**
      * 新增字典类型
      */
-    @PreAuthorize("@ss.hasPermi('system:dict:add')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:add')")
     @Log(title = "字典类型", businessType = BusinessTypeEnum.INSERT)
     @PostMapping("/add")
     public LmyXlfResult<Boolean> add(@Validated({Insert.class}) @RequestBody ReqSysDictType reqSysDictType) {
@@ -74,7 +74,7 @@ public class SysDictTypeController {
     /**
      * 修改字典类型
      */
-    @PreAuthorize("@ss.hasPermi('system:dict:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:edit')")
     @Log(title = "字典类型", businessType = BusinessTypeEnum.UPDATE)
     @PostMapping("/edit")
     public LmyXlfResult<Boolean> edit(@Validated({Update.class}) @RequestBody ReqSysDictType reqSysDictType) {
@@ -85,7 +85,7 @@ public class SysDictTypeController {
     /**
      * 删除字典类型
      */
-    @PreAuthorize("@ss.hasPermi('system:dict:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:remove')")
     @Log(title = "字典类型", businessType = BusinessTypeEnum.DELETE)
     @PostMapping("/remove")
     public LmyXlfResult<Boolean> remove(@Validated({Delete.class}) @RequestBody ReqSysDictType reqSysDictType) {
@@ -96,7 +96,7 @@ public class SysDictTypeController {
     /**
      * 刷新字典缓存
      */
-    @PreAuthorize("@ss.hasPermi('system:dict:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:dict:remove')")
     @Log(title = "字典类型", businessType = BusinessTypeEnum.CLEAN)
     @DeleteMapping("/refreshCache")
     public LmyXlfResult<Boolean> refreshCache() {

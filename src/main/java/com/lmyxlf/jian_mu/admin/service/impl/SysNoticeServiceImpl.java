@@ -49,7 +49,7 @@ public class SysNoticeServiceImpl extends ServiceImpl<SysNoticeDao, SysNotice> i
                 .like(StrUtil.isNotEmpty(createUser), SysNotice::getCreateUser, createUser);
 
         Page<SysNotice> sysNoticePage = this.page(
-                new Page<>(page, size), sysNoticeLambdaQueryChainWrapper);
+                new Page<>(page, size), sysNoticeLambdaQueryChainWrapper.getWrapper());
 
 
         // 仅为将返回对象转为 Resp

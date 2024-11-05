@@ -35,7 +35,7 @@ public class SysNoticeController {
     /**
      * 获取通知公告列表
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:notice:list')")
     @PostMapping("/list")
     public LmyXlfResult<PageData<RespSysNotice>> list(@RequestBody ReqSysNotice reqSysNotice) {
 
@@ -45,7 +45,7 @@ public class SysNoticeController {
     /**
      * 根据通知公告编号获取详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:notice:query')")
     @GetMapping(value = "/{id}")
     public LmyXlfResult<RespSysNotice> getInfo(@PathVariable Integer id) {
 
@@ -55,7 +55,7 @@ public class SysNoticeController {
     /**
      * 新增通知公告
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:add')")
+    @PreAuthorize("@permissionService.hasPermi('system:notice:add')")
     @Log(title = "通知公告", businessType = BusinessTypeEnum.INSERT)
     @PostMapping("/add")
     public LmyXlfResult<Boolean> add(@Validated({Insert.class}) @RequestBody ReqSysNotice reqSysNotice) {
@@ -66,7 +66,7 @@ public class SysNoticeController {
     /**
      * 修改通知公告
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:notice:edit')")
     @Log(title = "通知公告", businessType = BusinessTypeEnum.UPDATE)
     @PostMapping("/edit")
     public LmyXlfResult<Boolean> edit(@Validated({Update.class}) @RequestBody ReqSysNotice reqSysNotice) {
@@ -77,7 +77,7 @@ public class SysNoticeController {
     /**
      * 删除通知公告
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:notice:remove')")
     @Log(title = "通知公告", businessType = BusinessTypeEnum.DELETE)
     @PostMapping("/remove")
     public LmyXlfResult<Boolean> remove(@Validated({Delete.class}) @RequestBody ReqSysNotice reqSysNotice) {

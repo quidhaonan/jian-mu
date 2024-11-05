@@ -38,7 +38,7 @@ public class SysPostController {
     /**
      * 获取岗位列表
      */
-    @PreAuthorize("@ss.hasPermi('system:post:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:post:list')")
     @PostMapping("/list")
     public LmyXlfResult<PageData<RespSysPost>> list(@RequestBody ReqSysPost reqSysPost) {
 
@@ -46,7 +46,7 @@ public class SysPostController {
     }
 
     @Log(title = "岗位管理", businessType = BusinessTypeEnum.EXPORT)
-    @PreAuthorize("@ss.hasPermi('system:post:export')")
+    @PreAuthorize("@permissionService.hasPermi('system:post:export')")
     @PostMapping("/export")
     public void export(@RequestBody ReqSysPost reqSysPost, HttpServletResponse response) {
 
@@ -56,7 +56,7 @@ public class SysPostController {
     /**
      * 根据岗位编号获取详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:post:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:post:query')")
     @GetMapping(value = "/{id}")
     public LmyXlfResult<RespSysPost> getInfo(@PathVariable Integer id) {
 
@@ -66,7 +66,7 @@ public class SysPostController {
     /**
      * 新增岗位
      */
-    @PreAuthorize("@ss.hasPermi('system:post:add')")
+    @PreAuthorize("@permissionService.hasPermi('system:post:add')")
     @Log(title = "岗位管理", businessType = BusinessTypeEnum.INSERT)
     @PostMapping("/add")
     public LmyXlfResult<Boolean> add(@Validated({Insert.class}) @RequestBody ReqSysPost reqSysPost) {
@@ -77,7 +77,7 @@ public class SysPostController {
     /**
      * 修改岗位
      */
-    @PreAuthorize("@ss.hasPermi('system:post:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:post:edit')")
     @Log(title = "岗位管理", businessType = BusinessTypeEnum.UPDATE)
     @PostMapping("/edit")
     public LmyXlfResult<Boolean> edit(@Validated({Update.class}) @RequestBody ReqSysPost reqSysPost) {
@@ -88,7 +88,7 @@ public class SysPostController {
     /**
      * 删除岗位
      */
-    @PreAuthorize("@ss.hasPermi('system:post:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:post:remove')")
     @Log(title = "岗位管理", businessType = BusinessTypeEnum.DELETE)
     @PostMapping("/remove")
     public LmyXlfResult<Boolean> remove(@Validated({Delete.class}) @RequestBody ReqSysPost reqSysPost) {

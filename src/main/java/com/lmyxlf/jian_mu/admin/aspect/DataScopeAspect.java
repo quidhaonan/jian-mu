@@ -57,11 +57,6 @@ public class DataScopeAspect {
      */
     public static final Integer DATA_SCOPE_SELF = 5;
 
-    /**
-     * 数据权限过滤关键字
-     */
-    public static final String DATA_SCOPE = "dataScope";
-
     @Before("@annotation(controllerDataScope)")
     public void doBefore(JoinPoint point, DataScope controllerDataScope) {
 

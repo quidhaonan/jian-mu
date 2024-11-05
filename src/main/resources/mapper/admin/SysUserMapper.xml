@@ -6,39 +6,39 @@
 
     <select id="selectUserList" resultType="com.lmyxlf.jian_mu.admin.model.resp.RespSysUser">
         select sys_user.id, sys_user.dept_id, sys_user.nick_name, sys_user.user_name, sys_user.email,
-               sys_user.phonenumber, sys_user.sex, sys_user.avatar, sys_user.status,  sys_user.login_ip,
+               sys_user.phone_number, sys_user.sex, sys_user.avatar, sys_user.status,  sys_user.login_ip,
                sys_user.last_login_time, sys_user.create_user, sys_user.create_time, sys_user.remark,
                sys_dept.dept_name, sys_dept.leader
         from sys_user
         left join sys_dept on sys_user.dept_id = sys_dept.id
         where sys_user.delete_time = '1970-01-01 00:00:00'
-        <if test="id != null and id != 0">
-            AND sys_user.id = #{id}
+        <if test="reqSysUser.id != null and reqSysUser.id != 0">
+            AND sys_user.id = #{reqSysUser.id}
         </if>
-        <if test="userName != null and userName != ''">
-            AND sys_user.user_name like concat('%', #{userName}, '%')
+        <if test="reqSysUser.userName != null and reqSysUser.userName != ''">
+            AND sys_user.user_name like concat('%', #{reqSysUser.userName}, '%')
         </if>
-        <if test="status != null and status != ''">
-            AND sys_user.status = #{status}
+        <if test="reqSysUser.status != null">
+            AND sys_user.status = #{reqSysUser.status}
         </if>
-        <if test="phonenumber != null and phonenumber != ''">
-            AND sys_user.phonenumber like concat('%', #{phonenumber}, '%')
+        <if test="reqSysUser.phoneNumber != null and reqSysUser.phoneNumber != ''">
+            AND sys_user.phone_number like concat('%', #{reqSysUser.phoneNumber}, '%')
         </if>
-        <if test="beginTime != null and beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(sys_user.create_time,'%Y%m%d') &gt;= date_format(#{beginTime},'%Y%m%d')
+        <if test="reqSysUser.beginTime != null"><!-- 开始时间检索 -->
+            AND date_format(sys_user.create_time,'%Y%m%d') &gt;= date_format(#{reqSysUser.beginTime},'%Y%m%d')
         </if>
-        <if test="endTime != null and endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(sys_user.create_time,'%Y%m%d') &lt;= date_format(#{endTime},'%Y%m%d')
+        <if test="reqSysUser.endTime != null"><!-- 结束时间检索 -->
+            AND date_format(sys_user.create_time,'%Y%m%d') &lt;= date_format(#{reqSysUser.endTime},'%Y%m%d')
         </if>
-        <if test="deptId != null and deptId != 0">
-            AND (sys_user.dept_id = #{deptId}
+        <if test="reqSysUser.deptId != null and reqSysUser.deptId != 0">
+            AND (sys_user.dept_id = #{reqSysUser.deptId}
             OR sys_user.dept_id IN (
-                SELECT t.dept_id
+                SELECT t.id
                 FROM sys_dept t
-                WHERE find_in_set(#{deptId}, ancestors) ))
+                WHERE find_in_set(#{reqSysUser.deptId}, ancestors) ))
         </if>
         <!-- 数据范围过滤 -->
-        ${dataScopeSql}
+        ${reqSysUser.dataScopeSql}
     </select>
 
     <select id="selectAllocatedList" resultType="com.lmyxlf.jian_mu.admin.model.entity.SysUser">
@@ -49,11 +49,11 @@
         left join sys_user_role on sys_user.id = sys_user_role.user_id
         left join sys_role on sys_role.id = sys_user_role.role_id
         where sys_user.delete_time = '1970-01-01 00:00:00' and sys_role.id = #{roleId}
-        <if test="userName != null and userName != ''">
-            AND sys_user.user_name like concat('%', #{userName}, '%')
+        <if test="reqSysUser.userName != null and reqSysUser.userName != ''">
+            AND sys_user.user_name like concat('%', #{reqSysUser.userName}, '%')
         </if>
-        <if test="phonenumber != null and phonenumber != ''">
-            AND sys_user.phonenumber like concat('%', #{phonenumber}, '%')
+        <if test="reqSysUser.phoneNumber != null and reqSysUser.phoneNumber != ''">
+            AND sys_user.phonenumber like concat('%', #{reqSysUser.phoneNumber}, '%')
         </if>
         <!-- 数据范围过滤 -->
         ${dataScopeSql}

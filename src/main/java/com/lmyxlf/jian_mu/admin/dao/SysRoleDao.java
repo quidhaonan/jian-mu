@@ -1,11 +1,14 @@
 package com.lmyxlf.jian_mu.admin.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lmyxlf.jian_mu.admin.annotation.DataScope;
 import com.lmyxlf.jian_mu.admin.model.entity.SysRole;
 import com.lmyxlf.jian_mu.admin.model.req.ReqSysRole;
+import com.lmyxlf.jian_mu.admin.model.resp.RespSysRole;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,5 +29,5 @@ public interface SysRoleDao extends BaseMapper<SysRole> {
      * @return 角色数据集合信息
      */
     @DataScope(deptAlias = "dept")
-    List<SysRole> selectRoleList(ReqSysRole reqSysRole, Page<SysRole> page);
+    IPage<RespSysRole> selectRoleList(@Param("reqSysRole") ReqSysRole reqSysRole, @Param("page") Page<SysRole> page);
 }

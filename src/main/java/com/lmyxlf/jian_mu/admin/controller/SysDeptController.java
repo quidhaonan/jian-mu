@@ -33,7 +33,7 @@ public class SysDeptController {
     /**
      * 获取部门列表
      */
-    @PreAuthorize("@ss.hasPermi('system:dept:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:dept:list')")
     @PostMapping("/list")
     public LmyXlfResult<List<RespSysDept>> list(@RequestBody ReqSysDept reqSysDept) {
 
@@ -43,7 +43,7 @@ public class SysDeptController {
     /**
      * 查询部门列表（排除节点）
      */
-    @PreAuthorize("@ss.hasPermi('system:dept:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:dept:list')")
     @GetMapping("/list/exclude/{id}")
     public LmyXlfResult<List<RespSysDept>> excludeChild(@PathVariable(value = "id", required = false) Integer id) {
 
@@ -53,7 +53,7 @@ public class SysDeptController {
     /**
      * 根据部门编号获取详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:dept:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:dept:query')")
     @GetMapping(value = "/{id}")
     public LmyXlfResult<RespSysDept> getInfo(@PathVariable("id") Integer id) {
 
@@ -63,7 +63,7 @@ public class SysDeptController {
     /**
      * 新增部门
      */
-    @PreAuthorize("@ss.hasPermi('system:dept:add')")
+    @PreAuthorize("@permissionService.hasPermi('system:dept:add')")
     @Log(title = "部门管理", businessType = BusinessTypeEnum.INSERT)
     @PostMapping("/add")
     public LmyXlfResult<Boolean> add(@Validated @RequestBody ReqSysDept reqSysDept) {
@@ -74,7 +74,7 @@ public class SysDeptController {
     /**
      * 修改部门
      */
-    @PreAuthorize("@ss.hasPermi('system:dept:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:dept:edit')")
     @Log(title = "部门管理", businessType = BusinessTypeEnum.UPDATE)
     @PostMapping("/edit")
     public LmyXlfResult<Boolean> edit(@Validated @RequestBody ReqSysDept reqSysDept) {
@@ -85,7 +85,7 @@ public class SysDeptController {
     /**
      * 删除部门
      */
-    @PreAuthorize("@ss.hasPermi('system:dept:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:dept:remove')")
     @Log(title = "部门管理", businessType = BusinessTypeEnum.DELETE)
     @DeleteMapping("/{id}")
     public LmyXlfResult<Boolean> remove(@PathVariable("id") Integer id) {

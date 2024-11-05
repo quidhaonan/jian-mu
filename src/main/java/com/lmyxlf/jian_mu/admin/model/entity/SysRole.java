@@ -21,8 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @Accessors(chain = true)
 @ApiModel("角色表 sys_role")
-@EqualsAndHashCode(callSuper = true)
-public class SysRole extends DataScopeEntity {
+public class SysRole  {
 
     @TableId
     @ApiModelProperty(value = "主键 id")

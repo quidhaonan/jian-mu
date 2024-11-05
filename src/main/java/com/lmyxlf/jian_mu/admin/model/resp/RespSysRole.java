@@ -54,7 +54,7 @@ public class RespSysRole {
     /**
      * 角色状态，0：正常，1：停用
      */
-    private Integer status;
+    private String status;
 
     /**
      * 创建者

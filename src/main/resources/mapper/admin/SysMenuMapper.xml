@@ -37,7 +37,7 @@
         <if test="visible != null and visible != ''">
             AND sys_menu.visible = #{visible}
         </if>
-        <if test="status != null and status != ''">
+        <if test="status != null">
             AND sys_menu.status = #{status}
         </if>
         order by sys_menu.parent_id, sys_menu.order_num

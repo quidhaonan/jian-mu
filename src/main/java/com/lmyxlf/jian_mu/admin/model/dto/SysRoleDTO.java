@@ -3,7 +3,6 @@ package com.lmyxlf.jian_mu.admin.model.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 import com.lmyxlf.jian_mu.admin.annotation.Excel;
 import com.lmyxlf.jian_mu.admin.annotation.Excel.ColumnType;

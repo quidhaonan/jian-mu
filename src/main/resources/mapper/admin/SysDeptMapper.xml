@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lmyxlf.jian_mu.admin.dao.SysDeptDao">
 
-    <select id="selectDeptList" resultType="com.lmyxlf.jian_mu.admin.model.entity.SysDept">
+    <select id="selectDeptList" resultType="com.lmyxlf.jian_mu.admin.model.resp.RespSysDept">
         select dept.id,dept.parent_id,dept.ancestors,dept.dept_name,dept.order_num,dept.leader,
                dept.phone,dept.email,dept.status,dept.create_user,dept.create_time,dept.update_user,
                dept.update_time,dept.delete_time
@@ -20,7 +20,7 @@
         <if test="deptName != null and deptName != ''">
             AND dept_name like concat('%', #{deptName}, '%')
         </if>
-        <if test="status != null and status != ''">
+        <if test="status != null">
             AND status = #{status}
         </if>
         <!-- 数据范围过滤 -->

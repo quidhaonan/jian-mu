@@ -4,36 +4,36 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lmyxlf.jian_mu.admin.dao.SysRoleDao">
 
-    <select id="selectRoleList" resultType="com.lmyxlf.jian_mu.admin.model.entity.SysRole">
+    <select id="selectRoleList" resultType="com.lmyxlf.jian_mu.admin.model.resp.RespSysRole">
         select distinct sys_role.id, sys_role.role_name, sys_role.role_key, sys_role.role_sort,
                         sys_role.data_scope, sys_role.menu_check_strictly, sys_role.dept_check_strictly,
                         sys_role.status, sys_role.create_user, sys_role.create_time, sys_role.update_user,
                         sys_role.update_time,sys_role.remark
         from sys_role
-                 left join sys_user_role on sys_user_role.role_id = sys_role.role_id
-                 left join sys_user on sys_user.user_id = sys_user_role.user_id
-                 left join sys_dept dept on sys_user.dept_id = sys_dept.dept_id
+                 left join sys_user_role on sys_user_role.role_id = sys_role.id
+                 left join sys_user on sys_user.id = sys_user_role.user_id
+                 left join sys_dept dept on sys_user.dept_id = dept.id
         where sys_role.delete_time = '1970-01-01 00:00:00'
-        <if test="id != null and id != 0">
-            AND sys_role.id = #{id}
+        <if test="reqSysRole.id != null and reqSysRole.id != 0">
+            AND sys_role.id = #{reqSysRole.id}
         </if>
-        <if test="roleName != null and roleName != ''">
-            AND sys_role.role_name like concat('%', #{roleName}, '%')
+        <if test="reqSysRole.roleName != null and reqSysRole.roleName != ''">
+            AND sys_role.role_name like concat('%', #{reqSysRole.roleName}, '%')
         </if>
-        <if test="status != null and status != ''">
-            AND sys_role.status = #{status}
+        <if test="reqSysRole.status != null">
+            AND sys_role.status = #{reqSysRole.status}
         </if>
-        <if test="roleKey != null and roleKey != ''">
-            AND sys_role.role_key like concat('%', #{roleKey}, '%')
+        <if test="reqSysRole.roleKey != null and reqSysRole.roleKey != ''">
+            AND sys_role.role_key like concat('%', #{reqSysRole.roleKey}, '%')
         </if>
-        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-            and date_format(sys_role.create_time,'%Y%m%d') &gt;= date_format(#{beginTime},'%Y%m%d')
+        <if test="reqSysRole.beginTime != null"><!-- 开始时间检索 -->
+            and date_format(sys_role.create_time,'%Y%m%d') &gt;= date_format(#{reqSysRole.beginTime},'%Y%m%d')
         </if>
-        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-            and date_format(sys_role.create_time,'%Y%m%d') &lt;= date_format(#{endTime},'%Y%m%d')
+        <if test="reqSysRole.endTime != null"><!-- 结束时间检索 -->
+            and date_format(sys_role.create_time,'%Y%m%d') &lt;= date_format(#{reqSysRole.endTime},'%Y%m%d')
         </if>
         <!-- 数据范围过滤 -->
-        ${dataScopeSql}
+        ${reqSysRole.dataScopeSql}
         order by sys_role.role_sort
     </select>
 </mapper>

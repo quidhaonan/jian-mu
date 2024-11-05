@@ -120,7 +120,7 @@ public class SecurityConfig {
                             .anyRequest().authenticated();
                 })
                 // 添加 Logout filter
-                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler))
+                .logout(logout -> logout.logoutUrl("/admin/logout").logoutSuccessHandler(logoutSuccessHandler))
                 // 添加 JWT filter
                 .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 // 添加 CORS filter

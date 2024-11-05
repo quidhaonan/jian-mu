@@ -33,7 +33,7 @@ public class ReqSysOperLog extends PageEntity {
     /**
      * 业务类型，0：其它，1：新增，2：修改，3：删除
      */
-    private List<Integer> businessType;
+    private Integer businessType;
 
     /**
      * 操作人员

@@ -57,7 +57,7 @@ public class SysLoginInfoServiceImpl extends ServiceImpl<SysLoginInfoDao, SysLog
                 .orderByDesc(SysLoginInfo::getLoginTime);
 
         Page<SysLoginInfo> sysLoginInfoPage = this.page(
-                new Page<>(page, size), sysLoginInfoLambdaQueryChainWrapper);
+                new Page<>(page, size), sysLoginInfoLambdaQueryChainWrapper.getWrapper());
 
 
         // 仅为将返回对象转为 Resp

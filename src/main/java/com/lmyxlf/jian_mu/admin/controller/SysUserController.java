@@ -43,7 +43,7 @@ public class SysUserController {
     /**
      * 获取用户列表
      */
-    @PreAuthorize("@ss.hasPermi('system:user:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:list')")
     @PostMapping("/list")
     public LmyXlfResult<PageData<RespSysUser>> list(@RequestBody ReqSysUser reqSysUser) {
 
@@ -51,7 +51,7 @@ public class SysUserController {
     }
 
     @Log(title = "用户管理", businessType = BusinessTypeEnum.EXPORT)
-    @PreAuthorize("@ss.hasPermi('system:user:export')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:export')")
     @PostMapping("/export")
     public void export(@RequestBody ReqSysUser reqSysUser, HttpServletResponse response) {
 
@@ -59,7 +59,7 @@ public class SysUserController {
     }
 
     @Log(title = "用户管理", businessType = BusinessTypeEnum.IMPORT)
-    @PreAuthorize("@ss.hasPermi('system:user:import')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:import')")
     @PostMapping("/importData")
     public LmyXlfResult<String> importData(MultipartFile file, boolean updateSupport) throws Exception {
 
@@ -75,7 +75,7 @@ public class SysUserController {
     /**
      * 根据用户编号获取详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:user:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:query')")
     @GetMapping(value = {"/", "/{id}"})
     public LmyXlfResult<RespSysUser> getInfo(@PathVariable(value = "id", required = false) Integer id) {
 
@@ -85,7 +85,7 @@ public class SysUserController {
     /**
      * 新增用户
      */
-    @PreAuthorize("@ss.hasPermi('system:user:add')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:add')")
     @Log(title = "用户管理", businessType = BusinessTypeEnum.INSERT)
     @PostMapping("/add")
     public LmyXlfResult<Boolean> add(@Validated({Insert.class}) @RequestBody ReqSysUser reqSysUser) {
@@ -96,7 +96,7 @@ public class SysUserController {
     /**
      * 修改用户
      */
-    @PreAuthorize("@ss.hasPermi('system:user:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:edit')")
     @Log(title = "用户管理", businessType = BusinessTypeEnum.UPDATE)
     @PostMapping("/edit")
     public LmyXlfResult<Boolean> edit(@Validated({Update.class}) @RequestBody ReqSysUser reqSysUser) {
@@ -107,7 +107,7 @@ public class SysUserController {
     /**
      * 删除用户
      */
-    @PreAuthorize("@ss.hasPermi('system:user:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:remove')")
     @Log(title = "用户管理", businessType = BusinessTypeEnum.DELETE)
     @PostMapping("/remove")
     public LmyXlfResult<Boolean> remove(@Validated({Delete.class}) @RequestBody ReqSysUser reqSysUser) {
@@ -118,7 +118,7 @@ public class SysUserController {
     /**
      * 重置密码
      */
-    @PreAuthorize("@ss.hasPermi('system:user:resetPwd')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:resetPwd')")
     @Log(title = "用户管理", businessType = BusinessTypeEnum.UPDATE)
     @PutMapping("/resetPwd")
     public LmyXlfResult<Boolean> resetPwd(@RequestBody ReqSysUser reqSysUser) {
@@ -129,7 +129,7 @@ public class SysUserController {
     /**
      * 状态修改
      */
-    @PreAuthorize("@ss.hasPermi('system:user:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:edit')")
     @Log(title = "用户管理", businessType = BusinessTypeEnum.UPDATE)
     @PutMapping("/changeStatus")
     public LmyXlfResult<Boolean> changeStatus(@RequestBody ReqSysUser reqSysUser) {
@@ -140,7 +140,7 @@ public class SysUserController {
     /**
      * 根据用户编号获取授权角色
      */
-    @PreAuthorize("@ss.hasPermi('system:user:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:query')")
     @GetMapping("/authRole/{id}")
     public LmyXlfResult<RespSysUser> authRole(@PathVariable("id") Integer id) {
 
@@ -150,7 +150,7 @@ public class SysUserController {
     /**
      * 用户授权角色
      */
-    @PreAuthorize("@ss.hasPermi('system:user:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:edit')")
     @Log(title = "用户管理", businessType = BusinessTypeEnum.GRANT)
     @PostMapping("/authRole")
     public LmyXlfResult<Boolean> insertAuthRole(@RequestBody ReqSysUser reqSysUser) {
@@ -161,10 +161,10 @@ public class SysUserController {
     /**
      * 获取部门树列表
      */
-    @PreAuthorize("@ss.hasPermi('system:user:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:user:list')")
     @GetMapping("/deptTree")
-    public LmyXlfResult<List<RespTreeSelect>> deptTree(@RequestBody ReqSysDept reqSysDept) {
+    public LmyXlfResult<List<RespTreeSelect>> deptTree() {
 
-        return LmyXlfResult.ok(sysDeptService.selectDeptTreeList(reqSysDept));
+        return LmyXlfResult.ok(sysDeptService.selectDeptTreeList());
     }
 }

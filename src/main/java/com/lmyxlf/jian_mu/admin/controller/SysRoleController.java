@@ -41,7 +41,7 @@ public class SysRoleController {
     private final SysRoleService sysRoleService;
     private final SysUserDao sysUserDao;
 
-    @PreAuthorize("@ss.hasPermi('system:role:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:list')")
     @PostMapping("/list")
     public LmyXlfResult<PageData<RespSysRole>> list(@RequestBody ReqSysRole reqSysRole) {
 
@@ -49,7 +49,7 @@ public class SysRoleController {
     }
 
     @Log(title = "角色管理", businessType = BusinessTypeEnum.EXPORT)
-    @PreAuthorize("@ss.hasPermi('system:role:export')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:export')")
     @PostMapping("/export")
     public void export(@RequestBody ReqSysRole reqSysRole, HttpServletResponse response) {
 
@@ -59,7 +59,7 @@ public class SysRoleController {
     /**
      * 根据角色编号获取详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:role:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:query')")
     @GetMapping(value = "/{id}")
     public LmyXlfResult<RespSysRole> getInfo(@PathVariable Integer id) {
 
@@ -69,7 +69,7 @@ public class SysRoleController {
     /**
      * 新增角色
      */
-    @PreAuthorize("@ss.hasPermi('system:role:add')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:add')")
     @Log(title = "角色管理", businessType = BusinessTypeEnum.INSERT)
     @PostMapping("/add")
     public LmyXlfResult<Boolean> add(@Validated({Insert.class}) @RequestBody ReqSysRole reqSysRole) {
@@ -80,7 +80,7 @@ public class SysRoleController {
     /**
      * 修改保存角色
      */
-    @PreAuthorize("@ss.hasPermi('system:role:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:edit')")
     @Log(title = "角色管理", businessType = BusinessTypeEnum.UPDATE)
     @PostMapping("/edit")
     public LmyXlfResult<Boolean> edit(@Validated({Update.class}) @RequestBody ReqSysRole reqSysRole) {
@@ -91,7 +91,7 @@ public class SysRoleController {
     /**
      * 修改保存数据权限
      */
-    @PreAuthorize("@ss.hasPermi('system:role:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:edit')")
     @Log(title = "角色管理", businessType = BusinessTypeEnum.UPDATE)
     @PutMapping("/dataScope")
     public LmyXlfResult<Boolean> dataScope(@RequestBody ReqSysRole reqSysRole) {
@@ -102,7 +102,7 @@ public class SysRoleController {
     /**
      * 状态修改
      */
-    @PreAuthorize("@ss.hasPermi('system:role:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:edit')")
     @Log(title = "角色管理", businessType = BusinessTypeEnum.UPDATE)
     @PutMapping("/changeStatus")
     public LmyXlfResult<Boolean> changeStatus(@RequestBody ReqSysRole reqSysRole) {
@@ -113,7 +113,7 @@ public class SysRoleController {
     /**
      * 删除角色
      */
-    @PreAuthorize("@ss.hasPermi('system:role:remove')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:remove')")
     @Log(title = "角色管理", businessType = BusinessTypeEnum.DELETE)
     @PostMapping("/remove")
     public LmyXlfResult<Boolean> remove(@Validated({Delete.class}) @RequestBody ReqSysRole reqSysRole) {
@@ -124,7 +124,7 @@ public class SysRoleController {
     /**
      * 获取角色选择框列表
      */
-    @PreAuthorize("@ss.hasPermi('system:role:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:query')")
     @GetMapping("/optionselect")
     public LmyXlfResult<List<RespSysRole>> optionselect() {
 
@@ -134,7 +134,7 @@ public class SysRoleController {
     /**
      * 查询已分配用户角色列表
      */
-    @PreAuthorize("@ss.hasPermi('system:role:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:list')")
     @GetMapping("/authUser/allocatedList")
     public LmyXlfResult<PageData<RespSysUser>> allocatedList(ReqSysUser reqSysUser) {
 
@@ -144,7 +144,7 @@ public class SysRoleController {
     /**
      * 查询未分配用户角色列表
      */
-    @PreAuthorize("@ss.hasPermi('system:role:list')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:list')")
     @GetMapping("/authUser/unallocatedList")
     public LmyXlfResult<PageData<RespSysUser>> unallocatedList(ReqSysUser reqSysUser) {
 
@@ -154,7 +154,7 @@ public class SysRoleController {
     /**
      * 取消授权用户
      */
-    @PreAuthorize("@ss.hasPermi('system:role:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:edit')")
     @Log(title = "角色管理", businessType = BusinessTypeEnum.GRANT)
     @PutMapping("/authUser/cancel")
     public LmyXlfResult<Boolean> cancelAuthUser(@RequestBody ReqSysRole reqSysRole) {
@@ -165,7 +165,7 @@ public class SysRoleController {
     /**
      * 批量取消授权用户
      */
-    @PreAuthorize("@ss.hasPermi('system:role:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:edit')")
     @Log(title = "角色管理", businessType = BusinessTypeEnum.GRANT)
     @PutMapping("/authUser/cancelAll")
     public LmyXlfResult<Boolean> cancelAuthUserAll(@RequestBody ReqSysRole reqSysRole) {
@@ -176,7 +176,7 @@ public class SysRoleController {
     /**
      * 批量选择用户授权
      */
-    @PreAuthorize("@ss.hasPermi('system:role:edit')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:edit')")
     @Log(title = "角色管理", businessType = BusinessTypeEnum.GRANT)
     @PutMapping("/authUser/selectAll")
     public LmyXlfResult<Boolean> selectAuthUserAll(@Validated({Other.class}) @RequestBody ReqSysRole reqSysRole) {
@@ -187,7 +187,7 @@ public class SysRoleController {
     /**
      * 获取对应角色部门树列表
      */
-    @PreAuthorize("@ss.hasPermi('system:role:query')")
+    @PreAuthorize("@permissionService.hasPermi('system:role:query')")
     @GetMapping(value = "/deptTree/{id}")
     public LmyXlfResult<RespDeptTree> deptTree(@PathVariable("id") Integer id) {
 

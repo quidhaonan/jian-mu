@@ -1,5 +1,6 @@
 package com.lmyxlf.jian_mu.admin.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lmyxlf.jian_mu.admin.model.entity.SysRole;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public interface SysRoleService extends IService<SysRole> {
 
-    Page<RespSysRole> list(ReqSysRole reqSysRole);
+    IPage<RespSysRole> list(ReqSysRole reqSysRole);
 
     void export(ReqSysRole reqSysRole, HttpServletResponse response);
 
@@ -62,5 +63,5 @@ public interface SysRoleService extends IService<SysRole> {
      * @param reqSysRole 角色信息
      * @return 角色数据集合信息
      */
-    List<SysRole> selectRoleList(ReqSysRole reqSysRole, Page<SysRole> page);
+    List<RespSysRole> selectRoleList(ReqSysRole reqSysRole, Page<SysRole> page);
 }

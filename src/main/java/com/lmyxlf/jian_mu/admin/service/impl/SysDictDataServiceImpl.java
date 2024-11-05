@@ -58,7 +58,7 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataDao, SysDictD
                 .orderByAsc(SysDictData::getDictSort);
 
         Page<SysDictData> sysDictDataPage = this.page(
-                new Page<>(page, size), sysDictDataLambdaQueryChainWrapper);
+                new Page<>(page, size), sysDictDataLambdaQueryChainWrapper.getWrapper());
 
 
         // 仅为将返回对象转为 Resp
