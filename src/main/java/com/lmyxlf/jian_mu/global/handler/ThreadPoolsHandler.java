@@ -1,9 +1,11 @@
 package com.lmyxlf.jian_mu.global.handler;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
 /**
  * @author lmy
@@ -12,6 +14,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @description
  * @since 17
  */
+@Slf4j
 public class ThreadPoolsHandler {
 
     /**
@@ -19,6 +22,11 @@ public class ThreadPoolsHandler {
      */
     public static final AsyncTaskExecutor ASYNC_COMMON_POOL =
             createAsyncTaskExecutor("async_common_pool_", 20, 30, 60);
+    /**
+     * 异步操作任务调度线程池
+     */
+    public static final ScheduledExecutorService ASYNC_SCHEDULED_POOL =
+            createScheduledExecutorService(5,"async_scheduled_pool_");
 
 
     private static AsyncTaskExecutor createAsyncTaskExecutor(String threadNamePrefix,
@@ -45,5 +53,53 @@ public class ThreadPoolsHandler {
         taskExecutor.initialize();
 
         return taskExecutor;
+    }
+
+    private static ScheduledExecutorService createScheduledExecutorService(Integer corePoolSize,
+                                                                           String namingPatternPrefix) {
+
+        return new ScheduledThreadPoolExecutor(corePoolSize,
+                new BasicThreadFactory.Builder().namingPattern(namingPatternPrefix+"%d").daemon(true).build(),
+                new ThreadPoolExecutor.CallerRunsPolicy()) {
+
+            @Override
+            protected void afterExecute(Runnable r, Throwable t) {
+
+                super.afterExecute(r, t);
+                printException(r, t);
+            }
+        };
+    }
+
+    /**
+     * 打印线程异常信息
+     */
+    public static void printException(Runnable r, Throwable t) {
+
+        if (t == null && r instanceof Future<?>) {
+
+            try {
+
+                Future<?> future = (Future<?>) r;
+                if (future.isDone()) {
+
+                    future.get();
+                }
+            } catch (CancellationException ce) {
+
+                t = ce;
+            } catch (ExecutionException ee) {
+
+                t = ee.getCause();
+            } catch (InterruptedException ie) {
+
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if (t != null) {
+
+            log.error(t.getMessage(), t);
+        }
     }
 }

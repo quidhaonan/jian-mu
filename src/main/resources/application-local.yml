@@ -4,7 +4,8 @@
 #  # mysql 密码
 #  MYSQL_PASSWORD: lmyxlf
 #  # mysql 待连接数据库名
-#  MYSQL_DATABASE: lmyxlf
+#  MYSQL_DATABASE_1: lmyxlf
+#  MYSQL_DATABASE_2: admin
 #
 #redis:
 #  # redis ip+端口
