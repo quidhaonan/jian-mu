@@ -25,12 +25,14 @@ public class SpringConfig {
     // }
 
     @Bean
-    public FilterRegistrationBean registFilter() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
+    public FilterRegistrationBean<LogParamFilter> registFilter() {
+
+        FilterRegistrationBean<LogParamFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new LogParamFilter());
         registration.addUrlPatterns("/*");
         registration.setName("LogFilter");
         registration.setOrder(1);
+
         return registration;
     }
 }
