@@ -36,4 +36,9 @@ public class DBConstant {
      * 状态 - 已停用
      */
     public static final Integer STATUS_DEACTIVATED = 1;
+
+    /**
+     * 数据库名
+     */
+    public static final String ADMIN = "admin";
 }
