@@ -26,4 +26,19 @@ public class DBConstant {
      * 初始时间
      */
     public static final LocalDateTime INITIAL_TIME = LocalDateTime.parse("1970-01-01 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+    /**
+     * 状态 - 正常
+     */
+    public static final Integer STATUS_NORMAL = 0;
+
+    /**
+     * 状态 - 已停用
+     */
+    public static final Integer STATUS_DEACTIVATED = 1;
+
+    /**
+     * 数据库名
+     */
+    public static final String ADMIN = "admin";
 }

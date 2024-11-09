@@ -1,0 +1,25 @@
+jian_mu:
+  admin:
+    urlPrefix: /admin
+    
+    # 验证码类型 math 数字计算 char 字符验证
+    captchaType: math
+    # 文件路径
+    profile: ./jian_mu/admin
+    
+# 用户配置
+user:
+  password:
+    # 密码最大错误次数
+    maxRetryCount: 5
+    # 密码锁定时间（默认 10 分钟）
+    lockTime: 10
+    
+# token 配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: lmyxlf
+  # 令牌有效期（默认 30 分钟）
+  expireTime: 30

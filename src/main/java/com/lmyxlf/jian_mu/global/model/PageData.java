@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 @ApiModel(value = "分页数据")
 public class PageData<T> implements Serializable {
 
@@ -56,5 +58,4 @@ public class PageData<T> implements Serializable {
      */
     @ApiModelProperty(value = "当前页")
     private long current;
-
 }
