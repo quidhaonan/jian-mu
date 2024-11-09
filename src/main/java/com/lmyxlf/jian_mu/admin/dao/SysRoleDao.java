@@ -1,5 +1,6 @@
 package com.lmyxlf.jian_mu.admin.dao;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,6 +8,7 @@ import com.lmyxlf.jian_mu.admin.annotation.DataScope;
 import com.lmyxlf.jian_mu.admin.model.entity.SysRole;
 import com.lmyxlf.jian_mu.admin.model.req.ReqSysRole;
 import com.lmyxlf.jian_mu.admin.model.resp.RespSysRole;
+import com.lmyxlf.jian_mu.global.constant.DBConstant;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,6 +22,7 @@ import java.util.List;
  * @since 17
  */
 @Mapper
+@DS(DBConstant.ADMIN)
 public interface SysRoleDao extends BaseMapper<SysRole> {
 
     /**

@@ -1,8 +1,10 @@
 package com.lmyxlf.jian_mu.admin.dao;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lmyxlf.jian_mu.admin.model.entity.SysMenu;
 import com.lmyxlf.jian_mu.admin.model.req.ReqSysMenu;
+import com.lmyxlf.jian_mu.global.constant.DBConstant;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,6 +18,7 @@ import java.util.List;
  * @since 17
  */
 @Mapper
+@DS(DBConstant.ADMIN)
 public interface SysMenuDao extends BaseMapper<SysMenu> {
 
     /**
