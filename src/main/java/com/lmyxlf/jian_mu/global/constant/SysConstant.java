@@ -13,4 +13,9 @@ public class SysConstant {
      * 系统标识
      */
     public static final String LMYXLF = "lmyxlf";
+
+    /**
+     * 根路径
+     */
+    public static final String USER_DIR = System.getProperty("user.dir");
 }
