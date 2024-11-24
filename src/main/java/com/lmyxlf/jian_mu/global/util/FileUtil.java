@@ -61,7 +61,7 @@ public class FileUtil {
      * @param os       输出流
      * @return
      */
-    public static void writeBytes(String filePath, OutputStream os) throws IOException {
+    public static void writeBytes(String filePath, OutputStream os) {
 
         FileInputStream fis = null;
         try {
@@ -85,8 +85,14 @@ public class FileUtil {
             throw new LmyXlfException(CODE_MSG.ERROR);
         } finally {
 
-            IOUtils.close(os);
-            IOUtils.close(fis);
+            try {
+
+                IOUtils.close(os);
+                IOUtils.close(fis);
+            } catch (IOException e) {
+
+                log.error("资源关闭失败，filePath：{}e：{}", filePath, e.getMessage());
+            }
         }
     }
 
@@ -339,14 +345,15 @@ public class FileUtil {
      * @return 文件名称
      * @throws IOException
      */
-    public static final String upload(String baseDir, MultipartFile file) throws IOException {
+    public static final String upload(String baseDir, MultipartFile file) {
 
         try {
 
             return upload(baseDir, file, DEFAULT_ALLOWED_EXTENSION);
         } catch (Exception e) {
 
-            throw new IOException(e.getMessage(), e);
+            log.error("文件上传失败，baseDir：{}，file：{}，e：{}", baseDir, file.getOriginalFilename(), e.getMessage());
+            throw new LmyXlfException(CODE_MSG.ERROR);
         }
     }
 
@@ -373,7 +380,8 @@ public class FileUtil {
         String absPath = getAbsoluteFile(baseDir, fileName).getAbsolutePath();
         file.transferTo(Paths.get(absPath));
 
-        return getPathFileName(baseDir, fileName);
+        // return getPathFileName(baseDir, fileName);
+        return fileName;
     }
 
     /**
@@ -387,8 +395,8 @@ public class FileUtil {
             traceId = UUID.fastUUID().toString(true);
         }
 
-        return StrUtil.format("{}/{}_{}.{}", DateUtil.format(DateUtil.date(),
-                FilenameUtils.getBaseName(file.getOriginalFilename())), traceId, getExtension(file));
+        return StrUtil.format("{}_{}.{}", DateUtil.format(DateUtil.date(), "yyyyMMdd"),
+                traceId, getExtension(file));
     }
 
     public static File getAbsoluteFile(String uploadDir, String fileName) {
