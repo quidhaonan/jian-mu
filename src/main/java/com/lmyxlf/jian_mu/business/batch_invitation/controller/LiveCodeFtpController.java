@@ -1,10 +1,11 @@
 package com.lmyxlf.jian_mu.business.batch_invitation.controller;
 
 import com.lmyxlf.jian_mu.business.batch_invitation.model.req.ReqLiveCodeDelete;
-import com.lmyxlf.jian_mu.business.batch_invitation.model.req.ReqLiveCodeList;
-import com.lmyxlf.jian_mu.business.batch_invitation.model.resp.RespLiveCodeList;
-import com.lmyxlf.jian_mu.business.batch_invitation.service.LiveCodeService;
+import com.lmyxlf.jian_mu.business.batch_invitation.model.req.ReqLiveCodeFtp;
+import com.lmyxlf.jian_mu.business.batch_invitation.model.resp.RespLiveCodeFtp;
+import com.lmyxlf.jian_mu.business.batch_invitation.service.LiveCodeFtpService;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
+import com.lmyxlf.jian_mu.global.model.PageData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * @author lmy
@@ -24,18 +24,18 @@ import java.util.List;
  * @since 17
  */
 @RestController
-@Api(tags = "活码")
+@Api(tags = "ftp 活码")
 @AllArgsConstructor(onConstructor_ = @Autowired)
-@RequestMapping("${jian_mu.batch_invitation.urlPrefix}/liveCode")
-public class LiveCodeController {
+@RequestMapping("${jian_mu.batch_invitation.urlPrefix}/liveCode/ftp")
+public class LiveCodeFtpController {
 
-    private final LiveCodeService liveCodeService;
+    private final LiveCodeFtpService liveCodeFtpService;
 
     @PostMapping("/list")
     @ApiOperation(value = "获得多个活码")
-    public LmyXlfResult<List<RespLiveCodeList>> list(@RequestBody ReqLiveCodeList reqLiveCodeList) {
+    public LmyXlfResult<PageData<RespLiveCodeFtp>> list(@RequestBody ReqLiveCodeFtp reqLiveCodeFtp) {
 
-        return LmyXlfResult.ok(liveCodeService.list(reqLiveCodeList));
+        return LmyXlfResult.ok(new PageData<>(liveCodeFtpService.list(reqLiveCodeFtp)));
     }
 
     @PostMapping("/add")
@@ -43,14 +43,14 @@ public class LiveCodeController {
     public LmyXlfResult<Boolean> add(@RequestParam("file") MultipartFile file,
                                      @RequestParam(value = "remark", required = false) String remark) {
 
-        return LmyXlfResult.ok(liveCodeService.add(file, remark));
+        return LmyXlfResult.ok(liveCodeFtpService.add(file, remark));
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     @ApiOperation(value = "获得单个活码")
-    public void get(@PathVariable Integer id, HttpServletResponse response) {
+    public void getOne(@PathVariable("id") Integer id, HttpServletResponse response) {
 
-        liveCodeService.get(id, response);
+        liveCodeFtpService.getOne(id, response);
     }
 
     @PostMapping("/update")
@@ -59,13 +59,13 @@ public class LiveCodeController {
                                         @RequestParam("id") Integer id,
                                         @RequestParam(value = "remark", required = false) String remark) {
 
-        return LmyXlfResult.ok(liveCodeService.update(file, id, remark));
+        return LmyXlfResult.ok(liveCodeFtpService.update(file, id, remark));
     }
 
     @PostMapping("/delete")
     @ApiOperation(value = "删除活码")
     public LmyXlfResult<Boolean> delete(@RequestBody @Validated ReqLiveCodeDelete reqLiveCodeDelete) {
 
-        return LmyXlfResult.ok(liveCodeService.delete(reqLiveCodeDelete));
+        return LmyXlfResult.ok(liveCodeFtpService.delete(reqLiveCodeDelete));
     }
 }

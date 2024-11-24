@@ -1,6 +1,6 @@
 package com.lmyxlf.jian_mu.business.batch_invitation.model.req;
 
-import com.lmyxlf.jian_mu.business.batch_invitation.model.resp.RespLiveCodeList;
+import com.lmyxlf.jian_mu.business.batch_invitation.model.resp.RespLiveCodeFtp;
 import com.lmyxlf.jian_mu.global.model.PageData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(description = "请求活码列表请求体")
-public class ReqLiveCodeList extends PageData<RespLiveCodeList> {
+public class ReqLiveCodeList extends PageData<RespLiveCodeFtp> {
 
     @ApiModelProperty(value = "活码名称")
     private String name;

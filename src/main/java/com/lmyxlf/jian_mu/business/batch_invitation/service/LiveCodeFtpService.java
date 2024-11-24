@@ -1,14 +1,14 @@
 package com.lmyxlf.jian_mu.business.batch_invitation.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lmyxlf.jian_mu.business.batch_invitation.model.entity.LiveCode;
+import com.lmyxlf.jian_mu.business.batch_invitation.model.entity.LiveCodeFtp;
 import com.lmyxlf.jian_mu.business.batch_invitation.model.req.ReqLiveCodeDelete;
-import com.lmyxlf.jian_mu.business.batch_invitation.model.req.ReqLiveCodeList;
-import com.lmyxlf.jian_mu.business.batch_invitation.model.resp.RespLiveCodeList;
+import com.lmyxlf.jian_mu.business.batch_invitation.model.req.ReqLiveCodeFtp;
+import com.lmyxlf.jian_mu.business.batch_invitation.model.resp.RespLiveCodeFtp;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * @author lmy
@@ -17,15 +17,15 @@ import java.util.List;
  * @description
  * @since 17
  */
-public interface LiveCodeService extends IService<LiveCode> {
+public interface LiveCodeFtpService extends IService<LiveCodeFtp> {
 
     /**
      * 获得多个活码
      *
-     * @param reqLiveCodeList
+     * @param reqLiveCodeFtp
      * @return
      */
-    List<RespLiveCodeList> list(ReqLiveCodeList reqLiveCodeList);
+    IPage<RespLiveCodeFtp> list(ReqLiveCodeFtp reqLiveCodeFtp);
 
     /**
      * 添加活码
@@ -42,7 +42,7 @@ public interface LiveCodeService extends IService<LiveCode> {
      * @param id
      * @param response
      */
-    void get(Integer id, HttpServletResponse response);
+    void getOne(Integer id, HttpServletResponse response);
 
     /**
      * 修改活码
@@ -61,4 +61,12 @@ public interface LiveCodeService extends IService<LiveCode> {
      * @return
      */
     Boolean delete(ReqLiveCodeDelete reqLiveCodeDelete);
+
+    /**
+     * 获得城市
+     *
+     * @param region 格式：中国|0|重庆|重庆市|移动
+     * @return 将 0 值去除，并用 - 连接，即：中国-重庆-重庆市-移动
+     */
+    String getFullAddress(String region);
 }
