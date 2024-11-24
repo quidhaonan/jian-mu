@@ -80,7 +80,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
                 .one();
 
         RespSysRole respSysRole = new RespSysRole();
-        BeanUtils.copyProperties(sysRole, respSysRole);
+        if (ObjUtil.isNotNull(sysRole)) {
+
+            BeanUtils.copyProperties(sysRole, respSysRole);
+        }
 
         return respSysRole;
     }
