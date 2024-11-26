@@ -74,4 +74,14 @@ public class LmyXlfReqParamConstant {
     public static final String KEY_SIGN = "sign";
 
     public static final String AUTHORIZATION = "Authorization";
+
+    /**
+     * token
+     */
+    public static final String TOKEN = "token";
+
+    /**
+     * 来源
+     */
+    public static final String USER_AGENT = "User-Agent";
 }

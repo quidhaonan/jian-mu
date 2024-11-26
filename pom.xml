@@ -78,6 +78,10 @@
 
         <!-- feat/lmyxlf/admin 分支依赖 -->
         <kaptcha.version>2.3.3</kaptcha.version>
+        <spring.boot.starter.security.version>3.3.3</spring.boot.starter.security.version>
+        <oshi.core.version>6.6.3</oshi.core.version>
+        <UserAgentUtils.verison>1.21</UserAgentUtils.verison>
+        <jjwt.version>0.9.1</jjwt.version>
         <!-- feat/lmyxlf/admin 分支依赖 -->
 
     </properties>
@@ -334,6 +338,31 @@
             <groupId>pro.fessional</groupId>
             <artifactId>kaptcha</artifactId>
             <version>${kaptcha.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>${spring.boot.starter.security.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.oshi/oshi-core -->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>${oshi.core.version}</version>
+        </dependency>
+        <!-- 解析客户端操作系统、浏览器等 -->
+        <!-- https://mvnrepository.com/artifact/eu.bitwalker/UserAgentUtils -->
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>${UserAgentUtils.verison}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
         <!-- feat/lmyxlf/admin 分支依赖 -->
 

@@ -28,6 +28,7 @@ public class TraceIdGenerator {
      * 生成 traceId
      */
     public static String generateTraceId(String ipAddr) {
+
         return convertIpToHex(ipAddr) +
                 DateUtil.current() +
                 nextSequence() +

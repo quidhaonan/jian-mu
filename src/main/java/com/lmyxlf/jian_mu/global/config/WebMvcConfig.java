@@ -24,17 +24,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
         // 该拦截器用于绑定全局参数
         registry.addInterceptor(new SpringMvcSessionBindInterceptor());
     }
 
     /**
-     * 向容器中添加自定义JSON参数解析器
+     * 向容器中添加自定义 json 参数解析器
      *
      * @param resolvers
      */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+
         resolvers.add(new JsonParamModelAttributeMethodProcessor());
     }
 }
