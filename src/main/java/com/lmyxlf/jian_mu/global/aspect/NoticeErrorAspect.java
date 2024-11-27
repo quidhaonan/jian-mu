@@ -5,14 +5,13 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.lmyxlf.jian_mu.global.annotation.NoticeErrorAnnotation;
 import com.lmyxlf.jian_mu.global.constant.TraceConstant;
+import com.lmyxlf.jian_mu.global.util.SpringContextHolder;
 import com.lmyxlf.jian_mu.global.util.XiZhiNoticeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -30,9 +29,6 @@ import java.util.*;
 @Component
 public class NoticeErrorAspect {
 
-    @Autowired
-    private ApplicationContext context;
-
     @Pointcut("@within(com.lmyxlf.jian_mu.global.annotation.NoticeErrorAnnotation)" +
             " || @annotation(com.lmyxlf.jian_mu.global.annotation.NoticeErrorAnnotation)")
     public void noticeErrorPointcut() {
@@ -41,19 +37,25 @@ public class NoticeErrorAspect {
 
     @AfterThrowing(pointcut = "noticeErrorPointcut()", throwing = "ex")
     public void noticeErrorAfterThrowing(JoinPoint joinPoint, Throwable ex) {
+
         log.error("指定方法异常，ex：{}", ex.getMessage());
         NoticeErrorAnnotation noticeErrorAnnotation = getHandleExceptionAnnotation(joinPoint);
 
         if (ObjUtil.isNotNull(noticeErrorAnnotation)) {
+
             List<String> pushUrls = new ArrayList<>();
             // 获得所有实现了 PutPushUrlsAble 接口的实现类
-            Map<String, PutPushUrlsAble> providers = context.getBeansOfType(PutPushUrlsAble.class);
+            Map<String, AddPushUrlsAble> providers = SpringContextHolder.getApplicationContext()
+                    .getBeansOfType(AddPushUrlsAble.class);
             if (!providers.isEmpty()) {
+
                 String[] filter = noticeErrorAnnotation.filter();
-                for (PutPushUrlsAble provider : providers.values()) {
+                for (AddPushUrlsAble provider : providers.values()) {
+
                     // 使用过滤参数获得符合条件的实现类
                     if (provider.filter(filter)) {
-                        String[] urls = provider.put();
+
+                        String[] urls = provider.add();
                         // 添加到总列表中
                         pushUrls.addAll(Arrays.asList(urls));
                     }
@@ -74,6 +76,7 @@ public class NoticeErrorAspect {
                 put(TraceConstant.TRACE_ID, MDC.get(TraceConstant.TRACE_ID));
                 put("时间", DateUtil.now());
             }};
+
             XiZhiNoticeUtil.xiZhiMsgNotice(pushUrls, title, contentMap);
         }
     }
@@ -87,9 +90,11 @@ public class NoticeErrorAspect {
     private NoticeErrorAnnotation getHandleExceptionAnnotation(JoinPoint joinPoint) {
 
         if (joinPoint.getSignature() instanceof MethodSignature signature) {
+
             Method method = signature.getMethod();
             NoticeErrorAnnotation noticeErrorAnnotation = method.getAnnotation(NoticeErrorAnnotation.class);
             if (ObjUtil.isNotNull(noticeErrorAnnotation)) {
+
                 return noticeErrorAnnotation;
             }
         }
@@ -99,10 +104,10 @@ public class NoticeErrorAspect {
         return targetClass.getAnnotation(NoticeErrorAnnotation.class);
     }
 
-    public interface PutPushUrlsAble {
+    public interface AddPushUrlsAble {
 
         boolean filter(String[] filter);
 
-        String[] put();
+        String[] add();
     }
 }
