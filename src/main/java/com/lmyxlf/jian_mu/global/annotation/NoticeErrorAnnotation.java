@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
  * @description 异常通知注解，标识某些类或方法的错误需要额外关注
  * @since 17
  */
-@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
 public @interface NoticeErrorAnnotation {
 
     /**
