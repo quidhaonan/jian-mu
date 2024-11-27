@@ -1,5 +1,6 @@
 package com.lmyxlf.jian_mu.admin.config;
 
+import com.lmyxlf.jian_mu.global.mvc.IgnoreAuthUrlProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -111,6 +112,7 @@ public class SecurityConfig {
                 // 注解标记允许匿名访问的 url
                 .authorizeRequests((requests) -> {
                     permitAllUrl.getUrls().forEach(url -> requests.antMatchers(url).permitAll());
+                    IgnoreAuthUrlProcessor.getIgnoreAuthUrls().forEach(url -> requests.antMatchers(url).permitAll());
                     // 对于登录 login，注册 register，验证码 captchaImage 允许匿名访问
                     requests.antMatchers("/admin/auth/login", "/admin/system/verify/register", "/admin/captcha/captchaImage").permitAll()
                             // 静态资源，可匿名访问
