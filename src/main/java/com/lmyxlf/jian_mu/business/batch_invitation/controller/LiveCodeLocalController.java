@@ -3,6 +3,7 @@ package com.lmyxlf.jian_mu.business.batch_invitation.controller;
 import com.lmyxlf.jian_mu.business.batch_invitation.model.req.ReqLiveCodeLocal;
 import com.lmyxlf.jian_mu.business.batch_invitation.model.resp.RespLiveCodeLocal;
 import com.lmyxlf.jian_mu.business.batch_invitation.service.LiveCodeLocalService;
+import com.lmyxlf.jian_mu.global.annotation.IgnoreAuthUrlAnnotation;
 import com.lmyxlf.jian_mu.global.model.LmyXlfResult;
 import com.lmyxlf.jian_mu.global.model.PageData;
 import io.swagger.annotations.Api;
@@ -50,6 +51,7 @@ public class LiveCodeLocalController {
         liveCodeLocalService.getOneById(id, response);
     }
 
+    @IgnoreAuthUrlAnnotation
     @GetMapping("/pub/{randomStr}")
     @ApiOperation(value = "获得单个活码")
     public void getOneByRandomStr(@PathVariable("randomStr") String randomStr, HttpServletResponse response) {
