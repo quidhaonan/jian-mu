@@ -1,3 +1,10 @@
 jian_mu:
   batch_invitation:
     urlPrefix: /bi
+
+# 椰子接码
+yezi_sms:
+  # 用户名
+  username:
+  # 密码
+  password:
