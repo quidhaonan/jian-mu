@@ -1,6 +1,7 @@
 package com.lmyxlf.jian_mu.business.batch_invitation.util;
 
 import com.lmyxlf.jian_mu.business.batch_invitation.model.dto.YeZiAddBlacklist;
+import com.lmyxlf.jian_mu.business.batch_invitation.model.dto.YeZiGetMessageDto;
 import com.lmyxlf.jian_mu.business.batch_invitation.model.dto.YeZiGetMobileDto;
 import com.lmyxlf.jian_mu.business.batch_invitation.model.dto.YeZiLoginDto;
 import com.lmyxlf.jian_mu.global.exception.LmyXlfException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author lmy
@@ -24,15 +26,15 @@ import java.util.*;
 public class YeZiSMSUtil {
 
     // 用户名
-    @Value("${yezi.username}")
+    @Value("${yezi_sms.username}")
     private String USERNAME;
 
     // 密码
-    @Value("${yezi.password}")
+    @Value("${yezi_sms.password}")
     private String PASSWORD;
 
     // token
-    private static String YEZI_TOKEN;
+    public static String YEZI_TOKEN;
 
     // 主域名
     private static final String MAIN_DOMAIN = "http://api.sqhyw.net:90";
@@ -75,6 +77,7 @@ public class YeZiSMSUtil {
     public static YeZiLoginDto login(String username, String password) {
 
         Map<String, String> params = new HashMap<>() {{
+
             put("username", username);
             put("password", password);
         }};
@@ -97,8 +100,21 @@ public class YeZiSMSUtil {
     /**
      * 获取手机号
      *
+     * @param token     token
+     * @param projectId 项目 id；普通项目填普通项目的 id，专属类型也可以填写专属项目的对接码【例：12585----xxxx】
+     * @return
+     */
+    public static YeZiGetMobileDto getMobile(String token, String projectId) {
+
+        return getMobile(token, projectId, null, null, 4, null, null,
+                null, null, null, null, null);
+    }
+
+    /**
+     * 获取手机号
+     *
      * @param token        token
-     * @param projectId    项目 id;普通项目填普通项目的 id，专属类型也可以填写专属项目的对接码【例：12585----xxxx】
+     * @param projectId    项目 id；普通项目填普通项目的 id，专属类型也可以填写专属项目的对接码【例：12585----xxxx】
      * @param special      从专属取卡：special=1，不加这个参数取普通项目的卡，注意：此参数只有项目 id 是普通项目的时候才可以
      * @param loop         是否过滤项目，1：过滤，2：不过滤 默认不过滤
      * @param operator     运营商 (0=默认 1=移动 2=联通 3=电信 4=实卡 5=虚卡) 可空
@@ -116,6 +132,7 @@ public class YeZiSMSUtil {
                                              String apiId, String scopeBlack, Integer creatTime, String designatedID) {
 
         Map<String, Object> params = new HashMap<>() {{
+
             put("token", token);
             put("project_id", projectId);
             put("special", special);
@@ -129,9 +146,17 @@ public class YeZiSMSUtil {
             put("creat_time", creatTime);
             put("designatedID", designatedID);
         }};
+        // 除去值为 null 的参数
+        Map<String, Object> filteredParams = params.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
         YeZiGetMobileDto result = LmyXlfHttp
                 .get(MAIN_DOMAIN + GET_MOBILE_URL)
-                .urlParams(params)
+                .urlParams(filteredParams)
                 .build()
                 .json(YeZiGetMobileDto.class);
 
@@ -154,24 +179,33 @@ public class YeZiSMSUtil {
      * 获取短信
      *
      * @param token     token
-     * @param projectId 项目 id;普通项目填普通项目的 id，专属类型也可以填写专属项目的对接码【例：12585----xxxx】
+     * @param projectId 项目 id；普通项目填普通项目的 id，专属类型也可以填写专属项目的对接码【例：12585----xxxx】
      * @param special   如果取卡时调用了此参数，这里必须要填 special=1，否则获取不到短信
      * @param phoneNum  get_mobile 取卡接口返回的手机号
      * @return
      */
-    public static YeZiLoginDto getMessage(String token, String projectId, String special, String phoneNum) {
+    public static YeZiGetMessageDto getMessage(String token, String projectId, String special, String phoneNum) {
 
         Map<String, String> params = new HashMap<>() {{
+
             put("token", token);
             put("project_id", projectId);
             put("special", special);
             put("phone_num", phoneNum);
         }};
-        YeZiLoginDto result = LmyXlfHttp
+        // 除去值为 null 的参数
+        Map<String, Object> filteredParams = params.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
+        YeZiGetMessageDto result = LmyXlfHttp
                 .get(MAIN_DOMAIN + GET_MESSAGE_URL)
-                .urlParams(params)
+                .urlParams(filteredParams)
                 .build()
-                .json(YeZiLoginDto.class);
+                .json(YeZiGetMessageDto.class);
 
         if (SUCCESS_MSG.equals(result.getMessage())) {
 
@@ -179,6 +213,8 @@ public class YeZiSMSUtil {
                     token, projectId, special, phoneNum, result);
             return result;
         }
+        log.info("短信未到达，token:{}，projectId:{}，special:{}，phoneNum:{}，result:{}",
+                token, projectId, special, phoneNum, result);
         return null;
     }
 
@@ -194,14 +230,23 @@ public class YeZiSMSUtil {
     public static YeZiAddBlacklist addBlacklist(String token, String projectId, String special, String phoneNum) {
 
         Map<String, String> params = new HashMap<>() {{
+
             put("token", token);
             put("project_id", projectId);
             put("special", special);
             put("phone_num", phoneNum);
         }};
+        // 除去值为 null 的参数
+        Map<String, Object> filteredParams = params.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
         YeZiAddBlacklist result = LmyXlfHttp
                 .get(MAIN_DOMAIN + ADD_BLACKLIST_URL)
-                .urlParams(params)
+                .urlParams(filteredParams)
                 .build()
                 .json(YeZiAddBlacklist.class);
 
