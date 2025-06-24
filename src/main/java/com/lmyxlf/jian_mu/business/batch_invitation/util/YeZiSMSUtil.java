@@ -57,6 +57,9 @@ public class YeZiSMSUtil {
     // 用户获取短信 URL
     private static final String GET_MESSAGE_URL = "/api/get_message";
 
+    // 用户释放号码 URL
+    private static final String FREE_MOBILE_URL = "/api/free_mobile";
+
     // 用户拉黑号码 URL
     private static final String ADD_BLACKLIST_URL = "/api/add_blacklist";
 
@@ -216,6 +219,44 @@ public class YeZiSMSUtil {
         log.info("短信未到达，token:{}，projectId:{}，special:{}，phoneNum:{}，result:{}",
                 token, projectId, special, phoneNum, result);
         return null;
+    }
+
+    /**
+     * 释放号码
+     *
+     * @param token     token
+     * @param projectId 普通项目填普通项目的 id，专属类型也可以填写专属项目的对接码【例：12585----xxxx】
+     * @param special   如果取卡时调用了此参数，这里必须要填 special=1，否则不能释放号码
+     * @param phoneNum  get_mobile 取卡接口返回的手机号
+     * @return
+     */
+    public static YeZiAddBlacklist freeMobile(String token, String projectId, String special, String phoneNum) {
+
+        Map<String, String> params = new HashMap<>() {{
+
+            put("token", token);
+            put("project_id", projectId);
+            put("special", special);
+            put("phone_num", phoneNum);
+        }};
+        // 除去值为 null 的参数
+        Map<String, Object> filteredParams = params.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
+        // 返回格式与拉黑号码返回格式一致
+        YeZiAddBlacklist result = LmyXlfHttp
+                .get(MAIN_DOMAIN + FREE_MOBILE_URL)
+                .urlParams(filteredParams)
+                .build()
+                .json(YeZiAddBlacklist.class);
+
+        log.info("释放号码，result:{}，token:{}，projectId:{}，special:{}，phoneNum:{}",
+                result, token, projectId, special, phoneNum);
+        return result;
     }
 
     /**

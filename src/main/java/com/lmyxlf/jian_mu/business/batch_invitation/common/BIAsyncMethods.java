@@ -32,7 +32,7 @@ public class BIAsyncMethods {
     /**
      * 星流 AI 椰子项目 id
      */
-    private static final String PROJECT_ID = "718541";
+    private static final String XINGLIU_YEZI_PROJECT_ID = "718541";
 
     /**
      * cid 每个浏览器不同，同一个浏览器不会变
@@ -69,7 +69,7 @@ public class BIAsyncMethods {
 
         log.info("星流 AI 批量邀请，inviteCode：{}", inviteCode);
         // 获得手机号
-        YeZiGetMobileDto yeZiGetMobileDto = YeZiSMSUtil.getMobile(YeZiSMSUtil.YEZI_TOKEN, PROJECT_ID);
+        YeZiGetMobileDto yeZiGetMobileDto = YeZiSMSUtil.getMobile(YeZiSMSUtil.YEZI_TOKEN, XINGLIU_YEZI_PROJECT_ID);
         String mobile = yeZiGetMobileDto.getMobile();
 
         // 发送验证码
@@ -98,7 +98,7 @@ public class BIAsyncMethods {
         while (i-- > 0) {
 
             YeZiGetMessageDto yeZiGetMessageDto = YeZiSMSUtil.getMessage(
-                    YeZiSMSUtil.YEZI_TOKEN, PROJECT_ID, null, mobile);
+                    YeZiSMSUtil.YEZI_TOKEN, XINGLIU_YEZI_PROJECT_ID, null, mobile);
             if (ObjUtil.isNotNull(yeZiGetMessageDto)) {
 
                 code = yeZiGetMessageDto.getCode();
@@ -119,6 +119,8 @@ public class BIAsyncMethods {
         if (StrUtil.isEmpty(code)) {
 
             log.error("椰子获取验证码失败，inviteCode：{}，yeZiGetMobileDto：{}", inviteCode, yeZiGetMobileDto);
+            // 释放号码
+            YeZiSMSUtil.freeMobile(YeZiSMSUtil.YEZI_TOKEN, XINGLIU_YEZI_PROJECT_ID, null, mobile);
             return;
         }
         Map<String, Object> loginByPhoneCodeParams = new HashMap<>() {{
@@ -157,6 +159,7 @@ public class BIAsyncMethods {
                 .build()
                 .json(RespXingLiu.class);
         log.info("星流 AI 绑定邀请码，respLoginUserEventReport：{}", respLoginUserEventReport);
-        YeZiSMSUtil.addBlacklist(YeZiSMSUtil.YEZI_TOKEN, PROJECT_ID, null, mobile);
+        // 拉黑号码
+        YeZiSMSUtil.addBlacklist(YeZiSMSUtil.YEZI_TOKEN, XINGLIU_YEZI_PROJECT_ID, null, mobile);
     }
 }
